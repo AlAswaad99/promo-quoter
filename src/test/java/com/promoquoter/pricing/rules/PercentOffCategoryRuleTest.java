@@ -76,5 +76,6 @@ class PercentOffCategoryRuleTest {
     void runsInTheCategoryStage() {
         assertThat(new PercentOffCategoryRule(Promos.percentOff("K", "10").build()).stage())
                 .isEqualTo(PercentOffCategoryRule.STAGE);
+        assertThat(PercentOffCategoryRule.STAGE).isLessThan(BuyXGetYRule.STAGE);
     }
 }

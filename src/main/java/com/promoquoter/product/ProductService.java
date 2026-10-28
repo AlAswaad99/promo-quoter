@@ -1,7 +1,10 @@
 package com.promoquoter.product;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +37,11 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(ProductResponse::from)
                 .orElseThrow(() -> new ApiException(ErrorCode.PRODUCT_NOT_FOUND, "Product " + id + " was not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public Set<UUID> findExistingIds(Collection<UUID> ids) {
+        return productRepository.findAllById(ids).stream().map(Product::getId).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)

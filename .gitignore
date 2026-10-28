@@ -1,0 +1,8 @@
+target/
+.idea/
+*.iml
+.vscode/
+*.log
+HELP.md
+Backend Engineer Take Home Exercise.pdf
+.claude/

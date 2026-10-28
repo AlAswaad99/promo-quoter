@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: promo-quoter
+  datasource:
+    url: jdbc:h2:mem:promoquoter;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  pattern:
+    level: "%5p [%X{requestId:-}]"

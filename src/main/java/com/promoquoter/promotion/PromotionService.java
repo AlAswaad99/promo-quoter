@@ -15,6 +15,7 @@ import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.common.web.PageResponse;
+import com.promoquoter.pricing.PromotionDefinition;
 import com.promoquoter.pricing.PromotionType;
 import com.promoquoter.product.ProductService;
 
@@ -32,6 +33,11 @@ public class PromotionService {
         rejectUnknownProducts(requests);
         List<Promotion> promotions = requests.stream().map(CreatePromotionRequest::toEntity).toList();
         return promotionRepository.saveAll(promotions).stream().map(PromotionResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PromotionDefinition> activeDefinitions() {
+        return promotionRepository.findByActiveTrue().stream().map(Promotion::toDefinition).toList();
     }
 
     @Transactional(readOnly = true)

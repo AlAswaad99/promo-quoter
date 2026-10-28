@@ -1,6 +1,7 @@
 package com.promoquoter.promotion;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,11 +33,16 @@ class PromotionManagementIT {
     @Autowired
     TestDatabase testDatabase;
 
+    String productId;
     String promotionId;
 
     @BeforeEach
     void setUp() throws Exception {
         testDatabase.clean();
+        String product = mockMvc.perform(post("/api/v1/products").contentType(MediaType.APPLICATION_JSON)
+                        .content("[{\"name\":\"Mug\",\"category\":\"kitchen\",\"price\":10,\"stock\":10}]"))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        productId = JsonPath.read(product, "$[0].id");
         String promotion = mockMvc.perform(post("/api/v1/promotions").contentType(MediaType.APPLICATION_JSON)
                         .content("[{\"type\":\"PERCENT_OFF_CATEGORY\",\"name\":\"10% kitchen\","
                                 + "\"category\":\"kitchen\",\"percent\":10,\"priority\":5}]"))
@@ -46,6 +52,12 @@ class PromotionManagementIT {
 
     private ResultActions patchPromotion(String id, String json) throws Exception {
         return mockMvc.perform(patch("/api/v1/promotions/" + id).contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
+    private ResultActions quoteMugs(String segment) throws Exception {
+        return mockMvc.perform(post("/api/v1/cart/quote").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"items\":[{\"productId\":\"" + productId + "\",\"qty\":2}],\"customerSegment\":\""
+                        + segment + "\"}"));
     }
 
     @Test
@@ -81,27 +93,24 @@ class PromotionManagementIT {
     }
 
     @Test
-    void deactivatingMarksThePromotionInactive() throws Exception {
+    void deactivatingStopsThePromotionFromApplying() throws Exception {
+        quoteMugs("REGULAR").andExpect(jsonPath("$.total").value("18.00"));
+
         patchPromotion(promotionId, "{\"active\":false}")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.active").value(false));
 
-        mockMvc.perform(get("/api/v1/promotions/" + promotionId)).andExpect(jsonPath("$.active").value(false));
-        mockMvc.perform(get("/api/v1/promotions").param("active", "true"))
-                .andExpect(jsonPath("$.totalElements").value(0));
-        mockMvc.perform(get("/api/v1/promotions").param("active", "false"))
-                .andExpect(jsonPath("$.totalElements").value(1));
+        quoteMugs("REGULAR")
+                .andExpect(jsonPath("$.total").value("20.00"))
+                .andExpect(jsonPath("$.appliedPromotions", empty()));
     }
 
     @Test
-    void reactivatingMarksThePromotionActiveAgain() throws Exception {
+    void reactivatingRestoresThePromotion() throws Exception {
         patchPromotion(promotionId, "{\"active\":false}").andExpect(status().isOk());
-        patchPromotion(promotionId, "{\"active\":true}")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.active").value(true));
+        patchPromotion(promotionId, "{\"active\":true}").andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/v1/promotions").param("active", "true"))
-                .andExpect(jsonPath("$.totalElements").value(1));
+        quoteMugs("REGULAR").andExpect(jsonPath("$.total").value("18.00"));
     }
 
     @Test
@@ -119,14 +128,15 @@ class PromotionManagementIT {
         patchPromotion(promotionId, "{\"eligibleSegments\":[\"VIP\"]}")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eligibleSegments", contains("VIP")));
-        mockMvc.perform(get("/api/v1/promotions/" + promotionId))
-                .andExpect(jsonPath("$.eligibleSegments", contains("VIP")));
+
+        quoteMugs("REGULAR").andExpect(jsonPath("$.total").value("20.00"));
+        quoteMugs("VIP").andExpect(jsonPath("$.total").value("18.00"));
 
         patchPromotion(promotionId, "{\"eligibleSegments\":[]}")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eligibleSegments", hasSize(0)));
-        mockMvc.perform(get("/api/v1/promotions/" + promotionId))
-                .andExpect(jsonPath("$.eligibleSegments", hasSize(0)));
+
+        quoteMugs("REGULAR").andExpect(jsonPath("$.total").value("18.00"));
     }
 
     @Test
@@ -155,6 +165,7 @@ class PromotionManagementIT {
 
         mockMvc.perform(get("/api/v1/promotions/" + promotionId)).andExpect(status().isNotFound());
         mockMvc.perform(get("/api/v1/promotions")).andExpect(jsonPath("$.totalElements").value(0));
+        quoteMugs("REGULAR").andExpect(jsonPath("$.total").value("20.00"));
     }
 
     @Test

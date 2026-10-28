@@ -11,6 +11,7 @@ import org.hibernate.annotations.BatchSize;
 
 import com.promoquoter.common.text.Categories;
 import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.PromotionDefinition;
 import com.promoquoter.pricing.PromotionType;
 
 import jakarta.persistence.CollectionTable;
@@ -106,6 +107,11 @@ class Promotion {
                     ? EnumSet.noneOf(CustomerSegment.class)
                     : EnumSet.copyOf(newSegments);
         }
+    }
+
+    PromotionDefinition toDefinition() {
+        return new PromotionDefinition(id, type, name, active, priority, createdAt, Set.copyOf(eligibleSegments),
+                category, percent, productId, buyQty, freeQty);
     }
 
     static Promotion percentOffCategory(String name, boolean active, int priority,

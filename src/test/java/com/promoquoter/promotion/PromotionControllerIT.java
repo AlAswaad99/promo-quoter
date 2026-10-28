@@ -3,6 +3,7 @@ package com.promoquoter.promotion;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -199,5 +200,52 @@ class PromotionControllerIT {
         createPromotions("[" + percentOff("A", "kitchen", "10", ",\"discount\":5") + "]")
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+    }
+
+    @Test
+    void persistedSegmentsAreReadBack() throws Exception {
+        createPromotions("[" + percentOff("A", "k", "5", ",\"eligibleSegments\":[\"VIP\"]") + "]")
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/promotions"))
+                .andExpect(jsonPath("$.content[0].eligibleSegments", contains("VIP")));
+    }
+
+    @Test
+    void listsAndFiltersByTypeAndActive() throws Exception {
+        createPromotions("[" + percentOff("A", "k", "5", "") + "," + percentOff("B", "k", "5", ",\"active\":false")
+                + "," + buyXGetY("C", productId, "1", "1", "") + "]").andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/promotions").param("sort", "name,asc"))
+                .andExpect(jsonPath("$.totalElements").value(3));
+        mockMvc.perform(get("/api/v1/promotions").param("type", "PERCENT_OFF_CATEGORY").param("sort", "name,asc"))
+                .andExpect(jsonPath("$.content[*].name", contains("A", "B")));
+        mockMvc.perform(get("/api/v1/promotions").param("active", "false"))
+                .andExpect(jsonPath("$.content[*].name", contains("B")));
+        mockMvc.perform(get("/api/v1/promotions").param("type", "BUY_X_GET_Y").param("active", "true"))
+                .andExpect(jsonPath("$.content[*].name", contains("C")));
+        mockMvc.perform(get("/api/v1/promotions").param("type", "BUY_X_GET_Y").param("active", "false"))
+                .andExpect(jsonPath("$.totalElements").value(0));
+    }
+
+    @Test
+    void listPaginatesAndSorts() throws Exception {
+        createPromotions("[" + percentOff("C", "k", "5", ",\"priority\":1") + "," + percentOff("A", "k", "5", ",\"priority\":3")
+                + "," + percentOff("B", "k", "5", ",\"priority\":2") + "]").andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/promotions").param("size", "2").param("page", "1").param("sort", "priority,desc"))
+                .andExpect(jsonPath("$.content[*].name", contains("C")))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andExpect(jsonPath("$.totalElements").value(3));
+    }
+
+    @Test
+    void listRejectsBadTypeAndSort() throws Exception {
+        mockMvc.perform(get("/api/v1/promotions").param("type", "NOPE"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+        mockMvc.perform(get("/api/v1/promotions").param("sort", "percent"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_SORT"));
     }
 }

@@ -1,0 +1,71 @@
+package com.promoquoter.promotion;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+
+import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.PromotionType;
+
+class PromotionTest {
+
+    @Test
+    void percentOffCategoryNormalisesNameAndCategory() {
+        Promotion promotion = Promotion.percentOffCategory("  10% off  ", true, 5, Set.of(), " kitchen ",
+                new BigDecimal("10"));
+
+        assertThat(promotion.getType()).isEqualTo(PromotionType.PERCENT_OFF_CATEGORY);
+        assertThat(promotion.getName()).isEqualTo("10% off");
+        assertThat(promotion.getCategory()).isEqualTo("KITCHEN");
+        assertThat(promotion.getPercent()).isEqualByComparingTo("10");
+        assertThat(promotion.isActive()).isTrue();
+        assertThat(promotion.getPriority()).isEqualTo(5);
+        assertThat(promotion.getProductId()).isNull();
+    }
+
+    @Test
+    void buyXGetYKeepsProductAndQuantities() {
+        UUID productId = UUID.randomUUID();
+
+        Promotion promotion = Promotion.buyXGetY("2+1", false, 0, Set.of(), productId, 2, 1);
+
+        assertThat(promotion.getType()).isEqualTo(PromotionType.BUY_X_GET_Y);
+        assertThat(promotion.getProductId()).isEqualTo(productId);
+        assertThat(promotion.getBuyQty()).isEqualTo(2);
+        assertThat(promotion.getFreeQty()).isEqualTo(1);
+        assertThat(promotion.isActive()).isFalse();
+        assertThat(promotion.getCategory()).isNull();
+    }
+
+    @Test
+    void emptySegmentsMeanEveryone() {
+        Promotion promotion = Promotion.buyXGetY("A", true, 0, Set.of(), UUID.randomUUID(), 1, 1);
+
+        assertThat(promotion.getEligibleSegments()).isEmpty();
+    }
+
+    @Test
+    void segmentsAreCopiedDefensively() {
+        Set<CustomerSegment> segments = EnumSet.of(CustomerSegment.VIP);
+
+        Promotion promotion = Promotion.buyXGetY("A", true, 0, segments, UUID.randomUUID(), 1, 1);
+        segments.add(CustomerSegment.EMPLOYEE);
+
+        assertThat(promotion.getEligibleSegments()).containsExactly(CustomerSegment.VIP);
+    }
+
+    @Test
+    void generatesIdAndCreationTime() {
+        Promotion first = Promotion.buyXGetY("A", true, 0, Set.of(), UUID.randomUUID(), 1, 1);
+        Promotion second = Promotion.buyXGetY("A", true, 0, Set.of(), UUID.randomUUID(), 1, 1);
+
+        assertThat(first.getId()).isNotNull().isNotEqualTo(second.getId());
+        assertThat(first.getCreatedAt()).isNotNull();
+        assertThat(first.getVersion()).isNull();
+    }
+}

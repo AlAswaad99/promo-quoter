@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import com.promoquoter.pricing.rules.BuyXGetYRuleProvider;
 import com.promoquoter.pricing.rules.PercentOffCategoryRuleProvider;
+import com.promoquoter.pricing.rules.TieredBulkRuleProvider;
 
 class PromotionRuleFactoryTest {
 
     private final PromotionRuleFactory factory = new PromotionRuleFactory(
-            List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider()));
+            List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(), new TieredBulkRuleProvider()));
 
     @Test
     void buildsOneAuditedRulePerEligibleDefinition() {
@@ -70,7 +71,7 @@ class PromotionRuleFactoryTest {
     @Test
     void failsFastWhenAPromotionTypeHasTwoProviders() {
         assertThatThrownBy(() -> new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider(),
-                new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider())))
+                new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(), new TieredBulkRuleProvider())))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("PERCENT_OFF_CATEGORY");
     }
@@ -78,11 +79,13 @@ class PromotionRuleFactoryTest {
     @Test
     void providersRejectDefinitionsMissingTheirParameters() {
         PromotionDefinition incomplete = new PromotionDefinition(UUID.randomUUID(), PromotionType.BUY_X_GET_Y, "x",
-                true, 0, java.time.Instant.now(), java.util.Set.of(), null, null, null, null, null);
+                true, 0, java.time.Instant.now(), java.util.Set.of(), null, null, null, null, null, null);
 
         assertThatThrownBy(() -> new BuyXGetYRuleProvider().create(incomplete))
                 .isInstanceOf(NullPointerException.class);
         assertThatThrownBy(() -> new PercentOffCategoryRuleProvider().create(incomplete))
+                .isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> new TieredBulkRuleProvider().create(incomplete))
                 .isInstanceOf(NullPointerException.class);
     }
 }

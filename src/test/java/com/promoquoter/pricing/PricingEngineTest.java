@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.promoquoter.pricing.rules.BuyXGetYRuleProvider;
 import com.promoquoter.pricing.rules.PercentOffCategoryRuleProvider;
+import com.promoquoter.pricing.rules.TieredBulkRuleProvider;
 
 class PricingEngineTest {
 
@@ -17,7 +18,8 @@ class PricingEngineTest {
     private static final UUID LAMP = UUID.randomUUID();
 
     private final PricingEngine engine = new PricingEngine(
-            new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider())));
+            new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(),
+                    new TieredBulkRuleProvider())));
 
     private static CartLine mugs(int qty) {
         return new CartLine(MUG, "Mug", "KITCHEN", new BigDecimal("12.00"), qty);
@@ -140,6 +142,21 @@ class PricingEngineTest {
         assertThat(breakdown.appliedPromotions().get(0).amount()).isEqualByComparingTo("1.20");
         assertThat(breakdown.appliedPromotions().get(1).amount()).isEqualByComparingTo("2.16");
         assertThat(breakdown.total()).isEqualByComparingTo("8.64");
+    }
+
+    @Test
+    void tieredBulkRunsLastOnTheDiscountedTotal() {
+        PromotionDefinition percent = Promos.percentOff("KITCHEN", "10").named("category").build();
+        PromotionDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).named("bxgy").build();
+        PromotionDefinition tiered = Promos.tieredBulk(MUG, 3, "10").named("bulk").build();
+
+        PriceBreakdown breakdown = engine.price(List.of(mugs(3)), CustomerSegment.REGULAR,
+                List.of(tiered, buyXGetY, percent));
+
+        assertThat(breakdown.appliedPromotions()).extracting(AppliedPromotion::name)
+                .containsExactly("category", "bxgy", "bulk");
+        assertThat(breakdown.appliedPromotions().get(2).amount()).isEqualByComparingTo("2.16");
+        assertThat(breakdown.total()).isEqualByComparingTo("19.44");
     }
 
     @Test

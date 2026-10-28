@@ -158,3 +158,104 @@ Browse:
 curl -s "$BASE/products?category=kitchen&sort=price,desc&size=5"
 curl -s "$BASE/orders?size=5"
 ```
+
+## Design
+
+### Layout
+
+Packages are organised by feature, not by layer. Each feature owns its controller, service, entity and repository, and exposes a small public surface. Dependencies only point one way:
+
+```
+order ──► cart ──► product
+  │         ├────► promotion ──► pricing   (framework-free engine)
+  └─────────────► product (InventoryService)
+common: error handling, paging, money, observability
+```
+
+Entities and repositories are package-private, so another feature can only reach them through a public service.
+
+### Rules engine (`pricing`)
+
+| Pattern | Where | Role |
+|---|---|---|
+| Strategy | `PricingRule` and one class per promotion type | Each rule encapsulates one discount algorithm |
+| Pipeline / Chain | `PricingPipeline` | Sorts the rules and passes one `PricingContext` through them |
+| Factory | `PromotionRuleFactory` + one `RuleProvider` per type | Builds rules from persisted `PromotionDefinition`s; filters by active flag and customer segment |
+| Decorator | `AuditingRule` | Wraps every rule and records exactly what it changed in the audit trail that becomes `appliedPromotions` |
+
+The engine has no Spring or JPA dependencies, so it is tested without starting a context.
+
+**Adding a promotion type** takes a `PromotionType` value, a rule class, and a `RuleProvider` bean (plus the API request record and storage column if it carries new parameters). The pipeline, the factory and the services are untouched. The factory refuses to start if any `PromotionType` has no provider, so a half-wired type cannot ship.
+
+### Pricing rules
+
+1. A line starts at `unitPrice × qty`.
+2. Rules run in stage order: **`PERCENT_OFF_CATEGORY` (100) → `BUY_X_GET_Y` (200) → `TIERED_BULK` (300)**. Within a stage: `priority` ascending, then creation time, then id. Each rule works on the running total left by the previous ones, so discounts stack.
+3. `PERCENT_OFF_CATEGORY`: `percent` of the line total for lines in the category (category match is case-insensitive).
+4. `BUY_X_GET_Y`: `floor(qty / (buyQty + freeQty)) × freeQty` units are free, valued at the line's current (already discounted) unit price. Free items are never added to the cart automatically. Buy 2 get 1: qty 2 → 0 free, 3 → 1, 6 → 2, 7 → 2.
+5. `TIERED_BULK`: `percent` off the line total once `qty >= minQty`.
+6. Every discount is rounded `HALF_UP` to cents when applied and capped at the line's remaining total, so a line never goes below `0.00`. Cart totals are the sums of the lines, so lines always reconcile exactly with the total.
+7. A promotion applies only if it is active and either has no segment restriction or lists the cart's `customerSegment` (default `REGULAR`).
+
+Worked example (3 mugs at 12.00): 36.00 → 10% off takes 3.60 → 32.40 → the free mug is valued at 32.40 / 3 = 10.80 → **21.60**.
+
+### Concurrency and idempotency
+
+Confirm runs as one transaction:
+
+1. If an `Idempotency-Key` is present, its record (key, request hash, pre-generated `orderId`) is inserted first. The key is a primary key, so two simultaneous requests with the same key cannot both pass: the second waits on the first, then fails with a duplicate key and is answered with the first order.
+2. The product rows are loaded with `SELECT … FOR UPDATE` (pessimistic write lock) in a single query ordered by id, so every transaction takes locks in the same order and carts that share products cannot deadlock.
+3. Stock is checked for every line and **all** shortages are reported together in one `409 INSUFFICIENT_STOCK`. Nothing is decremented unless every line fits.
+4. Stock is decremented, the cart is priced from the locked rows, and the order with its price snapshot is saved.
+
+If anything fails, the whole transaction rolls back, including the idempotency record. A failed confirm therefore does not "use up" its key and can be retried. Products also carry a `@Version` and a `CHECK (stock >= 0)` constraint as defence in depth; an optimistic-lock or lock-timeout failure returns `409 CONCURRENT_MODIFICATION`.
+
+The request hash covers the customer segment and the merged, id-sorted items, so a cart that is the same after normalisation (items reordered, duplicate lines merged) is treated as the same request.
+
+### Errors
+
+All errors are RFC 7807 `application/problem+json` with extra fields `code`, `requestId` and, where useful, `errors[]`.
+
+| Code | Status | When |
+|---|---|---|
+| `VALIDATION_FAILED` | 400 | Bean Validation failure; `errors[]` lists `{field, message}` |
+| `MALFORMED_REQUEST` | 400 | Bad JSON, wrong types, unknown fields, unknown enum value or promotion `type` |
+| `INVALID_SORT` | 400 | Sort field not allowed |
+| `INVALID_IDEMPOTENCY_KEY` | 400 | Blank or longer than 100 characters |
+| `PRODUCT_NOT_FOUND` / `PROMOTION_NOT_FOUND` / `ORDER_NOT_FOUND` | 404 | Unknown id |
+| `INSUFFICIENT_STOCK` | 409 | Not enough stock; `errors[]` lists `{productId, requested, available}` |
+| `CONCURRENT_MODIFICATION` | 409 | Lock timeout or optimistic-lock failure |
+| `UNKNOWN_PRODUCT` | 422 | A promotion references a product that does not exist |
+| `IDEMPOTENCY_KEY_REUSED` | 422 | The key was already used with a different request |
+| `INTERNAL_ERROR` | 500 | Anything unexpected; details are logged, never returned |
+
+### Logging and request ids
+
+A servlet filter (`RequestLoggingFilter`) gives every request an id. An incoming `X-Request-Id` is reused when it is 1–64 characters of letters, digits, `.`, `_` or `-`; otherwise a UUID is generated. The id is put in the logging context, so it appears in every log line (`[requestId]`), in the `X-Request-Id` response header and in every error body, and a client can quote it when reporting a problem.
+
+Per request the filter logs a `request started` line and a `request completed` line with method, path, status, `startedAt`, `endedAt` and `durationMs`. The completion line is INFO, WARN for 4xx and ERROR for 5xx. The service also logs INFO when an order is confirmed or replayed, WARN on 409/422 and ERROR with a stack trace on 500. Request bodies are never logged. The `json` profile switches the console output to structured ECS JSON, with the request id as a field.
+
+## Assumptions and trade-offs
+
+- **No authentication.** Not part of the requirements. Idempotency keys and orders are therefore global.
+- Single currency, implicit. Prices are `BigDecimal` with two decimals.
+- Categories are free text, trimmed and upper-cased. Segments are a fixed enum.
+- Promotions **stack** in a fixed stage order. A "best single promotion wins" mode would be a different pipeline, and the structure supports it.
+- **Quote does not check stock, and confirm re-prices.** A confirmed price can differ from an earlier quote if prices or promotions changed in between. No quote token is issued.
+- Idempotency records never expire and only successful confirms are recorded.
+- Orders have one status, `CONFIRMED`, and snapshot product and promotion data so later catalogue changes do not rewrite history.
+- Limits (100 items per batch or cart, quantity 1000 per product, page size 100) are defensive defaults, not business rules from the brief.
+- In-memory H2, single node. The row locks are database-level, so they are not distributed locks.
+
+## With more time
+
+- Order lifecycle (cancel, fulfil, expiry) with stock release on cancel.
+- Product update and delete; a restock endpoint.
+- Promotion validity windows (start and end dates) and exclusivity or maximum-stack rules.
+- Idempotency key expiry and per-client scoping once there is authentication.
+- Distributed tracing, metrics dashboards, Flyway migrations, OpenAPI docs and a compose file with a database such as PostgreSQL. They were left out to keep the dependency list lean.
+- Quote tokens that pin a price for a short time.
+
+## Repository workflow
+
+`main` holds the project skeleton, then each feature was built on its own branch and merged with `--no-ff`: `feature/products`, `feature/promotions`, `feature/pricing-engine`, `feature/cart-confirm`, `feature/tiered-bulk-promotion`, `task/docker-and-readme` and `task/update-plan`. The service breakdown and the Postman collection are in [`docs/`](docs).

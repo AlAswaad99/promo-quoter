@@ -1,5 +1,6 @@
 package com.promoquoter.promotion;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 import com.promoquoter.pricing.PromotionType;
 
 interface PromotionRepository extends JpaRepository<Promotion, UUID> {
+
+    List<Promotion> findByActiveTrue();
 
     @Query("""
             select p from Promotion p

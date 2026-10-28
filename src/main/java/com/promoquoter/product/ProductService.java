@@ -45,6 +45,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductSnapshot> findSnapshots(Collection<UUID> ids) {
+        return productRepository.findAllById(ids).stream().map(ProductSnapshot::from).toList();
+    }
+
+    @Transactional(readOnly = true)
     public PageResponse<ProductResponse> list(String category, Pageable pageable) {
         Page<Product> page = category == null || category.isBlank()
                 ? productRepository.findAll(pageable)

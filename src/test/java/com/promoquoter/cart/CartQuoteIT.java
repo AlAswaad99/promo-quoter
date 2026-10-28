@@ -132,6 +132,18 @@ class CartQuoteIT {
     }
 
     @Test
+    void appliesTieredBulkOnlyAtTheThreshold() throws Exception {
+        api.createPromotion("{\"type\":\"TIERED_BULK\",\"name\":\"Bulk\",\"productId\":\"" + mug
+                + "\",\"minQty\":5,\"percent\":10}");
+
+        quote(cart(null, item(mug, 4))).andExpect(jsonPath("$.total").value("48.00"));
+        quote(cart(null, item(mug, 5)))
+                .andExpect(jsonPath("$.total").value("54.00"))
+                .andExpect(jsonPath("$.appliedPromotions[0].type").value("TIERED_BULK"))
+                .andExpect(jsonPath("$.appliedPromotions[0].amount").value("6.00"));
+    }
+
+    @Test
     void ignoresInactivePromotions() throws Exception {
         api.percentOff("Off", "kitchen", "50", ",\"active\":false");
 

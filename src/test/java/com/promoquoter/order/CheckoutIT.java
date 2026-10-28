@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -315,5 +317,67 @@ class CheckoutIT {
         confirm("{\"items\":[{\"productId\":\"" + mug + "\",\"quantity\":1}]}")
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+    }
+
+    @Test
+    void theOrderCanBeFetchedAfterwards() throws Exception {
+        api.percentOff("10% kitchen", "kitchen", "10", "");
+        ResultActions created = confirm(cart(null, item(mug, 2)));
+        String id = orderIdOf(created);
+        String createdBody = created.andReturn().getResponse().getContentAsString();
+
+        String fetched = mockMvc.perform(get("/api/v1/orders/" + id))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat((Object) JsonPath.read(fetched, "$")).isEqualTo(JsonPath.read(createdBody, "$"));
+    }
+
+    @Test
+    void unknownOrderIsNotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/orders/" + UUID.randomUUID()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("ORDER_NOT_FOUND"));
+        mockMvc.perform(get("/api/v1/orders/nope"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+    }
+
+    @Test
+    void listsOrdersWithPagingAndSorting() throws Exception {
+        confirm(cart(null, item(mug, 3))).andExpect(status().isCreated());
+        confirm(cart(null, item(mug, 1))).andExpect(status().isCreated());
+        confirm(cart(null, item(mug, 2))).andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/orders").param("sort", "total,asc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(3))
+                .andExpect(jsonPath("$.content[*].total", contains("12.00", "24.00", "36.00")));
+        mockMvc.perform(get("/api/v1/orders").param("sort", "total,desc").param("size", "2").param("page", "1"))
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].total").value("12.00"))
+                .andExpect(jsonPath("$.totalPages").value(2));
+        mockMvc.perform(get("/api/v1/orders").param("sort", "status"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_SORT"));
+    }
+
+    @Test
+    void orderHistorySurvivesFutureCatalogueChanges() throws Exception {
+        String id = orderIdOf(confirm(cart(null, item(mug, 1))));
+        database.changeProduct(mug, "Renamed", "99.00");
+
+        mockMvc.perform(get("/api/v1/orders/" + id))
+                .andExpect(jsonPath("$.lines[0].name").value("Mug"))
+                .andExpect(jsonPath("$.lines[0].unitPrice").value("12.00"))
+                .andExpect(jsonPath("$.total").value(not("99.00")));
+    }
+
+    @Test
+    void emptyOrderListIsAnEmptyPage() throws Exception {
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/orders")).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat((Integer) JsonPath.read(response.getContentAsString(), "$.totalElements")).isZero();
     }
 }

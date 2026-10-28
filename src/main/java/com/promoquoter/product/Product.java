@@ -48,6 +48,13 @@ class Product {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    void decrementStock(int quantity) {
+        if (quantity > stock) {
+            throw new IllegalStateException("Cannot reserve " + quantity + " units, only " + stock + " in stock");
+        }
+        this.stock -= quantity;
+    }
+
     Product(String name, String category, BigDecimal price, int stock) {
         this.id = UUID.randomUUID();
         this.name = name.trim();

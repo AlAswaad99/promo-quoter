@@ -169,6 +169,21 @@ class PromotionManagementIT {
     }
 
     @Test
+    void deletingAPromotionKeepsTheAuditTrailOfExistingOrders() throws Exception {
+        String order = mockMvc.perform(post("/api/v1/cart/confirm").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"items\":[{\"productId\":\"" + productId + "\",\"qty\":2}]}"))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        String orderId = JsonPath.read(order, "$.orderId");
+
+        mockMvc.perform(delete("/api/v1/promotions/" + promotionId)).andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/v1/orders/" + orderId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value("18.00"))
+                .andExpect(jsonPath("$.appliedPromotions[0].promotionId").value(promotionId));
+    }
+
+    @Test
     void deletingTwiceReturnsNotFoundTheSecondTime() throws Exception {
         mockMvc.perform(delete("/api/v1/promotions/" + promotionId)).andExpect(status().isNoContent());
         mockMvc.perform(delete("/api/v1/promotions/" + promotionId)).andExpect(status().isNotFound());

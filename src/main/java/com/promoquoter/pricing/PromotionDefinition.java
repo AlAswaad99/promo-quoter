@@ -17,7 +17,8 @@ public record PromotionDefinition(
         BigDecimal percent,
         UUID productId,
         Integer buyQty,
-        Integer freeQty) {
+        Integer freeQty,
+        Integer minQty) {
 
     public boolean isEligibleFor(CustomerSegment segment) {
         return active && (eligibleSegments.isEmpty() || eligibleSegments.contains(segment));

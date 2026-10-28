@@ -73,6 +73,9 @@ class Promotion {
     @Column(name = "free_qty")
     private Integer freeQty;
 
+    @Column(name = "min_qty")
+    private Integer minQty;
+
     @Version
     private Long version;
 
@@ -111,7 +114,7 @@ class Promotion {
 
     PromotionDefinition toDefinition() {
         return new PromotionDefinition(id, type, name, active, priority, createdAt, Set.copyOf(eligibleSegments),
-                category, percent, productId, buyQty, freeQty);
+                category, percent, productId, buyQty, freeQty, minQty);
     }
 
     static Promotion percentOffCategory(String name, boolean active, int priority,
@@ -119,6 +122,15 @@ class Promotion {
         Promotion promotion = new Promotion(PromotionType.PERCENT_OFF_CATEGORY, name, active, priority,
                 eligibleSegments);
         promotion.category = Categories.normalize(category);
+        promotion.percent = percent;
+        return promotion;
+    }
+
+    static Promotion tieredBulk(String name, boolean active, int priority, Set<CustomerSegment> eligibleSegments,
+            UUID productId, int minQty, BigDecimal percent) {
+        Promotion promotion = new Promotion(PromotionType.TIERED_BULK, name, active, priority, eligibleSegments);
+        promotion.productId = productId;
+        promotion.minQty = minQty;
         promotion.percent = percent;
         return promotion;
     }

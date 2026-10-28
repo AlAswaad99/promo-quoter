@@ -23,6 +23,13 @@ public final class Promos {
         return builder;
     }
 
+    public static Builder tieredBulk(UUID productId, int minQty, String percent) {
+        Builder builder = new Builder(PromotionType.TIERED_BULK).percent(new BigDecimal(percent));
+        builder.productId = productId;
+        builder.minQty = minQty;
+        return builder;
+    }
+
     public static final class Builder {
 
         private final PromotionType type;
@@ -37,6 +44,7 @@ public final class Promos {
         private UUID productId;
         private Integer buyQty;
         private Integer freeQty;
+        private Integer minQty;
 
         private Builder(PromotionType type) {
             this.type = type;
@@ -85,7 +93,7 @@ public final class Promos {
 
         public PromotionDefinition build() {
             return new PromotionDefinition(id, type, name, active, priority, createdAt, segments, category, percent,
-                    productId, buyQty, freeQty);
+                    productId, buyQty, freeQty, minQty);
         }
     }
 }

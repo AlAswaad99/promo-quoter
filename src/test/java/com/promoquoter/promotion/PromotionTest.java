@@ -68,4 +68,35 @@ class PromotionTest {
         assertThat(first.getCreatedAt()).isNotNull();
         assertThat(first.getVersion()).isNull();
     }
+
+    @Test
+    void tieredBulkKeepsProductThresholdAndPercent() {
+        UUID productId = UUID.randomUUID();
+
+        Promotion promotion = Promotion.tieredBulk("5% off 10+", true, 2, Set.of(CustomerSegment.VIP), productId, 10,
+                new BigDecimal("5"));
+
+        assertThat(promotion.getType()).isEqualTo(PromotionType.TIERED_BULK);
+        assertThat(promotion.getProductId()).isEqualTo(productId);
+        assertThat(promotion.getMinQty()).isEqualTo(10);
+        assertThat(promotion.getPercent()).isEqualByComparingTo("5");
+        assertThat(promotion.getBuyQty()).isNull();
+    }
+
+    @Test
+    void definitionCarriesEveryRuleParameter() {
+        UUID productId = UUID.randomUUID();
+        Promotion promotion = Promotion.tieredBulk("5% off 10+", true, 2, Set.of(CustomerSegment.VIP), productId, 10,
+                new BigDecimal("5"));
+
+        var definition = promotion.toDefinition();
+
+        assertThat(definition.id()).isEqualTo(promotion.getId());
+        assertThat(definition.type()).isEqualTo(PromotionType.TIERED_BULK);
+        assertThat(definition.minQty()).isEqualTo(10);
+        assertThat(definition.productId()).isEqualTo(productId);
+        assertThat(definition.eligibleSegments()).containsExactly(CustomerSegment.VIP);
+        assertThat(definition.isEligibleFor(CustomerSegment.VIP)).isTrue();
+        assertThat(definition.isEligibleFor(CustomerSegment.REGULAR)).isFalse();
+    }
 }

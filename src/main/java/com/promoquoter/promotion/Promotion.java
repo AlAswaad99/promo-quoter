@@ -91,6 +91,23 @@ class Promotion {
         this.createdAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
     }
 
+    void update(String newName, Boolean newActive, Integer newPriority, Set<CustomerSegment> newSegments) {
+        if (newName != null) {
+            this.name = newName.trim();
+        }
+        if (newActive != null) {
+            this.active = newActive;
+        }
+        if (newPriority != null) {
+            this.priority = newPriority;
+        }
+        if (newSegments != null) {
+            this.eligibleSegments = newSegments.isEmpty()
+                    ? EnumSet.noneOf(CustomerSegment.class)
+                    : EnumSet.copyOf(newSegments);
+        }
+    }
+
     static Promotion percentOffCategory(String name, boolean active, int priority,
             Set<CustomerSegment> eligibleSegments, String category, BigDecimal percent) {
         Promotion promotion = new Promotion(PromotionType.PERCENT_OFF_CATEGORY, name, active, priority,

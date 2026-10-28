@@ -39,6 +39,32 @@ public class PromotionService {
         return PageResponse.of(promotionRepository.search(type, active, pageable), PromotionResponse::from);
     }
 
+    @Transactional(readOnly = true)
+    public PromotionResponse get(UUID id) {
+        return PromotionResponse.from(find(id));
+    }
+
+    @Transactional
+    public PromotionResponse update(UUID id, UpdatePromotionRequest request) {
+        if (request.isEmpty()) {
+            throw new ApiException(ErrorCode.VALIDATION_FAILED, "Request validation failed",
+                    List.of(new FieldViolation("body", "At least one field must be provided")));
+        }
+        Promotion promotion = find(id);
+        promotion.update(request.name(), request.active(), request.priority(), request.eligibleSegments());
+        return PromotionResponse.from(promotionRepository.saveAndFlush(promotion));
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        promotionRepository.delete(find(id));
+    }
+
+    private Promotion find(UUID id) {
+        return promotionRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.PROMOTION_NOT_FOUND, "Promotion " + id + " was not found"));
+    }
+
     private void rejectUnknownProducts(List<CreatePromotionRequest> requests) {
         Set<UUID> referenced = requests.stream()
                 .map(CreatePromotionRequest::referencedProductId)

@@ -22,6 +22,7 @@ public record PromotionResponse(
         UUID productId,
         Integer buyQty,
         Integer freeQty,
+        Integer minQty,
         Instant createdAt) {
 
     static PromotionResponse from(Promotion promotion) {
@@ -29,6 +30,6 @@ public record PromotionResponse(
                 promotion.isActive(), promotion.getPriority(),
                 promotion.getEligibleSegments().stream().sorted().toList(), promotion.getCategory(),
                 promotion.getPercent(), promotion.getProductId(), promotion.getBuyQty(), promotion.getFreeQty(),
-                promotion.getCreatedAt());
+                promotion.getMinQty(), promotion.getCreatedAt());
     }
 }

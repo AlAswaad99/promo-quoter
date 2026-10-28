@@ -248,4 +248,55 @@ class PromotionControllerIT {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_SORT"));
     }
+
+    @Test
+    void createsTieredBulk() throws Exception {
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"5% off 10+\",\"productId\":\"" + productId
+                + "\",\"minQty\":10,\"percent\":5,\"eligibleSegments\":[\"REGULAR\"]}]")
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$[0].type").value("TIERED_BULK"))
+                .andExpect(jsonPath("$[0].productId").value(productId))
+                .andExpect(jsonPath("$[0].minQty").value(10))
+                .andExpect(jsonPath("$[0].percent").value(5.00))
+                .andExpect(jsonPath("$[0].eligibleSegments", contains("REGULAR")))
+                .andExpect(jsonPath("$[0].buyQty").doesNotExist());
+
+        mockMvc.perform(get("/api/v1/promotions").param("type", "TIERED_BULK"))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.content[0].minQty").value(10));
+    }
+
+    @Test
+    void rejectsInvalidTieredBulkFields() throws Exception {
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"x\",\"productId\":\"" + productId
+                + "\",\"minQty\":1,\"percent\":101}]")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[*].field", contains("[0].minQty", "[0].percent")));
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"x\",\"minQty\":5,\"percent\":5}]")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[*].field", contains("[0].productId")));
+    }
+
+    @Test
+    void tieredBulkForAnUnknownProductIsUnprocessable() throws Exception {
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"x\",\"productId\":\"" + UUID.randomUUID()
+                + "\",\"minQty\":5,\"percent\":5}]")
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.code").value("UNKNOWN_PRODUCT"));
+    }
+
+    @Test
+    void rejectsATieredBulkThresholdAboveTheCartLimit() throws Exception {
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"A\",\"productId\":\"" + productId
+                + "\",\"minQty\":1001,\"percent\":5}]")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0].field").value("[0].minQty"));
+    }
+
+    @Test
+    void acceptsATieredBulkThresholdAtTheCartLimit() throws Exception {
+        createPromotions("[{\"type\":\"TIERED_BULK\",\"name\":\"A\",\"productId\":\"" + productId
+                + "\",\"minQty\":1000,\"percent\":5}]")
+                .andExpect(status().isCreated());
+    }
 }

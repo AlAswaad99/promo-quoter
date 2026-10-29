@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
@@ -31,8 +32,8 @@ public class PromotionService {
 
     @Transactional
     public List<PromotionResponse> createAll(List<CreatePromotionRequest> requests) {
-        List<List<RuleParser.ProductReference>> ruleReferences = validateRules(requests);
-        rejectUnknownProducts(requests, ruleReferences);
+        List<List<RuleParser.ProductReference>> ruleReferences = validateRules(requests, index -> "[" + index + "]");
+        rejectUnknownProducts(requests, ruleReferences, index -> "[" + index + "]");
         List<Promotion> promotions = requests.stream().map(CreatePromotionRequest::toEntity).toList();
         return promotionRepository.saveAll(promotions).stream().map(PromotionResponse::from).toList();
     }
@@ -73,12 +74,25 @@ public class PromotionService {
                 () -> new ApiException(ErrorCode.PROMOTION_NOT_FOUND, "Promotion " + id + " was not found"));
     }
 
-    private List<List<RuleParser.ProductReference>> validateRules(List<CreatePromotionRequest> requests) {
+    public record PreviewRule(PromotionResponse response, RuleDefinition definition) {
+    }
+
+    @Transactional(readOnly = true)
+    public PreviewRule previewRule(CreatePromotionRequest request) {
+        List<CreatePromotionRequest> single = List.of(request);
+        List<List<RuleParser.ProductReference>> references = validateRules(single, index -> "rule");
+        rejectUnknownProducts(single, references, index -> "rule");
+        Promotion promotion = request.toEntity();
+        return new PreviewRule(PromotionResponse.from(promotion), promotion.toDefinition());
+    }
+
+    private List<List<RuleParser.ProductReference>> validateRules(List<CreatePromotionRequest> requests,
+            IntFunction<String> path) {
         List<FieldViolation> violations = new ArrayList<>();
         List<List<RuleParser.ProductReference>> references = new ArrayList<>();
         for (int index = 0; index < requests.size(); index++) {
             if (requests.get(index) instanceof RuleRequest rule) {
-                ParsedRule parsed = rule.parse("[" + index + "]", violations);
+                ParsedRule parsed = rule.parse(path.apply(index), violations);
                 references.add(parsed == null ? List.of() : parsed.references());
             } else {
                 references.add(List.of());
@@ -91,7 +105,7 @@ public class PromotionService {
     }
 
     private void rejectUnknownProducts(List<CreatePromotionRequest> requests,
-            List<List<RuleParser.ProductReference>> ruleReferences) {
+            List<List<RuleParser.ProductReference>> ruleReferences, IntFunction<String> path) {
         Set<UUID> referenced = new java.util.HashSet<>();
         requests.stream().map(CreatePromotionRequest::referencedProductId).filter(Objects::nonNull)
                 .forEach(referenced::add);
@@ -104,7 +118,7 @@ public class PromotionService {
         for (int index = 0; index < requests.size(); index++) {
             UUID productId = requests.get(index).referencedProductId();
             if (productId != null && !existing.contains(productId)) {
-                violations.add(new FieldViolation("[" + index + "].productId", "Product " + productId + " does not exist"));
+                violations.add(new FieldViolation(path.apply(index) + ".productId", "Product " + productId + " does not exist"));
             }
             for (RuleParser.ProductReference reference : ruleReferences.get(index)) {
                 if (!existing.contains(reference.productId())) {

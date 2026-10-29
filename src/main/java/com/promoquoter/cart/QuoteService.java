@@ -1,5 +1,6 @@
 package com.promoquoter.cart;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.pricing.CartLine;
 import com.promoquoter.pricing.PriceBreakdown;
 import com.promoquoter.pricing.PricingEngine;
+import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.product.ProductService;
 import com.promoquoter.product.ProductSnapshot;
 import com.promoquoter.promotion.PromotionService;
@@ -37,6 +39,11 @@ public class QuoteService {
 
     @Transactional(readOnly = true)
     public PriceBreakdown price(NormalizedCart cart) {
+        return price(cart, List.of());
+    }
+
+    @Transactional(readOnly = true)
+    public PriceBreakdown price(NormalizedCart cart, List<RuleDefinition> extraRules) {
         List<UUID> productIds = cart.items().stream().map(NormalizedCart.Item::productId).toList();
         Map<UUID, ProductSnapshot> products = productService.findSnapshots(productIds).stream()
                 .collect(Collectors.toMap(ProductSnapshot::id, Function.identity()));
@@ -44,7 +51,9 @@ public class QuoteService {
         List<CartLine> lines = cart.items().stream()
                 .map(item -> toCartLine(products.get(item.productId()), item.qty()))
                 .toList();
-        return pricingEngine.price(lines, cart.customerSegment(), promotionService.activeDefinitions());
+        List<RuleDefinition> rules = new ArrayList<>(promotionService.activeDefinitions());
+        rules.addAll(extraRules);
+        return pricingEngine.price(lines, cart.customerSegment(), rules);
     }
 
     private static CartLine toCartLine(ProductSnapshot product, int qty) {

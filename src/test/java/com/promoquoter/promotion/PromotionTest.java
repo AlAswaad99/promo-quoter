@@ -4,13 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.promoquoter.pricing.ActionSpec;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.condition.Condition;
+import com.promoquoter.pricing.condition.ConditionField;
+import com.promoquoter.pricing.condition.Operator;
 
 class PromotionTest {
 
@@ -93,8 +98,11 @@ class PromotionTest {
 
         assertThat(definition.id()).isEqualTo(promotion.getId());
         assertThat(definition.type()).isEqualTo(PromotionType.TIERED_BULK);
-        assertThat(definition.minQty()).isEqualTo(10);
-        assertThat(definition.productId()).isEqualTo(productId);
+        assertThat(definition.stage()).isEqualTo(300);
+        assertThat(definition.action()).isEqualTo(new ActionSpec.PercentOff(new BigDecimal("5")));
+        assertThat(definition.target()).isEqualTo(new Condition.All(List.of(
+                new Condition.Comparison(ConditionField.PRODUCT_ID, Operator.EQ, productId),
+                new Condition.Comparison(ConditionField.LINE_QTY, Operator.GTE, new BigDecimal("10")))));
         assertThat(definition.eligibleSegments()).containsExactly(CustomerSegment.VIP);
         assertThat(definition.isEligibleFor(CustomerSegment.VIP)).isTrue();
         assertThat(definition.isEligibleFor(CustomerSegment.REGULAR)).isFalse();

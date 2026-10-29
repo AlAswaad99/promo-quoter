@@ -11,7 +11,8 @@ import org.hibernate.annotations.BatchSize;
 
 import com.promoquoter.common.text.Categories;
 import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PromotionDefinition;
+import com.promoquoter.pricing.LegacyTemplates;
+import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
 
 import jakarta.persistence.CollectionTable;
@@ -112,9 +113,17 @@ class Promotion {
         }
     }
 
-    PromotionDefinition toDefinition() {
-        return new PromotionDefinition(id, type, name, active, priority, createdAt, Set.copyOf(eligibleSegments),
-                category, percent, productId, buyQty, freeQty, minQty);
+    RuleDefinition toDefinition() {
+        Set<CustomerSegment> segments = Set.copyOf(eligibleSegments);
+        return switch (type) {
+            case PERCENT_OFF_CATEGORY -> LegacyTemplates.percentOffCategory(id, name, active, priority, createdAt,
+                    segments, category, percent);
+            case BUY_X_GET_Y -> LegacyTemplates.buyXGetY(id, name, active, priority, createdAt, segments, productId,
+                    buyQty, freeQty);
+            case TIERED_BULK -> LegacyTemplates.tieredBulk(id, name, active, priority, createdAt, segments, productId,
+                    minQty, percent);
+            case RULE -> throw new IllegalStateException("Generic rules are not stored yet");
+        };
     }
 
     static Promotion percentOffCategory(String name, boolean active, int priority,

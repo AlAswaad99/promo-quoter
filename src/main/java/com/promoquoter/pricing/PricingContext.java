@@ -33,6 +33,7 @@ public final class PricingContext {
     private BigDecimal surcharges = Money.ZERO;
     private int giftUnits;
     private boolean stopped;
+    private String stoppedBy;
 
     private PricingContext(CustomerSegment customerSegment, List<PricedLine> lines, LocalDate date,
             BigDecimal shippingFee) {
@@ -92,8 +93,13 @@ public final class PricingContext {
         return stopped;
     }
 
-    public void stop() {
+    public void stop(RuleInfo by) {
         stopped = true;
+        stoppedBy = by.name();
+    }
+
+    public String stoppedBy() {
+        return stoppedBy;
     }
 
     public void freeze(PricedLine line) {

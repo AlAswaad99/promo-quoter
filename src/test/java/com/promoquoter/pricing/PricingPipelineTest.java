@@ -12,10 +12,10 @@ class PricingPipelineTest {
 
     private final List<String> executed = new ArrayList<>();
 
-    private PricingRule rule(String name, int stage, PromotionDefinition definition) {
+    private PricingRule rule(String name, int stage, RuleDefinition definition) {
         return new PricingRule() {
             @Override
-            public PromotionDefinition definition() {
+            public RuleDefinition definition() {
                 return definition;
             }
 
@@ -65,8 +65,8 @@ class PricingPipelineTest {
     void ordersByIdWhenEverythingElseTies() {
         UUID smaller = new UUID(0, 1);
         UUID larger = new UUID(0, 2);
-        PromotionDefinition first = Promos.percentOff("K", "5").id(smaller).build();
-        PromotionDefinition second = Promos.percentOff("K", "5").id(larger).build();
+        RuleDefinition first = Promos.percentOff("K", "5").id(smaller).build();
+        RuleDefinition second = Promos.percentOff("K", "5").id(larger).build();
 
         run(rule("larger", 100, second), rule("smaller", 100, first));
 

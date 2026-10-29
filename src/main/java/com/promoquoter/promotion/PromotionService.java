@@ -15,7 +15,7 @@ import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.common.web.PageResponse;
-import com.promoquoter.pricing.PromotionDefinition;
+import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
 import com.promoquoter.product.ProductService;
 
@@ -36,7 +36,7 @@ public class PromotionService {
     }
 
     @Transactional(readOnly = true)
-    public List<PromotionDefinition> activeDefinitions() {
+    public List<RuleDefinition> activeDefinitions() {
         return promotionRepository.findByActiveTrue().stream().map(Promotion::toDefinition).toList();
     }
 

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.rules.PercentOffCategoryRule;
+import com.promoquoter.pricing.rules.PercentOffRuleProvider;
 
 class AuditingRuleTest {
 
@@ -20,9 +20,9 @@ class AuditingRuleTest {
                 new CartLine(mug, "Mug", "KITCHEN", new BigDecimal("10.00"), 1),
                 new CartLine(lamp, "Lamp", "HOME", new BigDecimal("20.00"), 1),
                 new CartLine(UUID.randomUUID(), "Pan", "KITCHEN", new BigDecimal("40.00"), 1)), CustomerSegment.REGULAR);
-        PromotionDefinition promotion = Promos.percentOff("KITCHEN", "10").named("Kitchen 10").build();
+        RuleDefinition promotion = Promos.percentOff("KITCHEN", "10").named("Kitchen 10").build();
 
-        new AuditingRule(new PercentOffCategoryRule(promotion)).apply(context);
+        new AuditingRule(new PercentOffRuleProvider().create(promotion)).apply(context);
 
         assertThat(context.appliedPromotions()).hasSize(2);
         assertThat(context.appliedPromotions()).extracting(AppliedPromotion::sequence).containsExactly(1, 2);
@@ -40,7 +40,7 @@ class AuditingRuleTest {
                 List.of(new CartLine(UUID.randomUUID(), "Lamp", "HOME", new BigDecimal("20.00"), 1)),
                 CustomerSegment.REGULAR);
 
-        new AuditingRule(new PercentOffCategoryRule(Promos.percentOff("KITCHEN", "10").build())).apply(context);
+        new AuditingRule(new PercentOffRuleProvider().create(Promos.percentOff("KITCHEN", "10").build())).apply(context);
 
         assertThat(context.appliedPromotions()).isEmpty();
     }
@@ -52,7 +52,7 @@ class AuditingRuleTest {
                 CustomerSegment.REGULAR);
         context.lines().get(0).applyDiscount(new BigDecimal("9.50"));
 
-        new AuditingRule(new PercentOffCategoryRule(Promos.percentOff("KITCHEN", "100").build())).apply(context);
+        new AuditingRule(new PercentOffRuleProvider().create(Promos.percentOff("KITCHEN", "100").build())).apply(context);
 
         assertThat(context.appliedPromotions()).singleElement()
                 .satisfies(applied -> assertThat(applied.amount()).isEqualByComparingTo("0.50"));
@@ -60,10 +60,10 @@ class AuditingRuleTest {
 
     @Test
     void delegatesStageAndDefinition() {
-        PromotionDefinition promotion = Promos.percentOff("KITCHEN", "10").build();
-        AuditingRule rule = new AuditingRule(new PercentOffCategoryRule(promotion));
+        RuleDefinition promotion = Promos.percentOff("KITCHEN", "10").build();
+        AuditingRule rule = new AuditingRule(new PercentOffRuleProvider().create(promotion));
 
         assertThat(rule.definition()).isSameAs(promotion);
-        assertThat(rule.stage()).isEqualTo(PercentOffCategoryRule.STAGE);
+        assertThat(rule.stage()).isEqualTo(LegacyTemplates.PERCENT_OFF_CATEGORY_STAGE);
     }
 }

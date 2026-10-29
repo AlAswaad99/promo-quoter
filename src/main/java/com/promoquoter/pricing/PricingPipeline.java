@@ -18,6 +18,12 @@ public final class PricingPipeline {
     }
 
     public void run(PricingContext context) {
-        rules.forEach(rule -> rule.apply(context));
+        for (PricingRule rule : rules) {
+            if (context.isStopped() && rule.kind() == RuleKind.PRICING) {
+                context.skip(rule.definition(), "stopped by '" + context.stoppedBy() + "'");
+            } else {
+                rule.apply(context);
+            }
+        }
     }
 }

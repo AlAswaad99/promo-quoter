@@ -7,4 +7,16 @@ public interface PricingRule {
     int stage();
 
     void apply(PricingContext context);
+
+    default RuleKind kind() {
+        return RuleKind.PRICING;
+    }
+
+    default boolean stopAfter() {
+        return false;
+    }
+
+    default boolean targetsLines() {
+        return true;
+    }
 }

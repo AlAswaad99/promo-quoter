@@ -3,6 +3,7 @@ package com.promoquoter.pricing;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +13,10 @@ public final class Promos {
     }
 
     public static Builder percentOff(String category, String percent) {
-        return new Builder(PromotionType.PERCENT_OFF_CATEGORY).category(category).percent(new BigDecimal(percent));
+        Builder builder = new Builder(PromotionType.PERCENT_OFF_CATEGORY);
+        builder.category = category;
+        builder.percent = new BigDecimal(percent);
+        return builder;
     }
 
     public static Builder buyXGetY(UUID productId, int buyQty, int freeQty) {
@@ -24,9 +28,10 @@ public final class Promos {
     }
 
     public static Builder tieredBulk(UUID productId, int minQty, String percent) {
-        Builder builder = new Builder(PromotionType.TIERED_BULK).percent(new BigDecimal(percent));
+        Builder builder = new Builder(PromotionType.TIERED_BULK);
         builder.productId = productId;
         builder.minQty = minQty;
+        builder.percent = new BigDecimal(percent);
         return builder;
     }
 
@@ -42,23 +47,13 @@ public final class Promos {
         private String category;
         private BigDecimal percent;
         private UUID productId;
-        private Integer buyQty;
-        private Integer freeQty;
-        private Integer minQty;
+        private int buyQty;
+        private int freeQty;
+        private int minQty;
 
         private Builder(PromotionType type) {
             this.type = type;
             this.name = type.name();
-        }
-
-        private Builder category(String category) {
-            this.category = category;
-            return this;
-        }
-
-        private Builder percent(BigDecimal percent) {
-            this.percent = percent;
-            return this;
         }
 
         public Builder id(UUID id) {
@@ -87,13 +82,20 @@ public final class Promos {
         }
 
         public Builder forSegments(CustomerSegment... segments) {
-            this.segments = EnumSet.copyOf(java.util.List.of(segments));
+            this.segments = EnumSet.copyOf(List.of(segments));
             return this;
         }
 
-        public PromotionDefinition build() {
-            return new PromotionDefinition(id, type, name, active, priority, createdAt, segments, category, percent,
-                    productId, buyQty, freeQty, minQty);
+        public RuleDefinition build() {
+            return switch (type) {
+                case PERCENT_OFF_CATEGORY -> LegacyTemplates.percentOffCategory(id, name, active, priority, createdAt,
+                        segments, category, percent);
+                case BUY_X_GET_Y -> LegacyTemplates.buyXGetY(id, name, active, priority, createdAt, segments,
+                        productId, buyQty, freeQty);
+                case TIERED_BULK -> LegacyTemplates.tieredBulk(id, name, active, priority, createdAt, segments,
+                        productId, minQty, percent);
+                case RULE -> throw new IllegalStateException();
+            };
         }
     }
 }

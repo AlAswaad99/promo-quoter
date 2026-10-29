@@ -73,8 +73,8 @@ class PricingContextTest {
         PricingContext context = PricingContext.start(List.of(line(MUG, "KITCHEN", "10.00", 2)),
                 CustomerSegment.REGULAR);
         PricedLine priced = context.lines().get(0);
-        PromotionDefinition first = Promos.percentOff("KITCHEN", "10").named("First").build();
-        PromotionDefinition second = Promos.buyXGetY(MUG, 1, 1).named("Second").build();
+        RuleDefinition first = Promos.percentOff("KITCHEN", "10").named("First").build();
+        RuleDefinition second = Promos.buyXGetY(MUG, 1, 1).named("Second").build();
 
         context.recordApplied(first, priced, new BigDecimal("2.00"));
         context.recordApplied(second, priced, new BigDecimal("9.00"));

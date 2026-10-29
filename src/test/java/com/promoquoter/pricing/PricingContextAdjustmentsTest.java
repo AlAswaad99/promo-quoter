@@ -17,7 +17,7 @@ class PricingContextAdjustmentsTest {
     private static final UUID MUG = UUID.randomUUID();
     private static final UUID LAMP = UUID.randomUUID();
     private static final LocalDate TODAY = LocalDate.parse("2026-11-15");
-    private static final PromotionDefinition RULE = Promos.percentOff("KITCHEN", "10").named("Rule").build();
+    private static final RuleDefinition RULE = Promos.percentOff("KITCHEN", "10").named("Rule").build();
 
     private static PricingContext context(String shippingFee) {
         return PricingContext.start(List.of(
@@ -154,11 +154,12 @@ class PricingContextAdjustmentsTest {
         assertThat(context.isFrozen(mug)).isFalse();
         assertThat(context.isStopped()).isFalse();
         context.freeze(mug);
-        context.stop();
+        context.stop(RULE);
 
         assertThat(context.isFrozen(mug)).isTrue();
         assertThat(context.isFrozen(context.lines().get(1))).isFalse();
         assertThat(context.isStopped()).isTrue();
+        assertThat(context.stoppedBy()).isEqualTo("Rule");
     }
 
     @Test

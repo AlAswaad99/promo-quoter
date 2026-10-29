@@ -8,14 +8,11 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.rules.BuyXGetYRuleProvider;
-import com.promoquoter.pricing.rules.PercentOffCategoryRuleProvider;
-import com.promoquoter.pricing.rules.TieredBulkRuleProvider;
+import com.promoquoter.pricing.rules.PercentOffRuleProvider;
 
 class PromotionRuleFactoryTest {
 
-    private final PromotionRuleFactory factory = new PromotionRuleFactory(
-            List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(), new TieredBulkRuleProvider()));
+    private final PromotionRuleFactory factory = TestProviders.factory();
 
     @Test
     void buildsOneAuditedRulePerEligibleDefinition() {
@@ -37,7 +34,7 @@ class PromotionRuleFactoryTest {
 
     @Test
     void skipsPromotionsRestrictedToOtherSegments() {
-        PromotionDefinition vipOnly = Promos.percentOff("K", "10").forSegments(CustomerSegment.VIP).build();
+        RuleDefinition vipOnly = Promos.percentOff("K", "10").forSegments(CustomerSegment.VIP).build();
 
         assertThat(factory.create(List.of(vipOnly), CustomerSegment.REGULAR)).isEmpty();
         assertThat(factory.create(List.of(vipOnly), CustomerSegment.VIP)).hasSize(1);
@@ -45,7 +42,7 @@ class PromotionRuleFactoryTest {
 
     @Test
     void promotionsWithoutSegmentRestrictionApplyToEveryone() {
-        PromotionDefinition everyone = Promos.percentOff("K", "10").build();
+        RuleDefinition everyone = Promos.percentOff("K", "10").build();
 
         for (CustomerSegment segment : CustomerSegment.values()) {
             assertThat(factory.create(List.of(everyone), segment)).hasSize(1);
@@ -54,7 +51,7 @@ class PromotionRuleFactoryTest {
 
     @Test
     void supportsSeveralSegmentsOnOnePromotion() {
-        PromotionDefinition staff = Promos.percentOff("K", "10")
+        RuleDefinition staff = Promos.percentOff("K", "10")
                 .forSegments(CustomerSegment.VIP, CustomerSegment.EMPLOYEE).build();
 
         assertThat(factory.create(List.of(staff), CustomerSegment.EMPLOYEE)).hasSize(1);
@@ -62,30 +59,42 @@ class PromotionRuleFactoryTest {
     }
 
     @Test
-    void failsFastWhenAPromotionTypeHasNoProvider() {
-        assertThatThrownBy(() -> new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider())))
+    void failsFastWhenAnActionKindHasNoProvider() {
+        assertThatThrownBy(() -> new PromotionRuleFactory(List.of(new PercentOffRuleProvider())))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("BUY_X_GET_Y");
+                .hasMessageContaining("FREE_UNITS")
+                .hasMessageContaining("REJECT");
     }
 
     @Test
-    void failsFastWhenAPromotionTypeHasTwoProviders() {
-        assertThatThrownBy(() -> new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider(),
-                new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(), new TieredBulkRuleProvider())))
+    void failsFastWhenAnActionKindHasTwoProviders() {
+        List<ActionRuleProvider> providers = new java.util.ArrayList<>(TestProviders.all());
+        providers.add(new PercentOffRuleProvider());
+
+        assertThatThrownBy(() -> new PromotionRuleFactory(providers))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("PERCENT_OFF_CATEGORY");
+                .hasMessageContaining("PERCENT_OFF");
     }
 
     @Test
-    void providersRejectDefinitionsMissingTheirParameters() {
-        PromotionDefinition incomplete = new PromotionDefinition(UUID.randomUUID(), PromotionType.BUY_X_GET_Y, "x",
-                true, 0, java.time.Instant.now(), java.util.Set.of(), null, null, null, null, null, null);
+    void theDefaultProviderSetCoversEveryActionKind() {
+        assertThat(TestProviders.all()).extracting(ActionRuleProvider::kind)
+                .containsExactlyInAnyOrder(ActionKind.values());
+    }
 
-        assertThatThrownBy(() -> new BuyXGetYRuleProvider().create(incomplete))
-                .isInstanceOf(NullPointerException.class);
-        assertThatThrownBy(() -> new PercentOffCategoryRuleProvider().create(incomplete))
-                .isInstanceOf(NullPointerException.class);
-        assertThatThrownBy(() -> new TieredBulkRuleProvider().create(incomplete))
-                .isInstanceOf(NullPointerException.class);
+    @Test
+    void buildsRulesForEveryActionKindFromDefinitions() {
+        List<RuleDefinition> definitions = List.of(
+                TestRules.percentOff("5").build(), TestRules.amountOff("1").build(), TestRules.freeUnits(1, 1).build(),
+                TestRules.of(new ActionSpec.AmountOffCart(java.math.BigDecimal.ONE)).build(),
+                TestRules.of(new ActionSpec.Surcharge(java.math.BigDecimal.ONE)).build(),
+                TestRules.of(new ActionSpec.ShippingWaiver()).build(),
+                TestRules.of(new ActionSpec.FreeGift(UUID.randomUUID(), 1)).build(),
+                TestRules.of(new ActionSpec.Reject("no")).build());
+
+        List<PricingRule> rules = factory.create(definitions, CustomerSegment.REGULAR);
+
+        assertThat(rules).hasSize(8).allSatisfy(rule -> assertThat(rule).isInstanceOf(AuditingRule.class));
+        assertThat(rules).extracting(PricingRule::stage).containsExactlyInAnyOrder(100, 300, 200, 400, 700, 600, 500, 900);
     }
 }

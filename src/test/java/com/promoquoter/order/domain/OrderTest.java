@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.promoquoter.order.dto.OrderStatus;
 import com.promoquoter.pricing.AppliedPromotion;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.LineBreakdown;

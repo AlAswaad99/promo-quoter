@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.dto;
 
 public enum OrderStatus {
     CONFIRMED

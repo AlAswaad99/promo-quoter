@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

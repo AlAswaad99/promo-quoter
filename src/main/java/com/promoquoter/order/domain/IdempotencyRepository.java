@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.promoquoter.cart.CartRequest;
+import com.promoquoter.order.domain.CheckoutService;
+import com.promoquoter.order.dto.OrderResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

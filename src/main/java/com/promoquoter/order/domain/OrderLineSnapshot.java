@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

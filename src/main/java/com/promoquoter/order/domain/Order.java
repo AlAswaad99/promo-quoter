@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.hibernate.annotations.BatchSize;
 
 import com.promoquoter.cart.QuotedCart;
+import com.promoquoter.order.dto.OrderStatus;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.PriceBreakdown;
 

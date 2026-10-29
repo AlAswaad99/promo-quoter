@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

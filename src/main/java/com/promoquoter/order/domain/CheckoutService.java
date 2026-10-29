@@ -1,4 +1,4 @@
-package com.promoquoter.order;
+package com.promoquoter.order.domain;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,6 +16,7 @@ import com.promoquoter.cart.QuoteService;
 import com.promoquoter.cart.QuotedCart;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
+import com.promoquoter.order.dto.OrderResponse;
 import com.promoquoter.product.domain.InventoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public class CheckoutService {
             QuotedCart quoted = quoteService.priceChecked(cart, true);
             inventoryService.reserveGifts(giftQuantities(quoted));
             Order order = orderRepository.saveAndFlush(Order.confirmed(orderId, quoted, idempotencyKey));
-            return OrderResponse.from(order);
+            return OrderMapper.toResponse(order);
         });
     }
 
@@ -77,7 +78,7 @@ public class CheckoutService {
                         "Idempotency-Key was already used with a different request");
             }
             OrderResponse order = transactionTemplate.execute(status -> orderRepository.findById(record.getOrderId())
-                    .map(OrderResponse::from)
+                    .map(OrderMapper::toResponse)
                     .orElseThrow(() -> new IllegalStateException(
                             "Order " + record.getOrderId() + " is missing for a recorded idempotency key")));
             log.info("Replayed order {} for idempotency key", order.orderId());

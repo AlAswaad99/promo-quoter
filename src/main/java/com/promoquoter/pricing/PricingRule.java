@@ -2,7 +2,7 @@ package com.promoquoter.pricing;
 
 public interface PricingRule {
 
-    PromotionDefinition definition();
+    RuleInfo definition();
 
     int stage();
 

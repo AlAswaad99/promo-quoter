@@ -48,7 +48,7 @@ public class QuoteService {
     }
 
     private static CartLine toCartLine(ProductSnapshot product, int qty) {
-        return new CartLine(product.id(), product.name(), product.category(), product.price(), qty);
+        return new CartLine(product.id(), product.name(), product.category(), product.price(), qty, product.stock());
     }
 
     private static void rejectMissingProducts(List<UUID> requested, Map<UUID, ProductSnapshot> found) {

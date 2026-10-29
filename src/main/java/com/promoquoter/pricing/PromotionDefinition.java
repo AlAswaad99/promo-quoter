@@ -18,7 +18,7 @@ public record PromotionDefinition(
         UUID productId,
         Integer buyQty,
         Integer freeQty,
-        Integer minQty) {
+        Integer minQty) implements RuleInfo {
 
     public boolean isEligibleFor(CustomerSegment segment) {
         return active && (eligibleSegments.isEmpty() || eligibleSegments.contains(segment));

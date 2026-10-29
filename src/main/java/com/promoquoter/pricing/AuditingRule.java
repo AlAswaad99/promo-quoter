@@ -12,7 +12,7 @@ public final class AuditingRule implements PricingRule {
     }
 
     @Override
-    public PromotionDefinition definition() {
+    public RuleInfo definition() {
         return delegate.definition();
     }
 

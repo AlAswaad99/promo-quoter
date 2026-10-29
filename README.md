@@ -298,6 +298,7 @@ Per request the filter logs a `request started` line and a `request completed` l
 - **Rules** cannot be edited after creation except `name`, `active`, `priority` and `eligibleSegments`: delete and recreate. Products have no brand or owner field, so a rule that should hit "one seller's products" lists their product ids.
 - **Gifts** are best effort. A gift that is out of stock is skipped and the paid order still succeeds. Gifts add at most 100 units per order.
 - The `date` condition is today in UTC.
+- At most 500 promotions can be active at once (creating or re-activating beyond that is a `400`).
 
 ## With more time
 

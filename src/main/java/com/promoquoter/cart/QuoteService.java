@@ -25,7 +25,7 @@ import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.SkippedRule;
 import com.promoquoter.product.domain.ProductService;
 import com.promoquoter.product.domain.ProductSnapshot;
-import com.promoquoter.promotion.PromotionService;
+import com.promoquoter.promotion.domain.PromotionService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,28 +1,27 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.dto;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.promoquoter.pricing.CustomerSegment;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record PercentOffCategoryRequest(
+public record BuyXGetYRequest(
         @NotBlank @Size(max = 200) String name,
-        @NotBlank @Size(max = 100) String category,
-        @NotNull @DecimalMin(value = "0", inclusive = false) @DecimalMax("100") @Digits(integer = 3, fraction = 2) BigDecimal percent,
+        @NotNull UUID productId,
+        @NotNull @Min(1) @Max(1000) Integer buyQty,
+        @NotNull @Min(1) @Max(1000) Integer freeQty,
         Integer priority,
         Boolean active,
         Set<@NotNull CustomerSegment> eligibleSegments) implements CreatePromotionRequest {
 
-    public PercentOffCategoryRequest {
+    public BuyXGetYRequest {
         priority = priority == null ? 0 : priority;
         active = active == null ? Boolean.TRUE : active;
         eligibleSegments = eligibleSegments == null ? Set.of() : eligibleSegments;
@@ -31,11 +30,6 @@ public record PercentOffCategoryRequest(
     @Override
     @JsonIgnore
     public UUID referencedProductId() {
-        return null;
-    }
-
-    @Override
-    public Promotion toEntity() {
-        return Promotion.percentOffCategory(name, active, priority, eligibleSegments, category, percent);
+        return productId;
     }
 }

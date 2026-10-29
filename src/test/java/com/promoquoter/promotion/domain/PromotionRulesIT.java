@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;

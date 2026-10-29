@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.PromotionType;
-import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.RuleKind;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -33,15 +32,4 @@ public record PromotionResponse(
         JsonNode when,
         JsonNode target,
         JsonNode action) {
-
-    static PromotionResponse from(Promotion promotion) {
-        RuleDefinition rule = promotion.toDefinition();
-        return new PromotionResponse(promotion.getId(), promotion.getType(), promotion.getName(),
-                promotion.isActive(), promotion.getPriority(),
-                promotion.getEligibleSegments().stream().sorted().toList(), promotion.getCategory(),
-                promotion.getPercent(), promotion.getProductId(), promotion.getBuyQty(), promotion.getFreeQty(),
-                promotion.getMinQty(), promotion.getCreatedAt(), rule.kind(), rule.stage(), rule.stopAfter(),
-                RuleJsonWriter.condition(rule.when()), RuleJsonWriter.condition(rule.target()),
-                RuleJsonWriter.action(rule.action()));
-    }
 }

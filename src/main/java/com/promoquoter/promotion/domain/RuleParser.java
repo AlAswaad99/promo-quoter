@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

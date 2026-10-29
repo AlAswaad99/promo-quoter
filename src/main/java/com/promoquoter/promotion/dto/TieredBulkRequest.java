@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.dto;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -35,10 +35,5 @@ public record TieredBulkRequest(
     @JsonIgnore
     public UUID referencedProductId() {
         return productId;
-    }
-
-    @Override
-    public Promotion toEntity() {
-        return Promotion.tieredBulk(name, active, priority, eligibleSegments, productId, minQty, percent);
     }
 }

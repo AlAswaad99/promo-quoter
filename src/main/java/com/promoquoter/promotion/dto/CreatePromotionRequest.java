@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.dto;
 
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +25,4 @@ public sealed interface CreatePromotionRequest permits PercentOffCategoryRequest
     Set<CustomerSegment> eligibleSegments();
 
     UUID referencedProductId();
-
-    Promotion toEntity();
 }

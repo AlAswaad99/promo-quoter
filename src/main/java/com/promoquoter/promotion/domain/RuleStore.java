@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import java.util.ArrayList;
 import java.util.List;

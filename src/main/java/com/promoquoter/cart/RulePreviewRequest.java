@@ -1,6 +1,6 @@
 package com.promoquoter.cart;
 
-import com.promoquoter.promotion.CreatePromotionRequest;
+import com.promoquoter.promotion.dto.CreatePromotionRequest;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

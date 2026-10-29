@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.dto;
 
 import java.util.Set;
 
@@ -16,7 +16,7 @@ public record UpdatePromotionRequest(
         @Min(-1000000) @Max(1000000) Integer priority,
         Set<@NotNull CustomerSegment> eligibleSegments) {
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return name == null && active == null && priority == null && eligibleSegments == null;
     }
 }

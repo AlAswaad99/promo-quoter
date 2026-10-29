@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,8 +12,8 @@ import org.hibernate.annotations.BatchSize;
 import com.promoquoter.common.text.Categories;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.LegacyTemplates;
-import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.RuleKind;
 
 import jakarta.persistence.CollectionTable;

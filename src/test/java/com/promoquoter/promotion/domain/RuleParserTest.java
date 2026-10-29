@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,9 +16,9 @@ import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.pricing.ActionSpec;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.RuleKind;
-import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.Condition.All;
 import com.promoquoter.pricing.condition.Condition.Comparison;
+import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.ConditionField;
 import com.promoquoter.pricing.condition.FieldScope;
 import com.promoquoter.pricing.condition.Operator;

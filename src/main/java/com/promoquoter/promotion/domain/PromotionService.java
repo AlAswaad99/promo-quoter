@@ -1,4 +1,4 @@
-package com.promoquoter.promotion;
+package com.promoquoter.promotion.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,10 @@ import com.promoquoter.pricing.PromotionType;
 import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.RuleKind;
 import com.promoquoter.product.domain.ProductService;
+import com.promoquoter.promotion.dto.CreatePromotionRequest;
+import com.promoquoter.promotion.dto.PromotionResponse;
+import com.promoquoter.promotion.dto.RuleRequest;
+import com.promoquoter.promotion.dto.UpdatePromotionRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,8 +40,8 @@ public class PromotionService {
         List<List<RuleParser.ProductReference>> ruleReferences = validateRules(requests, index -> "[" + index + "]");
         rejectUnknownProducts(requests, ruleReferences, index -> "[" + index + "]");
         requireRoomForActive(requests.stream().filter(CreatePromotionRequest::active).count());
-        List<Promotion> promotions = requests.stream().map(CreatePromotionRequest::toEntity).toList();
-        return promotionRepository.saveAll(promotions).stream().map(PromotionResponse::from).toList();
+        List<Promotion> promotions = requests.stream().map(PromotionMapper::toEntity).toList();
+        return promotionRepository.saveAll(promotions).stream().map(PromotionMapper::toResponse).toList();
     }
 
     @Transactional(readOnly = true)
@@ -48,12 +51,12 @@ public class PromotionService {
 
     @Transactional(readOnly = true)
     public PageResponse<PromotionResponse> list(PromotionType type, Boolean active, RuleKind kind, Pageable pageable) {
-        return PageResponse.of(promotionRepository.search(type, active, kind, pageable), PromotionResponse::from);
+        return PageResponse.of(promotionRepository.search(type, active, kind, pageable), PromotionMapper::toResponse);
     }
 
     @Transactional(readOnly = true)
     public PromotionResponse get(UUID id) {
-        return PromotionResponse.from(find(id));
+        return PromotionMapper.toResponse(find(id));
     }
 
     @Transactional
@@ -67,7 +70,7 @@ public class PromotionService {
             requireRoomForActive(1);
         }
         promotion.update(request.name(), request.active(), request.priority(), request.eligibleSegments());
-        return PromotionResponse.from(promotionRepository.saveAndFlush(promotion));
+        return PromotionMapper.toResponse(promotionRepository.saveAndFlush(promotion));
     }
 
     @Transactional
@@ -88,8 +91,8 @@ public class PromotionService {
         List<CreatePromotionRequest> single = List.of(request);
         List<List<RuleParser.ProductReference>> references = validateRules(single, index -> "rule");
         rejectUnknownProducts(single, references, index -> "rule");
-        Promotion promotion = request.toEntity();
-        return new PreviewRule(PromotionResponse.from(promotion), promotion.toDefinition());
+        Promotion promotion = PromotionMapper.toEntity(request);
+        return new PreviewRule(PromotionMapper.toResponse(promotion), promotion.toDefinition());
     }
 
     private void requireRoomForActive(long additional) {
@@ -107,7 +110,7 @@ public class PromotionService {
         List<List<RuleParser.ProductReference>> references = new ArrayList<>();
         for (int index = 0; index < requests.size(); index++) {
             if (requests.get(index) instanceof RuleRequest rule) {
-                ParsedRule parsed = rule.parse(path.apply(index), violations);
+                ParsedRule parsed = RuleRequestParser.parse(rule, path.apply(index), violations);
                 references.add(parsed == null ? List.of() : parsed.references());
             } else {
                 references.add(List.of());

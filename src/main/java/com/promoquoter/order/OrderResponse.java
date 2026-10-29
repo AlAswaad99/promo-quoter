@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.promoquoter.cart.QuoteResponse;
+import com.promoquoter.common.money.Money;
 import com.promoquoter.common.money.MoneyField;
 import com.promoquoter.pricing.CustomerSegment;
 
@@ -18,7 +19,11 @@ public record OrderResponse(
         List<QuoteResponse.AppliedPromotionEntry> appliedPromotions,
         @MoneyField BigDecimal subtotal,
         @MoneyField BigDecimal totalDiscount,
-        @MoneyField BigDecimal total) {
+        @MoneyField BigDecimal total,
+        @MoneyField BigDecimal shipping,
+        List<QuoteResponse.AdjustmentEntry> adjustments,
+        List<QuoteResponse.GiftEntry> gifts,
+        List<String> notes) {
 
     static OrderResponse from(Order order) {
         return new OrderResponse(
@@ -37,6 +42,17 @@ public record OrderResponse(
                         .toList(),
                 order.getSubtotal(),
                 order.getTotalDiscount(),
-                order.getTotal());
+                order.getTotal(),
+                order.getShipping(),
+                order.getAdjustments().stream()
+                        .map(adjustment -> new QuoteResponse.AdjustmentEntry(adjustment.sequence(),
+                                adjustment.promotionId(), adjustment.name(), adjustment.action(),
+                                adjustment.direction(), adjustment.amount()))
+                        .toList(),
+                order.getGiftLines().stream()
+                        .map(gift -> new QuoteResponse.GiftEntry(gift.productId(), gift.name(), gift.category(),
+                                gift.qty(), Money.ZERO, Money.ZERO, gift.promotionId(), gift.promotionName()))
+                        .toList(),
+                List.copyOf(order.getNotes()));
     }
 }

@@ -8,18 +8,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.rules.BuyXGetYRuleProvider;
-import com.promoquoter.pricing.rules.PercentOffCategoryRuleProvider;
-import com.promoquoter.pricing.rules.TieredBulkRuleProvider;
-
 class PricingEngineTest {
 
     private static final UUID MUG = UUID.randomUUID();
     private static final UUID LAMP = UUID.randomUUID();
 
-    private final PricingEngine engine = new PricingEngine(
-            new PromotionRuleFactory(List.of(new PercentOffCategoryRuleProvider(), new BuyXGetYRuleProvider(),
-                    new TieredBulkRuleProvider())));
+    private final PricingEngine engine = new PricingEngine(TestProviders.factory());
 
     private static CartLine mugs(int qty) {
         return new CartLine(MUG, "Mug", "KITCHEN", new BigDecimal("12.00"), qty);
@@ -31,8 +25,8 @@ class PricingEngineTest {
 
     @Test
     void pricesTheWorkedExampleFromTheSpecification() {
-        PromotionDefinition percent = Promos.percentOff("KITCHEN", "10").named("10% kitchen").build();
-        PromotionDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).named("Mugs 2+1").build();
+        RuleDefinition percent = Promos.percentOff("KITCHEN", "10").named("10% kitchen").build();
+        RuleDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).named("Mugs 2+1").build();
 
         PriceBreakdown breakdown = engine.price(List.of(mugs(3)), CustomerSegment.REGULAR,
                 List.of(buyXGetY, percent));
@@ -57,8 +51,8 @@ class PricingEngineTest {
 
     @Test
     void definitionOrderDoesNotChangeTheResult() {
-        PromotionDefinition percent = Promos.percentOff("KITCHEN", "10").build();
-        PromotionDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).build();
+        RuleDefinition percent = Promos.percentOff("KITCHEN", "10").build();
+        RuleDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).build();
 
         PriceBreakdown one = engine.price(List.of(mugs(3)), CustomerSegment.REGULAR, List.of(percent, buyXGetY));
         PriceBreakdown other = engine.price(List.of(mugs(3)), CustomerSegment.REGULAR, List.of(buyXGetY, percent));
@@ -114,7 +108,7 @@ class PricingEngineTest {
 
     @Test
     void appliesVipPromotionsOnlyToVipCarts() {
-        PromotionDefinition vipOnly = Promos.percentOff("KITCHEN", "50").forSegments(CustomerSegment.VIP).build();
+        RuleDefinition vipOnly = Promos.percentOff("KITCHEN", "50").forSegments(CustomerSegment.VIP).build();
 
         assertThat(engine.price(List.of(mugs(1)), CustomerSegment.REGULAR, List.of(vipOnly)).total())
                 .isEqualByComparingTo("12.00");
@@ -132,8 +126,8 @@ class PricingEngineTest {
 
     @Test
     void sameStagePromotionsStackInPriorityOrder() {
-        PromotionDefinition tenPercent = Promos.percentOff("KITCHEN", "10").named("A").priority(1).build();
-        PromotionDefinition twentyPercent = Promos.percentOff("KITCHEN", "20").named("B").priority(2).build();
+        RuleDefinition tenPercent = Promos.percentOff("KITCHEN", "10").named("A").priority(1).build();
+        RuleDefinition twentyPercent = Promos.percentOff("KITCHEN", "20").named("B").priority(2).build();
 
         PriceBreakdown breakdown = engine.price(List.of(mugs(1)), CustomerSegment.REGULAR,
                 List.of(twentyPercent, tenPercent));
@@ -146,9 +140,9 @@ class PricingEngineTest {
 
     @Test
     void tieredBulkRunsLastOnTheDiscountedTotal() {
-        PromotionDefinition percent = Promos.percentOff("KITCHEN", "10").named("category").build();
-        PromotionDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).named("bxgy").build();
-        PromotionDefinition tiered = Promos.tieredBulk(MUG, 3, "10").named("bulk").build();
+        RuleDefinition percent = Promos.percentOff("KITCHEN", "10").named("category").build();
+        RuleDefinition buyXGetY = Promos.buyXGetY(MUG, 2, 1).named("bxgy").build();
+        RuleDefinition tiered = Promos.tieredBulk(MUG, 3, "10").named("bulk").build();
 
         PriceBreakdown breakdown = engine.price(List.of(mugs(3)), CustomerSegment.REGULAR,
                 List.of(tiered, buyXGetY, percent));

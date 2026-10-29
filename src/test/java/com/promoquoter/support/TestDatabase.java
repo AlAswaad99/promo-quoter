@@ -11,7 +11,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 public class TestDatabase {
 
     private static final String[] TABLES_IN_DELETE_ORDER = {"idempotency_record", "order_promotion", "order_line",
-            "orders", "promotion_segment", "promotion", "product"};
+            "order_adjustment", "order_gift", "order_note", "orders", "promotion_segment", "promotion", "product"};
 
     @Autowired
     JdbcTemplate jdbcTemplate;

@@ -37,6 +37,10 @@ public final class PricedLine {
         return cartLine.qty();
     }
 
+    public int stock() {
+        return cartLine.stock();
+    }
+
     public BigDecimal subtotal() {
         return subtotal;
     }

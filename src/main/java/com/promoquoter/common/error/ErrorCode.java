@@ -21,6 +21,7 @@ public enum ErrorCode {
     CONCURRENT_MODIFICATION(HttpStatus.CONFLICT, "Concurrent modification"),
     UNKNOWN_PRODUCT(HttpStatus.UNPROCESSABLE_ENTITY, "Unknown product"),
     IDEMPOTENCY_KEY_REUSED(HttpStatus.UNPROCESSABLE_ENTITY, "Idempotency key reused"),
+    RULE_VIOLATION(HttpStatus.UNPROCESSABLE_ENTITY, "Rule violation"),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error");
 
     private final HttpStatus status;

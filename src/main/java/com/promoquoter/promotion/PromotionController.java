@@ -20,6 +20,7 @@ import com.promoquoter.common.web.PageRequestFactory;
 import com.promoquoter.common.web.PageResponse;
 import com.promoquoter.common.web.SortPolicy;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleKind;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -49,8 +50,9 @@ public class PromotionController {
             @RequestParam(defaultValue = "" + PageRequestFactory.DEFAULT_SIZE) int size,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) PromotionType type,
-            @RequestParam(required = false) Boolean active) {
-        return promotionService.list(type, active, PageRequestFactory.create(page, size, sort, SORT_POLICY));
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) RuleKind kind) {
+        return promotionService.list(type, active, kind, PageRequestFactory.create(page, size, sort, SORT_POLICY));
     }
 
     @GetMapping("/{id}")

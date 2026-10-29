@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.BatchSize;
 
+import com.promoquoter.cart.QuotedCart;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.PriceBreakdown;
 
@@ -53,6 +54,9 @@ class Order {
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal total;
 
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal shipping = BigDecimal.ZERO.setScale(2);
+
     @Column(name = "idempotency_key", length = 100)
     private String idempotencyKey;
 
@@ -74,6 +78,25 @@ class Order {
     @BatchSize(size = 100)
     private List<AppliedPromotionSnapshot> appliedPromotions = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(name = "order_adjustment", joinColumns = @JoinColumn(name = "order_id"))
+    @OrderColumn(name = "entry_index")
+    @BatchSize(size = 100)
+    private List<CartAdjustmentSnapshot> adjustments = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "order_gift", joinColumns = @JoinColumn(name = "order_id"))
+    @OrderColumn(name = "entry_index")
+    @BatchSize(size = 100)
+    private List<GiftLineSnapshot> giftLines = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "order_note", joinColumns = @JoinColumn(name = "order_id"))
+    @OrderColumn(name = "entry_index")
+    @Column(name = "note", nullable = false, length = 500)
+    @BatchSize(size = 100)
+    private List<String> notes = new ArrayList<>();
+
     static Order confirmed(UUID id, PriceBreakdown breakdown, String idempotencyKey) {
         Order order = new Order();
         order.id = id;
@@ -82,6 +105,7 @@ class Order {
         order.subtotal = breakdown.subtotal();
         order.totalDiscount = breakdown.totalDiscount();
         order.total = breakdown.total();
+        order.shipping = breakdown.shipping();
         order.idempotencyKey = idempotencyKey;
         order.createdAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
         breakdown.lines().forEach(line -> order.lines.add(new OrderLineSnapshot(line.productId(), line.name(),
@@ -89,6 +113,22 @@ class Order {
         breakdown.appliedPromotions().forEach(applied -> order.appliedPromotions.add(new AppliedPromotionSnapshot(
                 applied.sequence(), applied.promotionId(), applied.name(), applied.type(), applied.productId(),
                 applied.amount())));
+        breakdown.adjustments().forEach(adjustment -> order.adjustments.add(new CartAdjustmentSnapshot(
+                adjustment.sequence(), adjustment.promotionId(), adjustment.name(), adjustment.action(),
+                adjustment.direction(), adjustment.amount())));
         return order;
+    }
+
+    static Order confirmed(UUID id, QuotedCart quoted, String idempotencyKey) {
+        Order order = confirmed(id, quoted.breakdown(), idempotencyKey);
+        quoted.gifts().forEach(gift -> order.giftLines.add(new GiftLineSnapshot(gift.productId(), gift.name(),
+                gift.category(), gift.qty(), gift.promotionId(), gift.promotionName())));
+        quoted.skipped().forEach(skipped -> order.notes.add(note(skipped.name(), skipped.reason())));
+        return order;
+    }
+
+    private static String note(String ruleName, String reason) {
+        String text = ruleName + ": " + reason;
+        return text.length() <= 500 ? text : text.substring(0, 500);
     }
 }

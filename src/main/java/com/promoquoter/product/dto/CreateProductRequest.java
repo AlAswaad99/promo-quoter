@@ -1,4 +1,4 @@
-package com.promoquoter.product;
+package com.promoquoter.product.dto;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package com.promoquoter.product;
+package com.promoquoter.product.domain;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +15,8 @@ import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.text.Categories;
 import com.promoquoter.common.web.PageResponse;
+import com.promoquoter.product.dto.CreateProductRequest;
+import com.promoquoter.product.dto.ProductResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,13 +31,13 @@ public class ProductService {
         List<Product> products = requests.stream()
                 .map(request -> new Product(request.name(), request.category(), request.price(), request.stock()))
                 .toList();
-        return productRepository.saveAll(products).stream().map(ProductResponse::from).toList();
+        return productRepository.saveAll(products).stream().map(ProductMapper::toResponse).toList();
     }
 
     @Transactional(readOnly = true)
     public ProductResponse get(UUID id) {
         return productRepository.findById(id)
-                .map(ProductResponse::from)
+                .map(ProductMapper::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.PRODUCT_NOT_FOUND, "Product " + id + " was not found"));
     }
 
@@ -54,6 +56,6 @@ public class ProductService {
         Page<Product> page = category == null || category.isBlank()
                 ? productRepository.findAll(pageable)
                 : productRepository.findByCategory(Categories.normalize(category), pageable);
-        return PageResponse.of(page, ProductResponse::from);
+        return PageResponse.of(page, ProductMapper::toResponse);
     }
 }

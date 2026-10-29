@@ -23,8 +23,8 @@ import com.promoquoter.pricing.PriceBreakdown;
 import com.promoquoter.pricing.PricingEngine;
 import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.SkippedRule;
-import com.promoquoter.product.ProductService;
-import com.promoquoter.product.ProductSnapshot;
+import com.promoquoter.product.domain.ProductService;
+import com.promoquoter.product.domain.ProductSnapshot;
 import com.promoquoter.promotion.PromotionService;
 
 import lombok.RequiredArgsConstructor;

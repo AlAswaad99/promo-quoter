@@ -1,4 +1,4 @@
-package com.promoquoter.product;
+package com.promoquoter.product.domain;
 
 import java.util.Collection;
 import java.util.List;

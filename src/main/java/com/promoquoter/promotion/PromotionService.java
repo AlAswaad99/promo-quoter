@@ -16,10 +16,10 @@ import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.common.web.PageResponse;
-import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.RuleKind;
-import com.promoquoter.product.ProductService;
+import com.promoquoter.product.domain.ProductService;
 
 import lombok.RequiredArgsConstructor;
 

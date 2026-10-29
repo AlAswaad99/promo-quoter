@@ -1,4 +1,4 @@
-package com.promoquoter.product;
+package com.promoquoter.product.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;

@@ -16,7 +16,7 @@ import com.promoquoter.cart.QuoteService;
 import com.promoquoter.cart.QuotedCart;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
-import com.promoquoter.product.InventoryService;
+import com.promoquoter.product.domain.InventoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

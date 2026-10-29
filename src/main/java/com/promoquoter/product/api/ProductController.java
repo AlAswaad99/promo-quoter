@@ -1,4 +1,4 @@
-package com.promoquoter.product;
+package com.promoquoter.product.api;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.promoquoter.common.web.PageRequestFactory;
 import com.promoquoter.common.web.PageResponse;
 import com.promoquoter.common.web.SortPolicy;
+import com.promoquoter.product.domain.ProductService;
+import com.promoquoter.product.dto.CreateProductRequest;
+import com.promoquoter.product.dto.ProductResponse;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

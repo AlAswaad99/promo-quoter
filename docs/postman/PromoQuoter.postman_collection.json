@@ -1,0 +1,2472 @@
+{
+  "info": {
+    "name": "PromoQuoter API",
+    "_postman_id": "6f3c1e2a-5d1b-4a9e-8f10-7c2b9d4e5a61",
+    "description": "Cart pricing and stock reservation service. Run the folders in order (or use the Collection Runner): the create requests save ids into collection variables that later requests use. Start the service first with ./mvnw spring-boot:run (http://localhost:8080). Every error is an RFC 7807 problem with code, requestId and errors[].",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Service is UP\", function () { pm.expect(pm.response.json().status).to.eql(\"UP\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Actuator health endpoint. Returns UP when the service is running."
+          },
+          "response": [
+            {
+              "name": "200 - Health check",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/actuator/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "actuator",
+                    "health"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.spring-boot.actuator.v3+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "f7536ecb-5412-4687-8152-5eff85fb55fb"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"UP\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Two products returned\", function () { pm.expect(body.length).to.eql(2); });",
+                  "pm.collectionVariables.set(\"productId\", body[0].id);",
+                  "pm.collectionVariables.set(\"lampId\", body[1].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"Mug\",\n    \"category\": \"kitchen\",\n    \"price\": 12.0,\n    \"stock\": 10\n  },\n  {\n    \"name\": \"Lamp\",\n    \"category\": \"home\",\n    \"price\": 30.0,\n    \"stock\": 5\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creates one or more products in a single all-or-nothing batch (1 to 100). Category is trimmed and upper-cased; price has at most 2 decimals and 10 integer digits. Saves productId (Mug) and lampId (Lamp)."
+          },
+          "response": [
+            {
+              "name": "201 - Create products",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"Mug\",\n    \"category\": \"kitchen\",\n    \"price\": 12.0,\n    \"stock\": 10\n  },\n  {\n    \"name\": \"Lamp\",\n    \"category\": \"home\",\n    \"price\": 30.0,\n    \"stock\": 5\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "ab415362-7040-4b4f-84bd-a39223d48e10"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n    \"name\": \"Mug\",\n    \"category\": \"KITCHEN\",\n    \"price\": \"12.00\",\n    \"stock\": 10,\n    \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n  },\n  {\n    \"id\": \"50a9bd3c-e172-4e54-a23d-38d3f94a5753\",\n    \"name\": \"Lamp\",\n    \"category\": \"HOME\",\n    \"price\": \"30.00\",\n    \"stock\": 5,\n    \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n  }\n]"
+            },
+            {
+              "name": "400 - validation errors, one entry per field",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \" \",\n    \"category\": \"\",\n    \"price\": 0,\n    \"stock\": -1\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "f1619677-bcd7-44f4-9914-9be5f1ea46b5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"f1619677-bcd7-44f4-9914-9be5f1ea46b5\",\n  \"errors\": [\n    {\n      \"field\": \"[0].category\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].name\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].price\",\n      \"message\": \"must be greater than 0.00\"\n    },\n    {\n      \"field\": \"[0].stock\",\n      \"message\": \"must be greater than or equal to 0\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - unknown field is rejected",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"Cup\",\n    \"category\": \"kitchen\",\n    \"price\": 3,\n    \"stock\": 1,\n    \"sku\": \"x\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "ccef651c-47d8-420f-994c-66997d099698"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"ccef651c-47d8-420f-994c-66997d099698\",\n  \"errors\": [\n    {\n      \"field\": \"[0].sku\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "List products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Page metadata present\", function () { const b = pm.response.json(); pm.expect(b).to.have.property(\"content\"); pm.expect(b).to.have.property(\"totalElements\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products?page=0&size=20&sort=name,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "name,asc"
+                }
+              ]
+            },
+            "description": "Paged list. Query: page (0-based), size (max 100, default 20), sort (createdAt, name or price; add ,desc), category (case-insensitive)."
+          },
+          "response": [
+            {
+              "name": "200 - List products",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products?page=0&size=20&sort=name,asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name,asc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "83d87e84-61ce-40ec-ad0c-0b96f1af82ae"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"50a9bd3c-e172-4e54-a23d-38d3f94a5753\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"price\": \"30.00\",\n      \"stock\": 5,\n      \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n    },\n    {\n      \"id\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 2,\n  \"totalPages\": 1\n}"
+            },
+            {
+              "name": "200 - filtered by category",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products?category=kitchen&sort=price,desc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "kitchen"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "price,desc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "91d832a0-0198-4d0a-8874-4a0f7cb713a6"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+            },
+            {
+              "name": "400 - sort field not allowed",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products?sort=stock,asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "stock,asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "d6efe091-7e5a-41c1-8e8a-623d0dd63420"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'stock,asc'; allowed fields: [createdAt, name, price]\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"d6efe091-7e5a-41c1-8e8a-623d0dd63420\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Product id matches\", function () { pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"productId\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "{{productId}}"
+              ]
+            },
+            "description": "Returns one product including its current stock."
+          },
+          "response": [
+            {
+              "name": "200 - Get product",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products/{{productId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "40840e2c-bbff-4510-bd25-840fd0ad0271"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 10,\n  \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n}"
+            },
+            {
+              "name": "404 - unknown product",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products/00000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "00000000-0000-0000-0000-000000000001"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "7d6f96c1-7931-455f-88b7-517cb237b10f"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Product 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/products/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"7d6f96c1-7931-455f-88b7-517cb237b10f\"\n}"
+            },
+            {
+              "name": "400 - malformed id",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products/abc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "abc"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "37784438-3347-4b3d-a740-5ca339d3367f"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'id'\",\n  \"instance\": \"/api/v1/products/abc\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"37784438-3347-4b3d-a740-5ca339d3367f\",\n  \"errors\": [\n    {\n      \"field\": \"id\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Promotions",
+      "item": [
+        {
+          "name": "Create promotions (percent off + buy X get Y)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set(\"percentPromoId\", body[0].id);",
+                  "pm.collectionVariables.set(\"bxgyPromoId\", body[1].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"type\": \"PERCENT_OFF_CATEGORY\",\n    \"name\": \"10% off kitchen\",\n    \"category\": \"kitchen\",\n    \"percent\": 10,\n    \"priority\": 0\n  },\n  {\n    \"type\": \"BUY_X_GET_Y\",\n    \"name\": \"Mugs 2+1\",\n    \"productId\": \"{{productId}}\",\n    \"buyQty\": 2,\n    \"freeQty\": 1\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creates promotions in one batch. Each entry has a \"type\": PERCENT_OFF_CATEGORY (category, percent) or BUY_X_GET_Y (productId, buyQty, freeQty). Optional: priority, active, eligibleSegments (REGULAR, VIP, EMPLOYEE; empty means everyone). Saves percentPromoId and bxgyPromoId."
+          },
+          "response": [
+            {
+              "name": "201 - Create promotions (percent off + buy X get Y)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"PERCENT_OFF_CATEGORY\",\n    \"name\": \"10% off kitchen\",\n    \"category\": \"kitchen\",\n    \"percent\": 10,\n    \"priority\": 0\n  },\n  {\n    \"type\": \"BUY_X_GET_Y\",\n    \"name\": \"Mugs 2+1\",\n    \"productId\": \"{{productId}}\",\n    \"buyQty\": 2,\n    \"freeQty\": 1\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "bfb07225-0018-465b-b56d-d0f651bb2a77"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n    \"type\": \"PERCENT_OFF_CATEGORY\",\n    \"name\": \"10% off kitchen\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"category\": \"KITCHEN\",\n    \"percent\": 10,\n    \"createdAt\": \"2026-10-29T13:14:22.606703Z\"\n  },\n  {\n    \"id\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n    \"type\": \"BUY_X_GET_Y\",\n    \"name\": \"Mugs 2+1\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n    \"buyQty\": 2,\n    \"freeQty\": 1,\n    \"createdAt\": \"2026-10-29T13:14:22.606703Z\"\n  }\n]"
+            },
+            {
+              "name": "400 - validation errors",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"PERCENT_OFF_CATEGORY\",\n    \"name\": \"Bad\",\n    \"category\": \"kitchen\",\n    \"percent\": 101\n  },\n  {\n    \"type\": \"BUY_X_GET_Y\",\n    \"name\": \"Bad\",\n    \"productId\": \"{{productId}}\",\n    \"buyQty\": 0,\n    \"freeQty\": 2000\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "b3fce432-9147-4db8-9630-ab68b6b79ccd"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"b3fce432-9147-4db8-9630-ab68b6b79ccd\",\n  \"errors\": [\n    {\n      \"field\": \"[0].percent\",\n      \"message\": \"must be less than or equal to 100\"\n    },\n    {\n      \"field\": \"[1].buyQty\",\n      \"message\": \"must be greater than or equal to 1\"\n    },\n    {\n      \"field\": \"[1].freeQty\",\n      \"message\": \"must be less than or equal to 1000\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "422 - unknown product",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"BUY_X_GET_Y\",\n    \"name\": \"Ghost\",\n    \"productId\": \"00000000-0000-0000-0000-000000000001\",\n    \"buyQty\": 1,\n    \"freeQty\": 1\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "254ef34a-062f-4adc-af05-acf36d46116d"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:unknown-product\",\n  \"title\": \"Unknown product\",\n  \"status\": 422,\n  \"detail\": \"Promotion references products that do not exist\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"UNKNOWN_PRODUCT\",\n  \"requestId\": \"254ef34a-062f-4adc-af05-acf36d46116d\",\n  \"errors\": [\n    {\n      \"field\": \"[0].productId\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 does not exist\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - unknown promotion type",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"FREE_LUNCH\",\n    \"name\": \"x\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "29d2fe7e-53be-49c2-8dc7-1cdc0b353343"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"29d2fe7e-53be-49c2-8dc7-1cdc0b353343\",\n  \"errors\": [\n    {\n      \"field\": \"[0]\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create tiered bulk promotion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set(\"tieredPromoId\", body[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"type\": \"TIERED_BULK\",\n    \"name\": \"5% off 10+\",\n    \"productId\": \"{{productId}}\",\n    \"minQty\": 10,\n    \"percent\": 5,\n    \"eligibleSegments\": [\n      \"VIP\"\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "TIERED_BULK: percent off a product once the cart quantity reaches minQty (2 to 1000). Saves tieredPromoId."
+          },
+          "response": [
+            {
+              "name": "201 - Create tiered bulk promotion",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"TIERED_BULK\",\n    \"name\": \"5% off 10+\",\n    \"productId\": \"{{productId}}\",\n    \"minQty\": 10,\n    \"percent\": 5,\n    \"eligibleSegments\": [\n      \"VIP\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "3871658a-7709-451f-a907-bbf21fff2150"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"bd73620d-c640-41b3-903d-a76123a941ee\",\n    \"type\": \"TIERED_BULK\",\n    \"name\": \"5% off 10+\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [\n      \"VIP\"\n    ],\n    \"percent\": 5,\n    \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n    \"minQty\": 10,\n    \"createdAt\": \"2026-10-29T13:14:22.706125Z\"\n  }\n]"
+            },
+            {
+              "name": "400 - minQty above the cart limit",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"TIERED_BULK\",\n    \"name\": \"x\",\n    \"productId\": \"{{productId}}\",\n    \"minQty\": 1001,\n    \"percent\": 5\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "767b8a1c-c0ea-462f-9c2a-6248a7c88933"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"767b8a1c-c0ea-462f-9c2a-6248a7c88933\",\n  \"errors\": [\n    {\n      \"field\": \"[0].minQty\",\n      \"message\": \"must be less than or equal to 1000\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "List promotions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Three promotions listed\", function () { pm.expect(pm.response.json().totalElements).to.eql(3); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions?sort=name,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "name,asc"
+                }
+              ]
+            },
+            "description": "Paged list. Query: page, size, sort (createdAt, name or priority), type, active."
+          },
+          "response": [
+            {
+              "name": "200 - List promotions",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions?sort=name,asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "name,asc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "75cb04d0-1421-49fc-b5ff-7232cc442d68"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n      \"type\": \"PERCENT_OFF_CATEGORY\",\n      \"name\": \"10% off kitchen\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"category\": \"KITCHEN\",\n      \"percent\": 10.0,\n      \"createdAt\": \"2026-10-29T13:14:22.606703Z\"\n    },\n    {\n      \"id\": \"bd73620d-c640-41b3-903d-a76123a941ee\",\n      \"type\": \"TIERED_BULK\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"percent\": 5.0,\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"minQty\": 10,\n      \"createdAt\": \"2026-10-29T13:14:22.706125Z\"\n    },\n    {\n      \"id\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n      \"type\": \"BUY_X_GET_Y\",\n      \"name\": \"Mugs 2+1\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"buyQty\": 2,\n      \"freeQty\": 1,\n      \"createdAt\": \"2026-10-29T13:14:22.606703Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 3,\n  \"totalPages\": 1\n}"
+            },
+            {
+              "name": "200 - filtered by type and active",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions?type=TIERED_BULK&active=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "TIERED_BULK"
+                    },
+                    {
+                      "key": "active",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "14eee6ca-845e-43a2-a125-537d648865be"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"bd73620d-c640-41b3-903d-a76123a941ee\",\n      \"type\": \"TIERED_BULK\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"percent\": 5.0,\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"minQty\": 10,\n      \"createdAt\": \"2026-10-29T13:14:22.706125Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+            },
+            {
+              "name": "400 - unknown type",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions?type=NOPE",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "NOPE"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "471a1544-eedc-4117-9774-bdd5e94d9fd9"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'type'\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"471a1544-eedc-4117-9774-bdd5e94d9fd9\",\n  \"errors\": [\n    {\n      \"field\": \"type\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get promotion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions/{{percentPromoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions",
+                "{{percentPromoId}}"
+              ]
+            },
+            "description": "Returns one promotion with its rule parameters."
+          },
+          "response": [
+            {
+              "name": "200 - Get promotion",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{percentPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{percentPromoId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "7f35de02-71f4-4da2-81f6-e6bc8b832a61"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n  \"type\": \"PERCENT_OFF_CATEGORY\",\n  \"name\": \"10% off kitchen\",\n  \"active\": true,\n  \"priority\": 0,\n  \"eligibleSegments\": [],\n  \"category\": \"KITCHEN\",\n  \"percent\": 10.0,\n  \"createdAt\": \"2026-10-29T13:14:22.606703Z\"\n}"
+            },
+            {
+              "name": "404 - unknown promotion",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/00000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "00000000-0000-0000-0000-000000000001"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "0c746bf5-0ba5-4287-b35e-5cc2f49bd5f4"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"0c746bf5-0ba5-4287-b35e-5cc2f49bd5f4\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update promotion (patch)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Promotion is inactive\", function () { pm.expect(pm.response.json().active).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions",
+                "{{tieredPromoId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false,\n  \"priority\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Changes only the fields you send: name, active, priority, eligibleSegments (empty list means everyone). Rule parameters cannot be patched. Deactivated promotions stop applying immediately."
+          },
+          "response": [
+            {
+              "name": "200 - Update promotion (patch)",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{tieredPromoId}}"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false,\n  \"priority\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "26d39ffa-7b5a-4497-9cc3-f9764bbeaa4c"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"bd73620d-c640-41b3-903d-a76123a941ee\",\n  \"type\": \"TIERED_BULK\",\n  \"name\": \"5% off 10+\",\n  \"active\": false,\n  \"priority\": 2,\n  \"eligibleSegments\": [\n    \"VIP\"\n  ],\n  \"percent\": 5.0,\n  \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n  \"minQty\": 10,\n  \"createdAt\": \"2026-10-29T13:14:22.706125Z\"\n}"
+            },
+            {
+              "name": "400 - empty body",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{tieredPromoId}}"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "8a17ae50-9771-406a-93d8-5b6c8ef7823d"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions/bd73620d-c640-41b3-903d-a76123a941ee\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"8a17ae50-9771-406a-93d8-5b6c8ef7823d\",\n  \"errors\": [\n    {\n      \"field\": \"body\",\n      \"message\": \"At least one field must be provided\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - rule parameters cannot be changed",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{percentPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{percentPromoId}}"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"percent\": 99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "07c56d14-08b1-4ae6-a3f1-def31c317dc4"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions/084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"07c56d14-08b1-4ae6-a3f1-def31c317dc4\",\n  \"errors\": [\n    {\n      \"field\": \"percent\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "404 - unknown promotion",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/00000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "00000000-0000-0000-0000-000000000001"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"active\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "a9e4fbf5-247a-4ffb-9f25-dd302b5c98ae"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"a9e4fbf5-247a-4ffb-9f25-dd302b5c98ae\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete promotion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions",
+                "{{tieredPromoId}}"
+              ]
+            },
+            "description": "Deletes a promotion. It stops applying to future quotes and confirms; stored orders keep their audit trail."
+          },
+          "response": [
+            {
+              "name": "204 - Delete promotion",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{tieredPromoId}}"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "X-Request-Id",
+                  "value": "63507bfc-1c81-4760-9f5f-02bf975709d4"
+                }
+              ],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "404 - already deleted",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions/{{tieredPromoId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions",
+                    "{{tieredPromoId}}"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "a0740d16-6659-4d13-acc5-7fea4840934a"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion bd73620d-c640-41b3-903d-a76123a941ee was not found\",\n  \"instance\": \"/api/v1/promotions/bd73620d-c640-41b3-903d-a76123a941ee\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"a0740d16-6659-4d13-acc5-7fea4840934a\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Quote cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Total is 21.60 for three mugs\", function () { pm.expect(body.total).to.eql(\"21.60\"); });",
+                  "pm.test(\"Two promotions applied in order\", function () { pm.expect(body.appliedPromotions.length).to.eql(2); pm.expect(body.appliedPromotions[0].sequence).to.eql(1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/cart/quote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cart",
+                "quote"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 3\n    }\n  ],\n  \"customerSegment\": \"REGULAR\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Prices a cart without reserving stock. Promotions are applied in stage order (category percent, then buy X get Y, then tiered bulk) and listed in the order they were applied. customerSegment is optional (default REGULAR). Duplicate lines are merged."
+          },
+          "response": [
+            {
+              "name": "200 - Quote cart",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/quote",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "quote"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 3\n    }\n  ],\n  \"customerSegment\": \"REGULAR\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "707d4ee2-3d40-4ac9-aef6-81cb82689165"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"PERCENT_OFF_CATEGORY\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"BUY_X_GET_Y\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\"\n}"
+            },
+            {
+              "name": "404 - unknown product",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/quote",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "quote"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"00000000-0000-0000-0000-000000000001\",\n      \"qty\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "f5f5b419-0ef9-4bbc-af38-70e4aef7b688"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Some products in the cart were not found\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"f5f5b419-0ef9-4bbc-af38-70e4aef7b688\",\n  \"errors\": [\n    {\n      \"field\": \"productId\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 was not found\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - empty cart",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/quote",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "quote"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "28c87cb9-1ca5-427e-99f8-aa8865ca57b1"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"28c87cb9-1ca5-427e-99f8-aa8865ca57b1\",\n  \"errors\": [\n    {\n      \"field\": \"items\",\n      \"message\": \"must not be empty\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - unknown field",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/quote",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "quote"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 1\n    }\n  ],\n  \"customersegment\": \"VIP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "6b7dcee4-8c83-4ef0-9f61-928fffb479ca"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"6b7dcee4-8c83-4ef0-9f61-928fffb479ca\",\n  \"errors\": [\n    {\n      \"field\": \"customersegment\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm cart",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"idempotencyKey\", \"order-\" + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Order id and total returned\", function () { pm.expect(body.orderId).to.be.a(\"string\"); pm.expect(body.total).to.eql(\"21.60\"); });",
+                  "pm.collectionVariables.set(\"orderId\", body.orderId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotencyKey}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/cart/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cart",
+                "confirm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 3\n    }\n  ],\n  \"customerSegment\": \"REGULAR\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Re-prices the cart, locks the stock rows, decrements stock and stores an order in one transaction. The optional Idempotency-Key header (max 100 chars) makes retries safe: the same key with the same cart replays the first order and adds Idempotent-Replayed: true. Saves orderId."
+          },
+          "response": [
+            {
+              "name": "201 - order confirmed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "{{idempotencyKey}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "confirm"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 3\n    }\n  ],\n  \"customerSegment\": \"REGULAR\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "13c1a54f-e69a-4afa-82b0-34e2e3deb69e"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"orderId\": \"307d272e-2378-4e93-8500-5877e4e54223\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T13:14:23.035788Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"PERCENT_OFF_CATEGORY\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"BUY_X_GET_Y\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\"\n}"
+            },
+            {
+              "name": "201 - replay with the same key (Idempotent-Replayed: true)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "{{idempotencyKey}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "confirm"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 3\n    }\n  ],\n  \"customerSegment\": \"REGULAR\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "0583050a-ea4a-400f-9027-b315bdea2a09"
+                },
+                {
+                  "key": "Idempotent-Replayed",
+                  "value": "true"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"orderId\": \"307d272e-2378-4e93-8500-5877e4e54223\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T13:14:23.035788Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"PERCENT_OFF_CATEGORY\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"BUY_X_GET_Y\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\"\n}"
+            },
+            {
+              "name": "422 - same key, different cart",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "{{idempotencyKey}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "confirm"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "57752952-4ac7-45d2-9a80-1f798a32d4ed"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:idempotency-key-reused\",\n  \"title\": \"Idempotency key reused\",\n  \"status\": 422,\n  \"detail\": \"Idempotency-Key was already used with a different request\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"IDEMPOTENCY_KEY_REUSED\",\n  \"requestId\": \"57752952-4ac7-45d2-9a80-1f798a32d4ed\"\n}"
+            },
+            {
+              "name": "409 - insufficient stock",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "confirm"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 50\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "727d3862-b8ed-4788-9baf-d5691ae23efc"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:insufficient-stock\",\n  \"title\": \"Insufficient stock\",\n  \"status\": 409,\n  \"detail\": \"Not enough stock for 1 product(s)\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INSUFFICIENT_STOCK\",\n  \"requestId\": \"727d3862-b8ed-4788-9baf-d5691ae23efc\",\n  \"errors\": [\n    {\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"requested\": 50,\n      \"available\": 7\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - invalid idempotency key (101 characters)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/cart/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "cart",
+                    "confirm"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"qty\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "79eb497b-a5f3-42e2-af30-f6d6f4a0be84"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-idempotency-key\",\n  \"title\": \"Invalid idempotency key\",\n  \"status\": 400,\n  \"detail\": \"Idempotency-Key must be between 1 and 100 non-blank characters\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INVALID_IDEMPOTENCY_KEY\",\n  \"requestId\": \"79eb497b-a5f3-42e2-af30-f6d6f4a0be84\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Check stock after confirm",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Stock is 7\", function () { pm.expect(pm.response.json().stock).to.eql(7); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "{{productId}}"
+              ]
+            },
+            "description": "Stock dropped by 3 and only once, even though the confirm was replayed."
+          },
+          "response": [
+            {
+              "name": "200 - Check stock after confirm",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/products/{{productId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "59b3e884-4313-4fef-a7bb-a1b3fa4b5082"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 7,\n  \"createdAt\": \"2026-10-29T13:14:21.990820Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders?sort=total,desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "total,desc"
+                }
+              ]
+            },
+            "description": "Paged list. Query: page, size, sort (createdAt or total)."
+          },
+          "response": [
+            {
+              "name": "200 - List orders",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/orders?sort=total,desc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "orders"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "total,desc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "7b7e1760-b9d6-4e32-8f38-7518ac097be3"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"orderId\": \"307d272e-2378-4e93-8500-5877e4e54223\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T13:14:23.035788Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"unitPrice\": \"12.00\",\n          \"qty\": 3,\n          \"subtotal\": \"36.00\",\n          \"discount\": \"14.40\",\n          \"total\": \"21.60\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n          \"name\": \"10% off kitchen\",\n          \"type\": \"PERCENT_OFF_CATEGORY\",\n          \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n          \"amount\": \"3.60\"\n        },\n        {\n          \"sequence\": 2,\n          \"promotionId\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n          \"name\": \"Mugs 2+1\",\n          \"type\": \"BUY_X_GET_Y\",\n          \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n          \"amount\": \"10.80\"\n        }\n      ],\n      \"subtotal\": \"36.00\",\n      \"totalDiscount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+            },
+            {
+              "name": "400 - sort field not allowed",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/orders?sort=status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "orders"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "status"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "4b5c42a5-dbc4-4a78-9ae0-1664ebb94374"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'status'; allowed fields: [createdAt, total]\",\n  \"instance\": \"/api/v1/orders\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"4b5c42a5-dbc4-4a78-9ae0-1664ebb94374\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Order id matches\", function () { pm.expect(pm.response.json().orderId).to.eql(pm.collectionVariables.get(\"orderId\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/{{orderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "orders",
+                "{{orderId}}"
+              ]
+            },
+            "description": "Returns one stored order with its line and promotion snapshots."
+          },
+          "response": [
+            {
+              "name": "200 - Get order",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/orders/{{orderId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "orders",
+                    "{{orderId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "1016d898-1bbb-45f7-946d-81c30fb9489b"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"orderId\": \"307d272e-2378-4e93-8500-5877e4e54223\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T13:14:23.035788Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"084bc4f8-8b69-4c5b-bf4e-eff62193f83b\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"PERCENT_OFF_CATEGORY\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4e1e3f53-489e-47cf-9de2-5c565b35c6a5\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"BUY_X_GET_Y\",\n      \"productId\": \"121597b9-61cd-4dd8-8bd7-b2bd2f02e91f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\"\n}"
+            },
+            {
+              "name": "404 - unknown order",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "orders",
+                    "00000000-0000-0000-0000-000000000001"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "189280e7-7a05-426e-94bc-e12065a2383f"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:order-not-found\",\n  \"title\": \"Order not found\",\n  \"status\": 404,\n  \"detail\": \"Order 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/orders/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"requestId\": \"189280e7-7a05-426e-94bc-e12065a2383f\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lampId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "percentPromoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bxgyPromoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tieredPromoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "idempotencyKey",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

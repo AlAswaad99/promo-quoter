@@ -2,13 +2,13 @@ package com.promoquoter.pricing.rules;
 
 import java.util.List;
 
-import com.promoquoter.pricing.PricedLine;
-import com.promoquoter.pricing.PricingContext;
-import com.promoquoter.pricing.PricingRule;
-import com.promoquoter.pricing.RuleDefinition;
-import com.promoquoter.pricing.RuleInfo;
-import com.promoquoter.pricing.RuleKind;
 import com.promoquoter.pricing.condition.ConditionEvaluator;
+import com.promoquoter.pricing.engine.PricedLine;
+import com.promoquoter.pricing.engine.PricingContext;
+import com.promoquoter.pricing.engine.PricingRule;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.model.RuleInfo;
+import com.promoquoter.pricing.model.RuleKind;
 
 public abstract class GenericRule implements PricingRule {
 

@@ -2,11 +2,11 @@ package com.promoquoter.pricing.rules;
 
 import org.springframework.stereotype.Component;
 
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.ActionRuleProvider;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.PricingRule;
-import com.promoquoter.pricing.RuleDefinition;
+import com.promoquoter.pricing.engine.ActionRuleProvider;
+import com.promoquoter.pricing.engine.PricingRule;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.ActionSpec;
 
 @Component
 public class FreeGiftRuleProvider implements ActionRuleProvider {

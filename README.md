@@ -6,7 +6,7 @@ A Spring Boot REST service that prices a shopping cart with pluggable promotion 
 - **Confirm** a cart: re-prices, locks the stock rows, decrements stock and stores an order in one transaction. Safe under concurrent calls; retries with an `Idempotency-Key` never reserve twice.
 - **Rules** decide prices and what is allowed. A rule is data: optional conditions on the cart, an optional target (which lines), and one action (percent off, amount off, free units, cart discount, surcharge, shipping waiver, free gift, or reject the cart). Rules become Strategy objects built by a Factory and run through an ordered Pipeline. Adding an action kind means adding classes. No orchestration code changes. The three classic promotion types are shortcuts that expand into rules.
 
-Java 21, Spring Boot 3.5, Spring Data JPA, H2 (in memory), Actuator, Lombok. One Maven module, packaged by feature.
+Java 21, Spring Boot 3.5, Spring Data JPA, H2 (in memory), Actuator, Lombok. One Maven module, packaged by feature and then by layer.
 
 ## Run it
 
@@ -44,11 +44,11 @@ A multi-stage build: JDK to compile, JRE to run, non-root user.
 ./mvnw verify    # tests + coverage report + coverage gate (fails below 85% line coverage)
 ```
 
-The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **96.8 % line, 92.1 % branch coverage** across 445 tests.
+The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **96.8 % line, 92.1 % branch coverage** across 450 tests.
 
 | Kind | What it covers |
 |---|---|
-| Unit | The condition model and evaluator, the rule parser and its limits, every action rule (rounding, caps, thresholds, the free-units table), the pipeline ordering, tie-breaks and `stopAfter`, the audit decorator, the rule factory (eligibility, fail-fast wiring), the engine end to end, cart normalisation, money rounding, paging and sort policy |
+| Unit | The package layer rules (`PackageLayersTest`), the condition model and evaluator, the rule parser and its limits, every action rule (rounding, caps, thresholds, the free-units table), the pipeline ordering, tie-breaks and `stopAfter`, the audit decorator, the rule factory (eligibility, fail-fast wiring), the engine end to end, cart normalisation, money rounding, paging and sort policy |
 | Integration (`*IT`) | Every endpoint on a real Spring context and H2 through MockMvc: success paths, every error code, validation, paging, filters, idempotency, request-id headers and log output, strict input handling, stored rules, rule preview, shipping, gifts and rule violations |
 | Concurrency | 20 threads against 5 units of stock (exactly 5 orders, rest get 409); multi-product carts stay all-or-nothing; same `Idempotency-Key` from 10 threads reserves once; opposite lock orders do not deadlock; 12 simultaneous orders share 5 free gifts without overselling |
 
@@ -210,16 +210,35 @@ Orders keep a snapshot of everything: applied promotions, adjustments, shipping,
 
 ### Layout
 
-Packages are organised by feature, not by layer. Each feature owns its controller, service, entity and repository, and exposes a small public surface. Dependencies only point one way:
+Packages are organised by feature, and inside each feature by layer:
 
 ```
-order ──► cart ──► product
-  │         ├────► promotion ──► pricing   (framework-free engine)
+<feature>/
+  api/      controllers only (HTTP, status codes)
+  dto/      request and response records (validation annotations, no logic)
+  domain/   entity, repository, service and the mapper between entities and DTOs
+```
+
+| Feature | `api` | `dto` | `domain` |
+|---|---|---|---|
+| `product` | `ProductController` | `CreateProductRequest`, `ProductResponse` | `Product`, `ProductRepository`, `ProductService`, `InventoryService`, `ProductSnapshot`, `ProductMapper` |
+| `promotion` | `PromotionController` | `CreatePromotionRequest` and its four payloads, `UpdatePromotionRequest`, `PromotionResponse` | `Promotion`, `PromotionRepository`, `PromotionService`, `RuleParser`, `RuleStore`, `RuleJsonWriter`, `PromotionMapper` |
+| `cart` | `CartController`, `RulePreviewController` | `CartRequest`, `QuoteResponse`, `RulePreviewRequest`, `RulePreviewResponse` | `CartNormalizer`, `QuoteService`, `RulePreviewService`, `QuotedCart`, `QuoteMapper` |
+| `order` | `CheckoutController`, `OrderController` | `OrderResponse`, `OrderStatus` | `Order`, `OrderRepository`, idempotency classes, `CheckoutService`, `OrderService`, `OrderMapper` |
+| `pricing` | none | none | `model` (records and enums), `engine` (pipeline, context, factory), `condition` (condition tree and evaluator), `rules` (one class per action kind) |
+
+Dependencies only point one way, between features and between layers:
+
+```
+order ──► cart ──► promotion ──► pricing   (framework-free engine)
+  │         └────► product
   └─────────────► product (InventoryService)
 common: error handling, paging, money, observability
+
+api ──► domain ──► dto        pricing: rules ──► engine ──► condition ──► model
 ```
 
-Entities and repositories are package-private, so another feature can only reach them through a public service.
+Entities, repositories and mappers are package-private inside `domain`, so another feature can only reach them through a public service. `PackageLayersTest` reads the source imports and fails the build if a feature depends on one it should not, if `dto` reaches into `domain` or `api`, if `domain` reaches into `api`, or if a pricing layer reaches back up the chain.
 
 ### Rules engine (`pricing`)
 

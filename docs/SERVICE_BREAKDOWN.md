@@ -65,7 +65,7 @@ Everything is in one Maven module under `com.promoquoter`.
 
 ### 3.1 Package-by-feature
 
-Each feature package owns its controller, service, entity and repository. Entities and repositories are package-private, so another feature can only reach them through a public service. Dependencies point one way:
+Each feature package owns its controller, service, entity and repository, split into `api`, `dto` and `domain` (see 3.2). Entities, repositories and mappers are package-private inside `domain`, so another feature can only reach them through a public service. Dependencies point one way:
 
 ```mermaid
 flowchart LR
@@ -85,9 +85,9 @@ flowchart LR
 
 | Package | Responsibility | Public surface |
 |---|---|---|
-| `product` | Product entity, create / get / list, stock reservation | `ProductService`, `InventoryService`, `ProductController`, DTOs |
+| `product` | Product entity, create / get / list, stock reservation | `ProductService`, `InventoryService`, `ProductController` (`api`), DTOs (`dto`) |
 | `promotion` | Promotion entity, create / list / get / patch / delete, conversion to definitions | `PromotionService`, `PromotionController`, DTOs |
-| `pricing` | The rules engine. **No Spring, no JPA** | `PricingEngine`, `PricingRule`, `RuleProvider`, `PromotionDefinition`, `PriceBreakdown` |
+| `pricing` | The rules engine, no JPA. Layers: `model`, `engine`, `condition`, `rules` | `PricingEngine`, `PricingRule`, `ActionRuleProvider`, `RuleDefinition`, `PriceBreakdown` |
 | `cart` | Cart request, normalisation, quoting | `CartNormalizer`, `QuoteService`, `CartController` |
 | `order` | Confirm, idempotency, order storage and reads | `CheckoutService`, `OrderService`, `CheckoutController`, `OrderController` |
 | `common` | Error model and handler, money, paging, request logging, text helpers | `ApiException`, `ErrorCode`, `Money`, `PageRequestFactory`, `RequestContext` |
@@ -95,14 +95,27 @@ flowchart LR
 ### 3.2 Layers inside a feature
 
 ```
-Controller  (HTTP, validation annotations, status codes)
+api/      Controller  (HTTP, validation annotations, status codes)
    ↓
-Service     (transactions, orchestration, error mapping)
+domain/   Service     (transactions, orchestration, error mapping)
+            ↓
+          Repository  (Spring Data JPA)    Entity + Mapper  (package-private)
    ↓
-Repository  (Spring Data JPA)        Entity  (package-private)
+dto/      Request and response records (validation annotations, no logic)
 ```
 
-Controllers return records (DTOs). Entities never leave their package.
+The dependency direction is `api → domain → dto`. A controller calls a public service; the service uses repositories and entities, which never leave `domain`, and returns DTO records built by a package-private mapper (`ProductMapper`, `PromotionMapper`, `QuoteMapper`, `OrderMapper`). Features may use each other's DTO records (`order.dto` uses `cart.dto`) and services, never another feature's `api`.
+
+| Feature | `api` | `dto` | `domain` |
+|---|---|---|---|
+| `product` | `ProductController` | `CreateProductRequest`, `ProductResponse` | `Product`, `ProductRepository`, `ProductService`, `InventoryService`, `ProductSnapshot`, `ProductMapper` |
+| `promotion` | `PromotionController` | `CreatePromotionRequest` (sealed: `PercentOffCategoryRequest`, `BuyXGetYRequest`, `TieredBulkRequest`, `RuleRequest`), `UpdatePromotionRequest`, `PromotionResponse` | `Promotion`, `PromotionRepository`, `PromotionService`, `RuleParser`, `RuleRequestParser`, `RuleStore`, `RuleJsonWriter`, `ParsedRule`, `PromotionMapper` |
+| `cart` | `CartController`, `RulePreviewController` | `CartRequest`, `CartItemRequest`, `QuoteResponse`, `RulePreviewRequest`, `RulePreviewResponse`, `RuleViolationEntry` | `CartNormalizer`, `NormalizedCart`, `QuotedCart`, `GiftLine`, `QuoteService`, `RulePreviewService`, `QuoteMapper` |
+| `order` | `CheckoutController`, `OrderController` | `OrderResponse`, `OrderStatus` | `Order`, `OrderRepository`, `IdempotencyRecord`, `IdempotencyRepository`, four snapshot records, `RequestFingerprint`, `CheckoutService`, `OrderService`, `OrderMapper` |
+
+`pricing` has no `api` or `dto`. Its layers are `model` (records and enums such as `RuleDefinition`'s parts: `ActionSpec`, `PriceBreakdown`, `CartLine`), `engine` (`PricingEngine`, `PricingPipeline`, `PricingContext`, `AuditingRule`, `PromotionRuleFactory`, `RuleDefinition`), `condition` (the condition tree and `ConditionEvaluator`) and `rules` (one class and one provider per action kind), and they depend on each other in one direction: `rules → engine → condition → model`.
+
+`PackageLayersTest` reads the imports of every main source file and fails the build when a feature depends on one it should not, when `dto` reaches into `domain` or `api`, when `domain` reaches into `api`, or when a pricing layer depends upward.
 
 ### 3.3 Key classes
 
@@ -111,7 +124,7 @@ Controllers return records (DTOs). Entities never leave their package.
 | `QuoteService` | Loads products and active promotions, hands them to `PricingEngine`. Read-only transaction |
 | `CartNormalizer` | Merges duplicate lines, enforces the merged quantity cap, defaults the segment, sorts items by product id |
 | `PricingEngine` | Entry point of the engine: factory → pipeline → context → breakdown |
-| `PromotionRuleFactory` | Turns `PromotionDefinition`s into rules; filters by `active` and segment; fails at startup if a type has no provider |
+| `PromotionRuleFactory` | Turns `RuleDefinition`s into rules; filters by `active` and segment; fails at startup if an action kind has no provider |
 | `PricingPipeline` | Sorts rules by stage, priority, creation time, id and runs them over one `PricingContext` |
 | `AuditingRule` | Decorator around every rule; records which line each promotion changed and by how much |
 | `PricingContext` / `PricedLine` | Mutable per-request state: running total per line, applied-promotion log |
@@ -1029,11 +1042,11 @@ The `json` Spring profile switches the console to ECS structured JSON, where `re
 
 ## 15. Testing
 
-445 tests; line coverage 96.8 %, branch coverage 92.1 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
+450 tests; line coverage 96.8 %, branch coverage 92.1 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
 
 | Level | Classes | Covers |
 |---|---|---|
-| Unit (no Spring) | `MoneyTest`, `CategoriesTest`, `PageRequestFactoryTest`, `CartNormalizerTest`, `ProductTest`, `PromotionTest`, `OrderTest`, `RequestFingerprintTest`, `PricingContextTest`, `PricingContextAdjustmentsTest`, `RuleEngineTest`, `ConditionModelTest`, `ConditionEvaluatorTest`, `RuleParserTest`, `GenericRuleTest`, `LineActionRulesTest`, `CartActionRulesTest`, `OrderSnapshotTest`, `PricingEngineTest`, `PricingPipelineTest`, `PromotionRuleFactoryTest`, `AuditingRuleTest`, rule tests under `pricing/rules` | Rounding, caps, thresholds, ordering and tie-breaks, stacking, eligibility, fail-fast wiring, decorator audit, merging of duplicate lines, stock decrement guard |
+| Unit (no Spring) | `MoneyTest`, `CategoriesTest`, `PageRequestFactoryTest`, `CartNormalizerTest`, `ProductTest`, `PromotionTest`, `OrderTest`, `RequestFingerprintTest`, `PricingContextTest`, `PricingContextAdjustmentsTest`, `RuleEngineTest`, `ConditionModelTest`, `ConditionEvaluatorTest`, `RuleParserTest`, `GenericRuleTest`, `LineActionRulesTest`, `CartActionRulesTest`, `OrderSnapshotTest`, `PackageLayersTest`, `PricingEngineTest`, `PricingPipelineTest`, `PromotionRuleFactoryTest`, `AuditingRuleTest`, rule tests under `pricing/rules` | Rounding, caps, thresholds, ordering and tie-breaks, stacking, eligibility, fail-fast wiring, decorator audit, merging of duplicate lines, stock decrement guard |
 | Integration (`@SpringBootTest` + MockMvc + H2) | `ProductControllerIT`, `ProductStockConstraintIT`, `InventoryServiceIT`, `PromotionControllerIT`, `PromotionManagementIT`, `PromotionRulesIT`, `PromotionLimitIT`, `RulePreviewIT`, `RuleQuoteIT`, `RuleShippingIT`, `OrderRulesIT`, `CartQuoteIT`, `CheckoutIT` (including order reads), `OrderPersistenceIT`, `GlobalExceptionHandlerIT`, `RequestLoggingIT`, `ApplicationIT` | Every endpoint's success path and every error code, paging and filters, idempotent replay and key reuse, stock visible through `GET /products/{id}`, request-id header and log output, strict JSON, numeric caps |
 | Concurrency | `ConcurrentCheckoutIT` | Overselling, partial reservation, same-key races, lock-order deadlocks |
 

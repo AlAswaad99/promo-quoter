@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.promoquoter.cart.CartRequest;
+import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.order.domain.CheckoutService;
 import com.promoquoter.order.dto.OrderResponse;
 

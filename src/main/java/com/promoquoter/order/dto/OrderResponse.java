@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import com.promoquoter.cart.QuoteResponse;
+import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.common.money.MoneyField;
 import com.promoquoter.pricing.CustomerSegment;
 

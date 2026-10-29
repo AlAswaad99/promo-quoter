@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.domain;
 
 import java.util.UUID;
 

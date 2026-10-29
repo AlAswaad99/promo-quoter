@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.domain;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.promoquoter.cart.dto.CartItemRequest;
+import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;

@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.dto;
 
 import java.util.List;
 

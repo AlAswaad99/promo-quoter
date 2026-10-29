@@ -9,11 +9,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.promoquoter.cart.CartNormalizer;
-import com.promoquoter.cart.CartRequest;
-import com.promoquoter.cart.NormalizedCart;
-import com.promoquoter.cart.QuoteService;
-import com.promoquoter.cart.QuotedCart;
+import com.promoquoter.cart.domain.CartNormalizer;
+import com.promoquoter.cart.domain.NormalizedCart;
+import com.promoquoter.cart.domain.QuoteService;
+import com.promoquoter.cart.domain.QuotedCart;
+import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.order.dto.OrderResponse;

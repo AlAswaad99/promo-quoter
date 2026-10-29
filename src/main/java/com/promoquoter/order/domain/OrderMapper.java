@@ -2,7 +2,7 @@ package com.promoquoter.order.domain;
 
 import java.util.List;
 
-import com.promoquoter.cart.QuoteResponse;
+import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.common.money.Money;
 import com.promoquoter.order.dto.OrderResponse;
 

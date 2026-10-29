@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.api;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;

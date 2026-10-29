@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 import java.util.stream.Collectors;
 
-import com.promoquoter.cart.NormalizedCart;
+import com.promoquoter.cart.domain.NormalizedCart;
 
 final class RequestFingerprint {
 

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.promoquoter.cart.QuotedCart;
+import com.promoquoter.cart.domain.QuotedCart;
 import com.promoquoter.order.dto.OrderStatus;
 import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.PriceBreakdown;

@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.cart.GiftLine;
-import com.promoquoter.cart.QuotedCart;
+import com.promoquoter.cart.domain.GiftLine;
+import com.promoquoter.cart.domain.QuotedCart;
 import com.promoquoter.pricing.ActionKind;
 import com.promoquoter.pricing.AdjustmentDirection;
 import com.promoquoter.pricing.CartAdjustment;

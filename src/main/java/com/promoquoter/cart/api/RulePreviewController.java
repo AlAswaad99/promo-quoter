@@ -1,9 +1,13 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.api;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.promoquoter.cart.domain.RulePreviewService;
+import com.promoquoter.cart.dto.RulePreviewRequest;
+import com.promoquoter.cart.dto.RulePreviewResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

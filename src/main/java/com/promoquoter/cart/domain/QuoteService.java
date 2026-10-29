@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.promoquoter.cart.dto.CartRequest;
+import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
@@ -40,7 +42,7 @@ public class QuoteService {
 
     @Transactional(readOnly = true)
     public QuoteResponse quote(CartRequest request) {
-        return QuoteResponse.from(priceChecked(cartNormalizer.normalize(request), false));
+        return QuoteMapper.toResponse(priceChecked(cartNormalizer.normalize(request), false));
     }
 
     @Transactional(readOnly = true)
@@ -110,7 +112,7 @@ public class QuoteService {
         if (!breakdown.violations().isEmpty()) {
             throw new ApiException(ErrorCode.RULE_VIOLATION,
                     "The cart violates " + breakdown.violations().size() + " rule(s)",
-                    breakdown.violations().stream().map(RuleViolationEntry::from).toList());
+                    breakdown.violations().stream().map(QuoteMapper::toEntry).toList());
         }
     }
 

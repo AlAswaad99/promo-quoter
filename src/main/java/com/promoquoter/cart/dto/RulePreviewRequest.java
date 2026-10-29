@@ -1,4 +1,4 @@
-package com.promoquoter.cart;
+package com.promoquoter.cart.dto;
 
 import com.promoquoter.promotion.dto.CreatePromotionRequest;
 

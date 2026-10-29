@@ -7,10 +7,10 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.cart.CartItemRequest;
-import com.promoquoter.cart.CartNormalizer;
-import com.promoquoter.cart.CartRequest;
-import com.promoquoter.cart.NormalizedCart;
+import com.promoquoter.cart.domain.CartNormalizer;
+import com.promoquoter.cart.domain.NormalizedCart;
+import com.promoquoter.cart.dto.CartItemRequest;
+import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.pricing.CustomerSegment;
 
 class RequestFingerprintTest {

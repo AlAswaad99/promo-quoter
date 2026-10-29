@@ -63,7 +63,7 @@ public class CheckoutService {
                 idempotencyRepository.saveAndFlush(new IdempotencyRecord(idempotencyKey, fingerprint, orderId));
             }
             inventoryService.reserve(quantitiesOf(cart));
-            PriceBreakdown breakdown = quoteService.price(cart);
+            PriceBreakdown breakdown = quoteService.priceChecked(cart, true).breakdown();
             Order order = orderRepository.saveAndFlush(Order.confirmed(orderId, breakdown, idempotencyKey));
             return OrderResponse.from(order);
         });

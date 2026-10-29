@@ -16,6 +16,8 @@ interface PromotionRepository extends JpaRepository<Promotion, UUID> {
 
     List<Promotion> findByActiveTrue();
 
+    long countByActiveTrue();
+
     @Query("""
             select p from Promotion p
             where (:type is null or p.type = :type)

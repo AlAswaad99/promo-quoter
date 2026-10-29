@@ -27,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PromotionService {
 
+    public static final int MAX_ACTIVE_PROMOTIONS = 500;
+
     private final PromotionRepository promotionRepository;
     private final ProductService productService;
 
@@ -34,6 +36,7 @@ public class PromotionService {
     public List<PromotionResponse> createAll(List<CreatePromotionRequest> requests) {
         List<List<RuleParser.ProductReference>> ruleReferences = validateRules(requests, index -> "[" + index + "]");
         rejectUnknownProducts(requests, ruleReferences, index -> "[" + index + "]");
+        requireRoomForActive(requests.stream().filter(CreatePromotionRequest::active).count());
         List<Promotion> promotions = requests.stream().map(CreatePromotionRequest::toEntity).toList();
         return promotionRepository.saveAll(promotions).stream().map(PromotionResponse::from).toList();
     }
@@ -60,6 +63,9 @@ public class PromotionService {
                     List.of(new FieldViolation("body", "At least one field must be provided")));
         }
         Promotion promotion = find(id);
+        if (Boolean.TRUE.equals(request.active()) && !promotion.isActive()) {
+            requireRoomForActive(1);
+        }
         promotion.update(request.name(), request.active(), request.priority(), request.eligibleSegments());
         return PromotionResponse.from(promotionRepository.saveAndFlush(promotion));
     }
@@ -84,6 +90,15 @@ public class PromotionService {
         rejectUnknownProducts(single, references, index -> "rule");
         Promotion promotion = request.toEntity();
         return new PreviewRule(PromotionResponse.from(promotion), promotion.toDefinition());
+    }
+
+    private void requireRoomForActive(long additional) {
+        long active = promotionRepository.countByActiveTrue();
+        if (active + additional > MAX_ACTIVE_PROMOTIONS) {
+            throw new ApiException(ErrorCode.VALIDATION_FAILED, "Request validation failed", List.of(new FieldViolation(
+                    "promotions", "At most " + MAX_ACTIVE_PROMOTIONS + " promotions can be active at once, "
+                            + active + " are active")));
+        }
     }
 
     private List<List<RuleParser.ProductReference>> validateRules(List<CreatePromotionRequest> requests,

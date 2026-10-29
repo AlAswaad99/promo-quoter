@@ -42,6 +42,8 @@ Design goals that shaped the code:
 - **Correct concurrency.** No overselling and no double reservation, proven by tests that fail when the lock is removed.
 - **Testable.** The pricing engine has no Spring or JPA dependency.
 
+Since the rule-engine rework, prices and restrictions come from **rules**: data made of optional conditions, an optional target and one action. The three classic promotion types (percent off a category, buy X get Y, tiered bulk) are shortcuts that expand into rules and price exactly as before. Rules can also add cart-level discounts, surcharges, a shipping waiver and free gifts, and can reject a cart. See sections 6 (BR36 to BR52), 7.5, 8.12 and 8.13.
+
 ## 2. Technology and runtime
 
 | Concern | Choice |
@@ -218,12 +220,13 @@ Base path `/api/v1`. JSON only. Money is a string with exactly two decimals (`"1
 | POST | `/products` | `201` array of products | 400 |
 | GET | `/products` | `200` page | 400 |
 | GET | `/products/{id}` | `200` product | 400, 404 |
-| POST | `/promotions` | `201` array of promotions | 400, 422 |
+| POST | `/promotions` | `201` array of promotions or rules | 400, 422 |
 | GET | `/promotions` | `200` page | 400 |
 | GET | `/promotions/{id}` | `200` promotion | 400, 404 |
 | PATCH | `/promotions/{id}` | `200` promotion | 400, 404 |
 | DELETE | `/promotions/{id}` | `204` | 400, 404 |
-| POST | `/cart/quote` | `200` quote | 400, 404 |
+| POST | `/promotions/preview` | `200` rule, quote and violations | 400, 404, 422 |
+| POST | `/cart/quote` | `200` quote | 400, 404, 422 |
 | POST | `/cart/confirm` | `201` order (`Idempotent-Replayed: true` on a replay) | 400, 404, 409, 422 |
 | GET | `/orders` | `200` page | 400 |
 | GET | `/orders/{id}` | `200` order | 400, 404 |
@@ -259,7 +262,23 @@ The category is trimmed and upper-cased (`" kitchen "` becomes `KITCHEN`). The r
 
 Common optional fields: `priority` (default 0, lower runs first within its stage), `active` (default `true`), `eligibleSegments` (default empty, meaning everyone).
 
-`GET /promotions?type=BUY_X_GET_Y&active=true` filters by type and active flag.
+`GET /promotions?type=BUY_X_GET_Y&active=true&kind=PRICING` filters by type, active flag and rule kind.
+
+**Generic rules.** `"type": "RULE"` creates a rule directly:
+
+```json
+{ "type": "RULE", "kind": "PRICING", "name": "Kitchen deal in November", "priority": 0,
+  "stage": 300, "stopAfter": false, "eligibleSegments": ["VIP"],
+  "when":   { "all": [ { "field": "cart.subtotal", "op": "gte", "value": "100.00" },
+                       { "field": "date", "op": "between", "value": ["2026-11-01", "2026-11-30"] } ] },
+  "target": { "all": [ { "field": "product.category", "op": "eq", "value": "KITCHEN" },
+                       { "field": "line.qty", "op": "gte", "value": 10 } ] },
+  "action": { "kind": "PERCENT_OFF", "percent": 5 } }
+```
+
+The response adds `kind`, `stage`, `stopAfter`, `when`, `target` and `action` to every promotion, including the ones created through the legacy shortcuts, so `GET` always shows the rule form.
+
+**Preview.** `POST /promotions/preview` with `{ "rule": { ... }, "cart": { ... } }` validates the rule exactly like creation (error paths start with `rule.`), prices the cart with that rule plus the active rules, and returns `{ "rule": ..., "quote": ..., "violations": [...] }`. Nothing is saved or reserved, and a matching validation rule is reported in `violations` instead of failing the call.
 
 `PATCH /promotions/{id}` changes only the fields present:
 
@@ -294,9 +313,15 @@ Quote response:
     { "sequence": 1, "promotionId": "…", "name": "10% off kitchen", "type": "PERCENT_OFF_CATEGORY", "productId": "…", "amount": "3.60" },
     { "sequence": 2, "promotionId": "…", "name": "Mugs 2+1", "type": "BUY_X_GET_Y", "productId": "…", "amount": "10.80" }
   ],
-  "subtotal": "36.00", "totalDiscount": "14.40", "total": "21.60"
+  "subtotal": "36.00", "totalDiscount": "14.40", "total": "21.60",
+  "shipping": "0.00",
+  "adjustments": [],
+  "gifts": [],
+  "skipped": []
 }
 ```
+
+New fields: `shipping` (the flat fee after any waiver, already part of `total`), `adjustments` (cart-level discounts, charges and shipping waivers: `{sequence, promotionId, name, action, direction, amount}`), `gifts` (zero-priced gift lines: `{productId, name, category, qty, unitPrice, total, promotionId, promotionName}`) and `skipped` (rules skipped by `stopAfter`, and gifts skipped for lack of stock: `{promotionId, name, reason}`). If a validation rule matches, the response is `422 RULE_VIOLATION` with `errors[]` = `{promotionId, name, message}`, one entry per violated rule.
 
 Confirm returns the same shape plus `orderId`, `status` (`CONFIRMED`) and `createdAt`, with status `201`. It accepts an optional `Idempotency-Key` header (1 to 100 non-blank characters).
 
@@ -380,6 +405,28 @@ Page shape:
 | BR34 | `DELETE` affects only future pricing; stored orders keep their snapshot |
 | BR35 | Unknown JSON fields are `400 MALFORMED_REQUEST` |
 
+### Rules engine
+
+| # | Rule |
+|---|---|
+| BR36 | `POST /promotions` with `type: RULE` creates a rule: `kind` (`PRICING` or `VALIDATION`), `name`, optional `when`, optional `target`, one `action`, plus `priority`, `active`, `eligibleSegments`, optional `stage` and `stopAfter`. The legacy types are shortcuts (BR48) |
+| BR37 | `target` is per line (`product.id`, `product.name`, `product.category`, `product.price`, `product.stock`, `line.qty`). `when` is per cart (`cart.subtotal` before discounts, `cart.total` running total, `cart.itemCount`, `customer.segment`, `date` in UTC). A field from the wrong scope is rejected. Products have no brand, owner or tags |
+| BR38 | Conditions: `all`, `any`, `not` over `{field, op, value}`; operators `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `between` (inclusive), `in`, `notIn`, `startsWith`, `contains`; the allowed operators depend on the field type; text is case-insensitive. Limits: depth 5, 20 conditions, 100 list values. No regular expressions, no scripting |
+| BR39 | A rule has an effect only if `when` matches (missing: always) and only on lines its `target` matches (missing: all lines). A cart-level action with a `target` fires once, and only if at least one line matches |
+| BR40 | Per-line actions: `PERCENT_OFF`, `AMOUNT_OFF` (per matching line, not per unit), `FREE_UNITS`. HALF_UP rounding and the cap at the line total still apply |
+| BR41 | Cart-level actions appear as `adjustments`: `AMOUNT_OFF_CART` (capped at what is left), `SURCHARGE`. Total = lines after discounts − cart discounts + surcharges + shipping; `totalDiscount` = line discounts + cart discounts |
+| BR42 | Shipping is the flat fee `promoquoter.shipping.flat-fee` (default `0.00`), shown as `shipping` and included in `total`; `SHIPPING_WAIVER` sets it to `0.00` and records the waived amount |
+| BR43 | `FREE_GIFT` adds a separate `0.00` line. A quote lists it only if its stock covers it after the cart's own purchase. Confirm locks the gift rows with the cart rows and skips unavailable gifts with a note, so a paid order never fails because of a gift. At most 100 gift units per order |
+| BR44 | `VALIDATION` rules use `REJECT {message}` and reject when they match. They run after all pricing rules, on the final discounted cart, for quote and confirm, and are never stopped by `stopAfter`. All violations come back in one `422 RULE_VIOLATION`; a rejected confirm reserves nothing |
+| BR45 | Order: `stage`, `priority`, creation time, id. Default stages: `PERCENT_OFF` 100, `FREE_UNITS` 200, `AMOUNT_OFF` 300, `AMOUNT_OFF_CART` 400, `FREE_GIFT` 500, `SHIPPING_WAIVER` 600, `SURCHARGE` 700, `REJECT` 900. Pricing stages 0 to 899, validation 900 to 999 |
+| BR46 | `stopAfter` acts only if the rule changed something: for line actions the discounted lines are skipped by later rules, for cart actions every later pricing rule is skipped. Skips are reported in `skipped` and stored as order notes |
+| BR47 | Rules are validated at creation and preview: every problem is a `400 VALIDATION_FAILED` entry with a field path (for example `[0].target.all[1].op`); a missing product in a condition or gift is `422 UNKNOWN_PRODUCT` with its path. Batches are all or nothing |
+| BR48 | Legacy shortcuts are stored as rules with their original stages: percent off category (100), buy X get Y (200), tiered bulk (300). Prices are unchanged. `GET` shows the original parameters and the rule form |
+| BR49 | `PATCH` changes only `name`, `active`, `priority`, `eligibleSegments`. Conditions and actions are fixed. `GET /promotions` filters by `kind` |
+| BR50 | `POST /promotions/preview` prices a cart with an unsaved rule plus the active ones. Nothing is saved or reserved |
+| BR51 | Orders store snapshots of applied promotions, adjustments, shipping, gift lines and notes |
+| BR52 | At most 500 promotions can be active at once; creating or re-activating beyond that is `400 VALIDATION_FAILED` on `promotions` |
+
 ### Paging
 
 | # | Rule |
@@ -395,10 +442,10 @@ The `pricing` package is plain Java with no framework imports. It knows nothing 
 
 | Pattern | Class | What it does |
 |---|---|---|
-| Strategy | `PricingRule` and `PercentOffCategoryRule`, `BuyXGetYRule`, `TieredBulkRule` | Each rule encapsulates one discount algorithm behind `stage()`, `definition()` and `apply(context)` |
+| Strategy | `PricingRule` and one class per action kind: `PercentOffRule`, `AmountOffRule`, `FreeUnitsRule`, `AmountOffCartRule`, `SurchargeRule`, `ShippingWaiverRule`, `FreeGiftRule`, `RejectRule` | Each rule encapsulates one algorithm behind `stage()`, `definition()` and `apply(context)`. Conditions are data that decide when it runs |
 | Pipeline / Chain | `PricingPipeline` | Sorts rules into a fixed order and passes the same `PricingContext` through each |
-| Factory | `PromotionRuleFactory` with one `RuleProvider` per type | Builds a rule from a stored `PromotionDefinition`; filters by active flag and segment |
-| Decorator | `AuditingRule` | Wraps each rule; compares line totals before and after and records the difference as an applied promotion |
+| Factory | `PromotionRuleFactory` with one `ActionRuleProvider` per action kind | Builds a rule from a `RuleDefinition`; filters by active flag and segment |
+| Decorator | `AuditingRule` | Wraps each rule; compares line totals before and after and records the difference as an applied promotion, and applies `stopAfter` |
 
 ### 7.2 Class diagram
 
@@ -459,7 +506,7 @@ classDiagram
 flowchart TD
     A[Active promotion definitions + cart lines + segment] --> B{For each definition:<br/>active and segment allowed?}
     B -- no --> X[skipped]
-    B -- yes --> C[RuleProvider for its type builds the rule]
+    B -- yes --> C[ActionRuleProvider for its action kind builds the rule]
     C --> D[Wrap in AuditingRule]
     D --> E[Sort all rules:<br/>stage, priority, createdAt, id]
     E --> F[Start context: each line total = subtotal]
@@ -498,6 +545,27 @@ Applied promotions: `#1 10% off kitchen 3.60`, `#2 Mugs 2+1 10.80`.
 **Example 7: nothing applies.** One lamp, with a kitchen promotion and a mug promotion. No line changes, so `appliedPromotions` is empty and total equals subtotal.
 
 **Example 8: segments.** A 50 % VIP-only promotion: a `REGULAR` cart is untouched; a `VIP` cart gets it.
+
+### 7.5 The generic rule model
+
+A stored rule becomes a `RuleDefinition`: id, name, kind, active flag, priority, stage, `stopAfter`, creation time, eligible segments, optional `when` and `target` conditions, and an `ActionSpec`.
+
+- **Conditions** (`pricing.condition`): `Condition` is a sealed tree (`All`, `Any`, `Not`, `Comparison`). `ConditionField` lists every field with its type and scope, `Operator` the operators, and `FieldType` which operators each type accepts. `ConditionEvaluator` evaluates a tree against `Facts` (a function from field to value), so the same code works for a line (`PricingContext.lineFacts`) and for the cart (`PricingContext.cartFacts`).
+- **Actions**: `ActionSpec` is a sealed set of records, one per `ActionKind`. `ActionKind` also knows its rule kind (pricing or validation) and its default stage.
+- **Rule classes**: `GenericRule` checks `when`, then `LineActionRule` runs its action on each matching, unfrozen line, and `CartActionRule` runs once if any line matches (or there is no target). The factory picks the class through one `ActionRuleProvider` per action kind.
+- **Parsing and storage** (`promotion` package): `RuleParser` turns the request JSON into conditions and actions and reports every problem with its path. The validated JSON is stored on the promotion row, and `RuleStore` parses it back into a `RuleDefinition`. `RuleJsonWriter` renders definitions (including the expansions of the legacy shortcuts, built by `LegacyTemplates`) back to JSON for responses.
+- **Context**: `PricingContext` carries the running line totals plus cart discounts, surcharges, shipping, gift requests, violations, skipped rules, frozen lines and the stop flag. `QuoteService` turns gift requests into gift lines using stock, and rejects the cart if there are violations.
+
+```mermaid
+flowchart LR
+    J[Rule JSON] --> P[RuleParser]
+    P -->|problems with paths| E[400 / 422]
+    P --> S[(Promotion row)]
+    S --> RS[RuleStore] --> D[RuleDefinition]
+    L[Legacy shortcut] --> LT[LegacyTemplates] --> D
+    D --> F[PromotionRuleFactory] --> R[GenericRule subclass] --> A[AuditingRule]
+    A --> PL[PricingPipeline]
+```
 
 ## 8. Sequence flows
 
@@ -753,6 +821,63 @@ sequenceDiagram
     F-->>Client: response with X-Request-Id
 ```
 
+### 8.12 Quote with rules
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant QS as QuoteService
+    participant PS as PromotionService
+    participant PE as PricingEngine
+    participant PP as PricingPipeline
+    Client->>QS: POST /cart/quote
+    QS->>QS: normalise the cart, load product snapshots (price, stock)
+    QS->>PS: activeDefinitions()
+    PS-->>QS: rule definitions (stored rules parsed, legacy ones expanded)
+    QS->>PE: price(lines, segment, rules)
+    PE->>PP: build audited rules, sort by stage, priority, createdAt, id
+    loop each rule in order
+        PP->>PP: pricing rule after a stop: record a skip
+        PP->>PP: otherwise check when, match target lines, apply the action, record the effect
+    end
+    PE-->>QS: breakdown with adjustments, gift requests, violations and skips
+    QS->>QS: turn gift requests into gift lines using stock, skip the rest
+    alt any validation rule matched
+        QS-->>Client: 422 RULE_VIOLATION listing every violated rule
+    else
+        QS-->>Client: 200 quote with shipping, adjustments, gifts and skipped
+    end
+```
+
+### 8.13 Confirm with gifts and rules
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant CS as CheckoutService
+    participant IS as InventoryService
+    participant QS as QuoteService
+    participant DB as Database
+    Client->>CS: POST /cart/confirm (optional Idempotency-Key)
+    CS->>DB: begin transaction, insert the idempotency record
+    CS->>IS: reserve(cart quantities, gift products of active gift rules)
+    IS->>DB: SELECT ... FOR UPDATE on cart and gift products in one id-ordered query
+    IS->>DB: check shortages for the cart, decrement the cart lines
+    CS->>QS: priceChecked(cart, stock already reserved)
+    alt a validation rule matches
+        QS-->>CS: RULE_VIOLATION
+        CS->>DB: roll back (stock, record and order are untouched)
+        CS-->>Client: 422 RULE_VIOLATION
+    else
+        QS-->>CS: priced cart with the gifts that are in stock
+        CS->>IS: reserveGifts(available gifts)
+        CS->>DB: save the order with adjustments, shipping, gift lines and notes
+        CS-->>Client: 201 order
+    end
+```
+
 ## 9. Concurrency and consistency
 
 ### 9.1 The mechanism
@@ -773,7 +898,7 @@ sequenceDiagram
 
 ### 9.3 What the tests prove
 
-`ConcurrentCheckoutIT` runs real threads against the real database:
+`ConcurrentCheckoutIT`, `ConcurrentGiftCheckoutIT` runs real threads against the real database:
 
 | Scenario | Expected result |
 |---|---|
@@ -861,7 +986,8 @@ All errors are `application/problem+json` (RFC 7807) with extra members `code`, 
 | `ORDER_NOT_FOUND` | 404 | Unknown order id |
 | `INSUFFICIENT_STOCK` | 409 | Stock-out on confirm; `errors[]` has `productId`, `requested`, `available` |
 | `CONCURRENT_MODIFICATION` | 409 | Lock timeout or optimistic-lock failure; the client may retry |
-| `UNKNOWN_PRODUCT` | 422 | A promotion references a product that does not exist |
+| `UNKNOWN_PRODUCT` | 422 | A promotion or rule references a product that does not exist |
+| `RULE_VIOLATION` | 422 | A validation rule matched; `errors[]` lists `{promotionId, name, message}` for every violated rule |
 | `IDEMPOTENCY_KEY_REUSED` | 422 | Key reused with a different request |
 | `INTERNAL_ERROR` | 500 | Anything unexpected; details logged, never returned |
 
@@ -897,17 +1023,18 @@ The `json` Spring profile switches the console to ECS structured JSON, where `re
 | `spring.jackson.deserialization.fail-on-unknown-properties` | `true` | Reject typos and unsupported fields |
 | `management.endpoints.web.exposure.include` | `health` | Only the health endpoint is exposed |
 | `logging.pattern.level` | `%5p [%X{requestId:-}]` | Request id in every log line |
+| `promoquoter.shipping.flat-fee` | `0.00` (default) | Flat shipping fee added to every quote and order; a `SHIPPING_WAIVER` rule removes it |
 
 `application-json.yml` (profile `json`) enables ECS structured logging.
 
 ## 15. Testing
 
-278 tests; line coverage 99.0 %, branch coverage 94.1 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
+445 tests; line coverage 96.8 %, branch coverage 92.1 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
 
 | Level | Classes | Covers |
 |---|---|---|
-| Unit (no Spring) | `MoneyTest`, `CategoriesTest`, `PageRequestFactoryTest`, `CartNormalizerTest`, `ProductTest`, `PromotionTest`, `OrderTest`, `RequestFingerprintTest`, `PricingContextTest`, `PricingEngineTest`, `PricingPipelineTest`, `PromotionRuleFactoryTest`, `AuditingRuleTest`, rule tests under `pricing/rules` | Rounding, caps, thresholds, ordering and tie-breaks, stacking, eligibility, fail-fast wiring, decorator audit, merging of duplicate lines, stock decrement guard |
-| Integration (`@SpringBootTest` + MockMvc + H2) | `ProductControllerIT`, `ProductStockConstraintIT`, `InventoryServiceIT`, `PromotionControllerIT`, `PromotionManagementIT`, `CartQuoteIT`, `CheckoutIT` (including order reads), `OrderPersistenceIT`, `GlobalExceptionHandlerIT`, `RequestLoggingIT`, `ApplicationIT` | Every endpoint's success path and every error code, paging and filters, idempotent replay and key reuse, stock visible through `GET /products/{id}`, request-id header and log output, strict JSON, numeric caps |
+| Unit (no Spring) | `MoneyTest`, `CategoriesTest`, `PageRequestFactoryTest`, `CartNormalizerTest`, `ProductTest`, `PromotionTest`, `OrderTest`, `RequestFingerprintTest`, `PricingContextTest`, `PricingContextAdjustmentsTest`, `RuleEngineTest`, `ConditionModelTest`, `ConditionEvaluatorTest`, `RuleParserTest`, `GenericRuleTest`, `LineActionRulesTest`, `CartActionRulesTest`, `OrderSnapshotTest`, `PricingEngineTest`, `PricingPipelineTest`, `PromotionRuleFactoryTest`, `AuditingRuleTest`, rule tests under `pricing/rules` | Rounding, caps, thresholds, ordering and tie-breaks, stacking, eligibility, fail-fast wiring, decorator audit, merging of duplicate lines, stock decrement guard |
+| Integration (`@SpringBootTest` + MockMvc + H2) | `ProductControllerIT`, `ProductStockConstraintIT`, `InventoryServiceIT`, `PromotionControllerIT`, `PromotionManagementIT`, `PromotionRulesIT`, `PromotionLimitIT`, `RulePreviewIT`, `RuleQuoteIT`, `RuleShippingIT`, `OrderRulesIT`, `CartQuoteIT`, `CheckoutIT` (including order reads), `OrderPersistenceIT`, `GlobalExceptionHandlerIT`, `RequestLoggingIT`, `ApplicationIT` | Every endpoint's success path and every error code, paging and filters, idempotent replay and key reuse, stock visible through `GET /products/{id}`, request-id header and log output, strict JSON, numeric caps |
 | Concurrency | `ConcurrentCheckoutIT` | Overselling, partial reservation, same-key races, lock-order deadlocks |
 
 Support code: `IntegrationTest` (meta-annotation), `TestDatabase` (clean tables, set/read stock, direct counts) and `ApiFixtures`. `ErrorProbeController` exists in test sources only, to trigger a 500 and verify it is sanitised.
@@ -942,6 +1069,7 @@ Trunk-based and local: the skeleton went directly on `main`, then each feature o
 | `feature/tiered-bulk-promotion` | Third promotion type |
 | `task/docker-and-readme` | Dockerfile, README, this document |
 | `task/update-plan` | Plan marked complete |
+| `rules-engine-rework` | Generic rule engine: conditions, actions, stored rules, preview, shipping, gifts, validation rules, order snapshots |
 
 ## 17. Edge cases and known limits
 
@@ -985,22 +1113,35 @@ Trunk-based and local: the skeleton went directly on `main`, then each feature o
 | Row locks are database-level | They do not coordinate multiple application nodes |
 | No promotion validity windows or "best single promotion" mode | Promotions always stack |
 
+### Rules engine notes
+
+- A flat shipping fee is the only shipping model; per-product or per-destination shipping would need a model change.
+- Gifts are best effort: an out-of-stock gift is skipped and noted, never an error.
+- Products have no brand, owner or tags, so rules that target "one owner's products" list product ids.
+- Stored rules cannot be edited except `name`, `active`, `priority` and `eligibleSegments`; delete and recreate.
+- `AMOUNT_OFF` is per matching line. A per-unit variant would be a new action kind.
+- At most 500 promotions can be active; each quote evaluates all of them.
+
 ## 18. Extending the service
 
-### Add a new promotion type (for example `SHIPPING_WAIVER`)
+### Add a rule
 
-1. Add the value to `PromotionType`.
-2. Add a rule class in `pricing/rules` implementing `PricingRule`, with its own `STAGE`.
-3. Add a `RuleProvider` `@Component` returning that type and building the rule.
-4. If it has new parameters: add nullable columns to `Promotion`, a factory method, a request record implementing the sealed `CreatePromotionRequest`, and the `PromotionDefinition` fields.
-5. Write unit tests for the rule and an integration test for the endpoint.
+A rule is data: `POST /promotions` with `"type": "RULE"`. Use `POST /promotions/preview` to try it on a sample cart first.
 
-`PricingPipeline`, `PromotionRuleFactory`, `QuoteService` and `CheckoutService` do not change. If step 3 is forgotten, the application refuses to start because the factory checks that every `PromotionType` has a provider.
+### Add an action kind (for example a per-unit discount)
+
+1. Add the value to `ActionKind` (with its rule kind and default stage) and a record to `ActionSpec`.
+2. Add a rule class extending `LineActionRule` or `CartActionRule` in `pricing/rules`.
+3. Add an `ActionRuleProvider` `@Component` for the kind.
+4. Add a parsing case in `RuleParser` (parameters and their limits) and a rendering case in `RuleJsonWriter`.
+5. Write unit tests for the rule and the parser case, and an integration test.
+
+`PricingEngine`, `PricingPipeline`, `PromotionRuleFactory`, `QuoteService` and `CheckoutService` do not change. If step 3 is forgotten the application refuses to start, because the factory checks that every `ActionKind` has a provider. A new condition field is one `ConditionField` value plus the fact it reads from the line or the cart in `PricingContext`.
 
 ### Remove or swap a rule
 
 - At runtime: `PATCH` it inactive, or `DELETE` it and `POST` a replacement.
-- In code: delete its `RuleProvider` and remove the type (the startup check keeps the two in sync).
+- In code: delete its `ActionRuleProvider` and remove the action kind (the startup check keeps the two in sync).
 
 ### Next steps if there were more time
 

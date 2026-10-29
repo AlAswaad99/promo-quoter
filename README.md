@@ -44,7 +44,7 @@ A multi-stage build: JDK to compile, JRE to run, non-root user.
 ./mvnw verify    # tests + coverage report + coverage gate (fails below 85% line coverage)
 ```
 
-The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **96.8 % line, 92.2 % branch coverage** across 440 tests.
+The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **96.8 % line, 92.1 % branch coverage** across 445 tests.
 
 | Kind | What it covers |
 |---|---|

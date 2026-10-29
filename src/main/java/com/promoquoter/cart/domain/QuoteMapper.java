@@ -3,12 +3,12 @@ package com.promoquoter.cart.domain;
 import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.cart.dto.RuleViolationEntry;
 import com.promoquoter.common.money.Money;
-import com.promoquoter.pricing.AppliedPromotion;
-import com.promoquoter.pricing.CartAdjustment;
-import com.promoquoter.pricing.LineBreakdown;
-import com.promoquoter.pricing.PriceBreakdown;
-import com.promoquoter.pricing.RuleViolation;
-import com.promoquoter.pricing.SkippedRule;
+import com.promoquoter.pricing.model.AppliedPromotion;
+import com.promoquoter.pricing.model.CartAdjustment;
+import com.promoquoter.pricing.model.LineBreakdown;
+import com.promoquoter.pricing.model.PriceBreakdown;
+import com.promoquoter.pricing.model.RuleViolation;
+import com.promoquoter.pricing.model.SkippedRule;
 
 final class QuoteMapper {
 

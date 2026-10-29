@@ -11,8 +11,8 @@ import org.hibernate.annotations.BatchSize;
 
 import com.promoquoter.cart.domain.QuotedCart;
 import com.promoquoter.order.dto.OrderStatus;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PriceBreakdown;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PriceBreakdown;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

@@ -12,7 +12,7 @@ import com.promoquoter.cart.dto.CartItemRequest;
 import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 class CartNormalizerTest {
 

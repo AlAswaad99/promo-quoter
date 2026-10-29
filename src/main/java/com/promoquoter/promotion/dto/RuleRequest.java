@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.RuleKind;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.RuleKind;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

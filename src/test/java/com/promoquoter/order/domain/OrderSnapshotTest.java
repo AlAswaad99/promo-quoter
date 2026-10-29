@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import com.promoquoter.cart.domain.GiftLine;
 import com.promoquoter.cart.domain.QuotedCart;
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.AdjustmentDirection;
-import com.promoquoter.pricing.CartAdjustment;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PriceBreakdown;
-import com.promoquoter.pricing.SkippedRule;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.AdjustmentDirection;
+import com.promoquoter.pricing.model.CartAdjustment;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PriceBreakdown;
+import com.promoquoter.pricing.model.SkippedRule;
 
 class OrderSnapshotTest {
 

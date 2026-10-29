@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import com.promoquoter.common.money.MoneyField;
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.AdjustmentDirection;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.AdjustmentDirection;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PromotionType;
 
 public record QuoteResponse(
         CustomerSegment customerSegment,

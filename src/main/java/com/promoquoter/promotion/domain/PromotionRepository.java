@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.promoquoter.pricing.PromotionType;
-import com.promoquoter.pricing.RuleKind;
+import com.promoquoter.pricing.model.PromotionType;
+import com.promoquoter.pricing.model.RuleKind;
 
 interface PromotionRepository extends JpaRepository<Promotion, UUID> {
 

@@ -2,7 +2,7 @@ package com.promoquoter.promotion.dto;
 
 import java.util.Set;
 
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

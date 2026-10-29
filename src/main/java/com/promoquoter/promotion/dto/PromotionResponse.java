@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PromotionType;
-import com.promoquoter.pricing.RuleKind;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PromotionType;
+import com.promoquoter.pricing.model.RuleKind;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record PromotionResponse(

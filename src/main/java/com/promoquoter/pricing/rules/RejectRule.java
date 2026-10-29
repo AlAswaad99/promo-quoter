@@ -1,8 +1,8 @@
 package com.promoquoter.pricing.rules;
 
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.PricingContext;
-import com.promoquoter.pricing.RuleDefinition;
+import com.promoquoter.pricing.engine.PricingContext;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.model.ActionSpec;
 
 public final class RejectRule extends CartActionRule {
 

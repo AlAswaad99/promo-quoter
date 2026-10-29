@@ -10,11 +10,11 @@ import java.util.UUID;
 import org.hibernate.annotations.BatchSize;
 
 import com.promoquoter.common.text.Categories;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.LegacyTemplates;
-import com.promoquoter.pricing.PromotionType;
-import com.promoquoter.pricing.RuleDefinition;
-import com.promoquoter.pricing.RuleKind;
+import com.promoquoter.pricing.engine.LegacyTemplates;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PromotionType;
+import com.promoquoter.pricing.model.RuleKind;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

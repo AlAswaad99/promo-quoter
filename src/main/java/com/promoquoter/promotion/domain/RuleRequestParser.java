@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.promoquoter.common.error.FieldViolation;
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.RuleKind;
 import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.FieldScope;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.RuleKind;
 import com.promoquoter.promotion.dto.RuleRequest;
 
 final class RuleRequestParser {

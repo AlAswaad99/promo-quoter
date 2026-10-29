@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.RuleKind;
 import com.promoquoter.pricing.condition.Condition;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.RuleKind;
 
 record ParsedRule(
         RuleKind kind,

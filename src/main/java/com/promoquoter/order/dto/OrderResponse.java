@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.common.money.MoneyField;
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 public record OrderResponse(
         UUID orderId,

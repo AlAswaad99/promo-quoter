@@ -2,7 +2,7 @@ package com.promoquoter.cart.dto;
 
 import java.util.List;
 
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

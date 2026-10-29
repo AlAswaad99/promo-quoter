@@ -10,18 +10,18 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.CartLine;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PricingContext;
-import com.promoquoter.pricing.PricingRule;
-import com.promoquoter.pricing.RuleDefinition;
-import com.promoquoter.pricing.RuleKind;
-import com.promoquoter.pricing.TestRules;
-import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.Condition.Comparison;
+import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.ConditionField;
 import com.promoquoter.pricing.condition.Operator;
+import com.promoquoter.pricing.engine.PricingContext;
+import com.promoquoter.pricing.engine.PricingRule;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.engine.TestRules;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.CartLine;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.RuleKind;
 
 class GenericRuleTest {
 
@@ -121,11 +121,11 @@ class GenericRuleTest {
     @Test
     void definitionsRejectAnActionOfTheWrongRuleKind() {
         assertThatThrownBy(() -> new RuleDefinition(UUID.randomUUID(),
-                com.promoquoter.pricing.PromotionType.PERCENT_OFF_CATEGORY, "x", RuleKind.VALIDATION, true, 0, 900,
+                com.promoquoter.pricing.model.PromotionType.PERCENT_OFF_CATEGORY, "x", RuleKind.VALIDATION, true, 0, 900,
                 false, java.time.Instant.now(), java.util.Set.of(), null, null,
                 new ActionSpec.PercentOff(BigDecimal.TEN))).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new RuleDefinition(UUID.randomUUID(),
-                com.promoquoter.pricing.PromotionType.PERCENT_OFF_CATEGORY, "x", RuleKind.PRICING, true, 0, 100,
+                com.promoquoter.pricing.model.PromotionType.PERCENT_OFF_CATEGORY, "x", RuleKind.PRICING, true, 0, 100,
                 false, java.time.Instant.now(), java.util.Set.of(), null, null, null))
                 .isInstanceOf(IllegalArgumentException.class);
     }

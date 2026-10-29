@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.promoquoter.pricing.AppliedPromotion;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.LineBreakdown;
-import com.promoquoter.pricing.PriceBreakdown;
-import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.model.AppliedPromotion;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.LineBreakdown;
+import com.promoquoter.pricing.model.PriceBreakdown;
+import com.promoquoter.pricing.model.PromotionType;
 import com.promoquoter.support.IntegrationTest;
 import com.promoquoter.support.TestDatabase;
 

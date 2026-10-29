@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.CartLine;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PricingContext;
-import com.promoquoter.pricing.PricingRule;
-import com.promoquoter.pricing.RuleDefinition;
-import com.promoquoter.pricing.TestRules;
+import com.promoquoter.pricing.engine.PricingContext;
+import com.promoquoter.pricing.engine.PricingRule;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.engine.TestRules;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.CartLine;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 class LineActionRulesTest {
 

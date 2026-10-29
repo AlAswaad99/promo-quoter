@@ -6,7 +6,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 public enum FieldType {
     NUMBER(BigDecimal.class, EnumSet.of(Operator.EQ, Operator.NE, Operator.GT, Operator.GTE, Operator.LT, Operator.LTE,

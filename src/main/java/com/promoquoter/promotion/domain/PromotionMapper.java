@@ -6,7 +6,7 @@ import java.util.List;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
-import com.promoquoter.pricing.RuleDefinition;
+import com.promoquoter.pricing.engine.RuleDefinition;
 import com.promoquoter.promotion.dto.BuyXGetYRequest;
 import com.promoquoter.promotion.dto.CreatePromotionRequest;
 import com.promoquoter.promotion.dto.PercentOffCategoryRequest;

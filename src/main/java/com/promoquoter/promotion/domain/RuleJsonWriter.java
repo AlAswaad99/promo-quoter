@@ -8,12 +8,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.promoquoter.pricing.ActionSpec;
 import com.promoquoter.pricing.condition.Condition.All;
 import com.promoquoter.pricing.condition.Condition.Any;
 import com.promoquoter.pricing.condition.Condition.Comparison;
 import com.promoquoter.pricing.condition.Condition.Not;
 import com.promoquoter.pricing.condition.Condition;
+import com.promoquoter.pricing.model.ActionSpec;
 
 public final class RuleJsonWriter {
 

@@ -11,7 +11,7 @@ import com.promoquoter.cart.domain.CartNormalizer;
 import com.promoquoter.cart.domain.NormalizedCart;
 import com.promoquoter.cart.dto.CartItemRequest;
 import com.promoquoter.cart.dto.CartRequest;
-import com.promoquoter.pricing.CustomerSegment;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 class RequestFingerprintTest {
 

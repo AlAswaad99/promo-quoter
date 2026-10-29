@@ -8,12 +8,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.promoquoter.common.error.FieldViolation;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.PromotionType;
-import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.condition.Condition;
 import com.promoquoter.pricing.condition.FieldScope;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.PromotionType;
 
 final class RuleStore {
 

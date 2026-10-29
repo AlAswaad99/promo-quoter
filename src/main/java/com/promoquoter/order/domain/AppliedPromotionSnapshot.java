@@ -3,7 +3,7 @@ package com.promoquoter.order.domain;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.model.PromotionType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

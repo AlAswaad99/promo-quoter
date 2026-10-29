@@ -9,11 +9,11 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.promoquoter.order.dto.OrderStatus;
-import com.promoquoter.pricing.AppliedPromotion;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.LineBreakdown;
-import com.promoquoter.pricing.PriceBreakdown;
-import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.model.AppliedPromotion;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.LineBreakdown;
+import com.promoquoter.pricing.model.PriceBreakdown;
+import com.promoquoter.pricing.model.PromotionType;
 
 class OrderTest {
 

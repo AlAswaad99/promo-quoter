@@ -3,8 +3,8 @@ package com.promoquoter.order.domain;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.AdjustmentDirection;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.AdjustmentDirection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

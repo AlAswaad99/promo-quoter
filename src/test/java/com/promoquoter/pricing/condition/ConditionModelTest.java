@@ -10,11 +10,11 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.condition.Condition.All;
 import com.promoquoter.pricing.condition.Condition.Any;
 import com.promoquoter.pricing.condition.Condition.Comparison;
 import com.promoquoter.pricing.condition.Condition.Not;
+import com.promoquoter.pricing.model.CustomerSegment;
 
 class ConditionModelTest {
 

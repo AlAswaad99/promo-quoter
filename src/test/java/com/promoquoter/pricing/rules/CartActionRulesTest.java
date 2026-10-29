@@ -10,18 +10,18 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.promoquoter.pricing.ActionKind;
-import com.promoquoter.pricing.ActionRuleProvider;
-import com.promoquoter.pricing.ActionSpec;
-import com.promoquoter.pricing.AdjustmentDirection;
-import com.promoquoter.pricing.CartLine;
-import com.promoquoter.pricing.CustomerSegment;
-import com.promoquoter.pricing.GiftRequest;
-import com.promoquoter.pricing.PriceBreakdown;
-import com.promoquoter.pricing.PricingContext;
-import com.promoquoter.pricing.PricingRule;
-import com.promoquoter.pricing.RuleDefinition;
-import com.promoquoter.pricing.TestRules;
+import com.promoquoter.pricing.engine.ActionRuleProvider;
+import com.promoquoter.pricing.engine.PricingContext;
+import com.promoquoter.pricing.engine.PricingRule;
+import com.promoquoter.pricing.engine.RuleDefinition;
+import com.promoquoter.pricing.engine.TestRules;
+import com.promoquoter.pricing.model.ActionKind;
+import com.promoquoter.pricing.model.ActionSpec;
+import com.promoquoter.pricing.model.AdjustmentDirection;
+import com.promoquoter.pricing.model.CartLine;
+import com.promoquoter.pricing.model.CustomerSegment;
+import com.promoquoter.pricing.model.GiftRequest;
+import com.promoquoter.pricing.model.PriceBreakdown;
 
 class CartActionRulesTest {
 

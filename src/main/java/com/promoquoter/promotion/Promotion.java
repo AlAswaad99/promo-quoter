@@ -14,6 +14,7 @@ import com.promoquoter.pricing.CustomerSegment;
 import com.promoquoter.pricing.LegacyTemplates;
 import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleKind;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
@@ -74,6 +76,19 @@ class Promotion {
     @Column(name = "free_qty")
     private Integer freeQty;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private RuleKind kind = RuleKind.PRICING;
+
+    private Integer stage;
+
+    @Column(name = "stop_after", nullable = false)
+    private boolean stopAfter;
+
+    @Lob
+    @Column(name = "rule_json")
+    private String ruleJson;
+
     @Column(name = "min_qty")
     private Integer minQty;
 
@@ -122,8 +137,18 @@ class Promotion {
                     buyQty, freeQty);
             case TIERED_BULK -> LegacyTemplates.tieredBulk(id, name, active, priority, createdAt, segments, productId,
                     minQty, percent);
-            case RULE -> throw new IllegalStateException("Generic rules are not stored yet");
+            case RULE -> RuleStore.definition(this);
         };
+    }
+
+    static Promotion rule(String name, boolean active, int priority, Set<CustomerSegment> eligibleSegments,
+            RuleKind kind, int stage, boolean stopAfter, String ruleJson) {
+        Promotion promotion = new Promotion(PromotionType.RULE, name, active, priority, eligibleSegments);
+        promotion.kind = kind;
+        promotion.stage = stage;
+        promotion.stopAfter = stopAfter;
+        promotion.ruleJson = ruleJson;
+        return promotion;
     }
 
     static Promotion percentOffCategory(String name, boolean active, int priority,

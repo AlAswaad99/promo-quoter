@@ -17,6 +17,7 @@ import com.promoquoter.common.error.FieldViolation;
 import com.promoquoter.common.web.PageResponse;
 import com.promoquoter.pricing.RuleDefinition;
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleKind;
 import com.promoquoter.product.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class PromotionService {
 
     @Transactional
     public List<PromotionResponse> createAll(List<CreatePromotionRequest> requests) {
-        rejectUnknownProducts(requests);
+        List<List<RuleParser.ProductReference>> ruleReferences = validateRules(requests);
+        rejectUnknownProducts(requests, ruleReferences);
         List<Promotion> promotions = requests.stream().map(CreatePromotionRequest::toEntity).toList();
         return promotionRepository.saveAll(promotions).stream().map(PromotionResponse::from).toList();
     }
@@ -41,8 +43,8 @@ public class PromotionService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<PromotionResponse> list(PromotionType type, Boolean active, Pageable pageable) {
-        return PageResponse.of(promotionRepository.search(type, active, pageable), PromotionResponse::from);
+    public PageResponse<PromotionResponse> list(PromotionType type, Boolean active, RuleKind kind, Pageable pageable) {
+        return PageResponse.of(promotionRepository.search(type, active, kind, pageable), PromotionResponse::from);
     }
 
     @Transactional(readOnly = true)
@@ -71,11 +73,29 @@ public class PromotionService {
                 () -> new ApiException(ErrorCode.PROMOTION_NOT_FOUND, "Promotion " + id + " was not found"));
     }
 
-    private void rejectUnknownProducts(List<CreatePromotionRequest> requests) {
-        Set<UUID> referenced = requests.stream()
-                .map(CreatePromotionRequest::referencedProductId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+    private List<List<RuleParser.ProductReference>> validateRules(List<CreatePromotionRequest> requests) {
+        List<FieldViolation> violations = new ArrayList<>();
+        List<List<RuleParser.ProductReference>> references = new ArrayList<>();
+        for (int index = 0; index < requests.size(); index++) {
+            if (requests.get(index) instanceof RuleRequest rule) {
+                ParsedRule parsed = rule.parse("[" + index + "]", violations);
+                references.add(parsed == null ? List.of() : parsed.references());
+            } else {
+                references.add(List.of());
+            }
+        }
+        if (!violations.isEmpty()) {
+            throw new ApiException(ErrorCode.VALIDATION_FAILED, "Request validation failed", violations);
+        }
+        return references;
+    }
+
+    private void rejectUnknownProducts(List<CreatePromotionRequest> requests,
+            List<List<RuleParser.ProductReference>> ruleReferences) {
+        Set<UUID> referenced = new java.util.HashSet<>();
+        requests.stream().map(CreatePromotionRequest::referencedProductId).filter(Objects::nonNull)
+                .forEach(referenced::add);
+        ruleReferences.forEach(list -> list.forEach(reference -> referenced.add(reference.productId())));
         if (referenced.isEmpty()) {
             return;
         }
@@ -85,6 +105,12 @@ public class PromotionService {
             UUID productId = requests.get(index).referencedProductId();
             if (productId != null && !existing.contains(productId)) {
                 violations.add(new FieldViolation("[" + index + "].productId", "Product " + productId + " does not exist"));
+            }
+            for (RuleParser.ProductReference reference : ruleReferences.get(index)) {
+                if (!existing.contains(reference.productId())) {
+                    violations.add(new FieldViolation(reference.path(),
+                            "Product " + reference.productId() + " does not exist"));
+                }
             }
         }
         if (!violations.isEmpty()) {

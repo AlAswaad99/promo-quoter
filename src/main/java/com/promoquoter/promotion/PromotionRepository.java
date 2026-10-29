@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.promoquoter.pricing.PromotionType;
+import com.promoquoter.pricing.RuleKind;
 
 interface PromotionRepository extends JpaRepository<Promotion, UUID> {
 
@@ -19,6 +20,8 @@ interface PromotionRepository extends JpaRepository<Promotion, UUID> {
             select p from Promotion p
             where (:type is null or p.type = :type)
               and (:active is null or p.active = :active)
+              and (:kind is null or p.kind = :kind)
             """)
-    Page<Promotion> search(@Param("type") PromotionType type, @Param("active") Boolean active, Pageable pageable);
+    Page<Promotion> search(@Param("type") PromotionType type, @Param("active") Boolean active,
+            @Param("kind") RuleKind kind, Pageable pageable);
 }

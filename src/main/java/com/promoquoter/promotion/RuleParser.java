@@ -34,11 +34,19 @@ public final class RuleParser {
     private static final BigDecimal HUNDRED = new BigDecimal("100");
     private static final BigDecimal MAX_AMOUNT = new BigDecimal("9999999999.99");
 
+    public record ProductReference(String path, UUID productId) {
+    }
+
     private final List<FieldViolation> violations;
+    private final List<ProductReference> references = new ArrayList<>();
     private int conditionCount;
 
     public RuleParser(List<FieldViolation> violations) {
         this.violations = violations;
+    }
+
+    public List<ProductReference> references() {
+        return List.copyOf(references);
     }
 
     public Condition parseCondition(JsonNode node, FieldScope scope, String path) {
@@ -102,6 +110,9 @@ public final class RuleParser {
             case FREE_GIFT -> {
                 UUID productId = uuid(node.get("productId"), path + ".productId");
                 Integer qty = integer(node.get("qty"), path + ".qty", 1, MAX_GIFT_QTY);
+                if (productId != null) {
+                    references.add(new ProductReference(path + ".productId", productId));
+                }
                 yield productId == null || qty == null ? null : new ActionSpec.FreeGift(productId, qty);
             }
             case SHIPPING_WAIVER -> new ActionSpec.ShippingWaiver();
@@ -199,11 +210,24 @@ public final class RuleParser {
         if (value == null) {
             return null;
         }
+        if (field == ConditionField.PRODUCT_ID) {
+            collectProductReferences(value, path + ".value");
+        }
         try {
             return new Condition.Comparison(field, operator, value);
         } catch (IllegalArgumentException e) {
             violations.add(new FieldViolation(path, e.getMessage()));
             return null;
+        }
+    }
+
+    private void collectProductReferences(Object value, String path) {
+        if (value instanceof UUID id) {
+            references.add(new ProductReference(path, id));
+        } else if (value instanceof List<?> items) {
+            for (int index = 0; index < items.size(); index++) {
+                references.add(new ProductReference(path + "[" + index + "]", (UUID) items.get(index)));
+            }
         }
     }
 

@@ -65,7 +65,7 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "9e0b9803-a9ce-40af-ac19-b667756f1bfe"
+                  "value": "576d8596-afbd-4205-a383-d284cd18aece"
                 }
               ],
               "cookie": [],
@@ -168,11 +168,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "d47c3da5-3ee3-40fa-b3a4-508c692d5038"
+                  "value": "d25017b7-7fd9-49d3-a00b-254626581da3"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n    \"name\": \"Mug\",\n    \"category\": \"KITCHEN\",\n    \"price\": \"12.00\",\n    \"stock\": 10,\n    \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n  },\n  {\n    \"id\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n    \"name\": \"Lamp\",\n    \"category\": \"HOME\",\n    \"price\": \"30.00\",\n    \"stock\": 5,\n    \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n  },\n  {\n    \"id\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n    \"name\": \"Pan\",\n    \"category\": \"KITCHEN\",\n    \"price\": \"20.00\",\n    \"stock\": 20,\n    \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n    \"name\": \"Mug\",\n    \"category\": \"KITCHEN\",\n    \"price\": \"12.00\",\n    \"stock\": 10,\n    \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n  },\n  {\n    \"id\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n    \"name\": \"Lamp\",\n    \"category\": \"HOME\",\n    \"price\": \"30.00\",\n    \"stock\": 5,\n    \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n  },\n  {\n    \"id\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n    \"name\": \"Pan\",\n    \"category\": \"KITCHEN\",\n    \"price\": \"20.00\",\n    \"stock\": 20,\n    \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n  }\n]"
             },
             {
               "name": "400 - validation errors, one entry per field",
@@ -215,11 +215,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "3328d5d9-87db-40e2-a068-bbe406d49647"
+                  "value": "94a3b977-a0fe-4513-b53a-45e86be43b60"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"3328d5d9-87db-40e2-a068-bbe406d49647\",\n  \"errors\": [\n    {\n      \"field\": \"[0].category\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].name\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].price\",\n      \"message\": \"must be greater than 0.00\"\n    },\n    {\n      \"field\": \"[0].stock\",\n      \"message\": \"must be greater than or equal to 0\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"94a3b977-a0fe-4513-b53a-45e86be43b60\",\n  \"errors\": [\n    {\n      \"field\": \"[0].category\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].name\",\n      \"message\": \"must not be blank\"\n    },\n    {\n      \"field\": \"[0].price\",\n      \"message\": \"must be greater than 0.00\"\n    },\n    {\n      \"field\": \"[0].stock\",\n      \"message\": \"must be greater than or equal to 0\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - unknown field is rejected",
@@ -262,11 +262,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "027778e3-717e-4c77-91be-eecf998f65bf"
+                  "value": "669a6e64-f1b5-4c5b-8989-845b22eaabb4"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"027778e3-717e-4c77-91be-eecf998f65bf\",\n  \"errors\": [\n    {\n      \"field\": \"[0].sku\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"669a6e64-f1b5-4c5b-8989-845b22eaabb4\",\n  \"errors\": [\n    {\n      \"field\": \"[0].sku\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -356,11 +356,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "3211fffe-2f4f-4b40-a7a3-6e4e2dc5dc31"
+                  "value": "3369f01c-d9c5-481c-9a6b-51c9d641971a"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"id\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"price\": \"30.00\",\n      \"stock\": 5,\n      \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n    },\n    {\n      \"id\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n    },\n    {\n      \"id\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"20.00\",\n      \"stock\": 20,\n      \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 3,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"price\": \"30.00\",\n      \"stock\": 5,\n      \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n    },\n    {\n      \"id\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n    },\n    {\n      \"id\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"20.00\",\n      \"stock\": 20,\n      \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 3,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "200 - filtered by category",
@@ -399,11 +399,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "24ea3c16-583e-45b6-89e6-d7792e89b221"
+                  "value": "a6ffd75e-b899-43db-893b-b4bd88aff5f9"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"id\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"20.00\",\n      \"stock\": 20,\n      \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n    },\n    {\n      \"id\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 2,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"20.00\",\n      \"stock\": 20,\n      \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n    },\n    {\n      \"id\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"price\": \"12.00\",\n      \"stock\": 10,\n      \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 2,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "400 - sort field not allowed",
@@ -438,11 +438,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "aa0ba32e-844e-4a84-98a9-88ec8228a635"
+                  "value": "a1def870-aa66-442c-ace0-3fcddbb9decb"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'stock,asc'; allowed fields: [createdAt, name, price]\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"aa0ba32e-844e-4a84-98a9-88ec8228a635\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'stock,asc'; allowed fields: [createdAt, name, price]\",\n  \"instance\": \"/api/v1/products\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"a1def870-aa66-442c-ace0-3fcddbb9decb\"\n}"
             }
           ]
         },
@@ -506,11 +506,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "bafaccf2-9941-42f1-948f-a563d9c2aace"
+                  "value": "139b4373-ea25-438c-84c3-160c9deb0cc4"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 10,\n  \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n}"
+              "body": "{\n  \"id\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 10,\n  \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n}"
             },
             {
               "name": "404 - unknown product",
@@ -540,11 +540,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "08675c3b-e666-4784-a5c3-c6cdb7cf5635"
+                  "value": "820117c0-6f9f-40c0-9256-6dea2bd32ca8"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Product 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/products/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"08675c3b-e666-4784-a5c3-c6cdb7cf5635\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Product 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/products/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"820117c0-6f9f-40c0-9256-6dea2bd32ca8\"\n}"
             },
             {
               "name": "400 - malformed id",
@@ -574,11 +574,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "f82bb5d9-c0cd-4526-a019-c39ed03a3a01"
+                  "value": "dd33945e-0266-411a-bc05-3187f797b133"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'id'\",\n  \"instance\": \"/api/v1/products/abc\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"f82bb5d9-c0cd-4526-a019-c39ed03a3a01\",\n  \"errors\": [\n    {\n      \"field\": \"id\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'id'\",\n  \"instance\": \"/api/v1/products/abc\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"dd33945e-0266-411a-bc05-3187f797b133\",\n  \"errors\": [\n    {\n      \"field\": \"id\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             }
           ]
         }
@@ -588,7 +588,7 @@
       "name": "Promotions",
       "item": [
         {
-          "name": "Create promotions (percent off + buy X get Y)",
+          "name": "Create percent off promotion",
           "event": [
             {
               "listen": "test",
@@ -597,9 +597,8 @@
                 "exec": [
                   "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
                   "const body = pm.response.json();",
-                  "pm.test(\"Stored as rules\", function () { pm.expect(body[0].type).to.eql(\"RULE\"); pm.expect(body[0].stage).to.eql(100); pm.expect(body[1].stage).to.eql(200); });",
-                  "pm.collectionVariables.set(\"percentPromoId\", body[0].id);",
-                  "pm.collectionVariables.set(\"bxgyPromoId\", body[1].id);"
+                  "pm.test(\"Stored as a rule\", function () { pm.expect(body[0].type).to.eql(\"RULE\"); pm.expect(body[0].stage).to.eql(100); });",
+                  "pm.collectionVariables.set(\"percentPromoId\", body[0].id);"
                 ]
               }
             }
@@ -625,18 +624,18 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"10% off kitchen\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  },\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Mugs 2+1\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"{{productId}}\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]",
+              "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"10% off kitchen\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  }\n]",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "description": "A promotion is a rule: optional \"when\" (checked once per cart), optional \"target\" (checked per line) and one \"action\". Conditions combine with all, any and not and compare with eq, ne, gt, gte, lt, lte, between, in, notIn, startsWith and contains. Here: 10 percent off every kitchen product (PERCENT_OFF, stage 100) and buy 2 get 1 free on the mug (FREE_UNITS, stage 200). Several rules can be created in one batch (1 to 100, all or nothing). Saves percentPromoId and bxgyPromoId. This collection uses the generic RULE payload; the classic shortcut payloads (PERCENT_OFF_CATEGORY, BUY_X_GET_Y, TIERED_BULK) are still accepted and are described in the README."
+            "description": "A promotion is a rule: optional \"when\" (checked once per cart), optional \"target\" (checked per line) and one \"action\". Conditions combine with all, any and not and compare with eq, ne, gt, gte, lt, lte, between, in, notIn, startsWith and contains. Here: 10 percent off every kitchen product (PERCENT_OFF, stage 100). Saves percentPromoId. This collection uses the generic RULE payload; the classic shortcut payloads (PERCENT_OFF_CATEGORY, BUY_X_GET_Y, TIERED_BULK) are still accepted and are described in the README."
           },
           "response": [
             {
-              "name": "201 - Create promotions (percent off + buy X get Y)",
+              "name": "201 - Create percent off promotion",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -658,7 +657,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"10% off kitchen\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  },\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Mugs 2+1\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"{{productId}}\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]",
+                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"10% off kitchen\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  }\n]",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -676,11 +675,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "85fb2237-3884-430c-992c-2ec43a4363c2"
+                  "value": "f05c7fb5-b92a-40f7-b4fb-55e6fb8b6489"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n    \"type\": \"RULE\",\n    \"name\": \"10% off kitchen\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.064205Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 100,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  },\n  {\n    \"id\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n    \"type\": \"RULE\",\n    \"name\": \"Mugs 2+1\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.065207Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 200,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n    \"type\": \"RULE\",\n    \"name\": \"10% off kitchen\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:13.909205Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 100,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"eq\",\n      \"value\": \"kitchen\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 10\n    }\n  }\n]"
             },
             {
               "name": "400 - every problem reported with its field path",
@@ -705,7 +704,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Bad\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"gt\",\n      \"value\": \"x\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 101\n    }\n  },\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Bad\",\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 0,\n      \"freeQty\": 2000\n    }\n  }\n]",
+                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Bad\",\n    \"target\": {\n      \"field\": \"product.category\",\n      \"op\": \"gt\",\n      \"value\": \"x\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 101\n    }\n  }\n]",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -723,58 +722,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "e49e70f5-f062-4198-bf9f-4dd11e668eaf"
+                  "value": "69d86d38-c9f5-4115-870c-22e6e53a8509"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"e49e70f5-f062-4198-bf9f-4dd11e668eaf\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.op\",\n      \"message\": \"Operator 'gt' cannot be used with product.category. Allowed: [contains, eq, in, ne, notIn, startsWith]\"\n    },\n    {\n      \"field\": \"[0].action.percent\",\n      \"message\": \"must be greater than 0 and at most 100 with at most 2 decimals\"\n    },\n    {\n      \"field\": \"[1].action.buyQty\",\n      \"message\": \"must be between 1 and 1000\"\n    },\n    {\n      \"field\": \"[1].action.freeQty\",\n      \"message\": \"must be between 1 and 1000\"\n    }\n  ]\n}"
-            },
-            {
-              "name": "422 - a condition references an unknown product",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/v1/promotions",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "promotions"
-                  ]
-                },
-                "body": {
-                  "mode": "raw",
-                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Ghost\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"00000000-0000-0000-0000-000000000001\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 1,\n      \"freeQty\": 1\n    }\n  }\n]",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unprocessable Entity",
-              "code": 422,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/problem+json"
-                },
-                {
-                  "key": "X-Request-Id",
-                  "value": "a72b84da-6f5a-4210-b43f-402e89d832b2"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:unknown-product\",\n  \"title\": \"Unknown product\",\n  \"status\": 422,\n  \"detail\": \"Promotion references products that do not exist\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"UNKNOWN_PRODUCT\",\n  \"requestId\": \"a72b84da-6f5a-4210-b43f-402e89d832b2\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.value\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 does not exist\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"69d86d38-c9f5-4115-870c-22e6e53a8509\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.op\",\n      \"message\": \"Operator 'gt' cannot be used with product.category. Allowed: [contains, eq, in, ne, notIn, startsWith]\"\n    },\n    {\n      \"field\": \"[0].action.percent\",\n      \"message\": \"must be greater than 0 and at most 100 with at most 2 decimals\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - unknown promotion type",
@@ -817,11 +769,201 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "d6cabef8-d99b-4342-8870-1b9058c1eb79"
+                  "value": "b9fc7d32-f293-47b4-8022-6a80d91f65d5"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"d6cabef8-d99b-4342-8870-1b9058c1eb79\",\n  \"errors\": [\n    {\n      \"field\": \"[0]\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"b9fc7d32-f293-47b4-8022-6a80d91f65d5\",\n  \"errors\": [\n    {\n      \"field\": \"[0]\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create buy X get Y promotion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Stored as a rule\", function () { pm.expect(body[0].type).to.eql(\"RULE\"); pm.expect(body[0].stage).to.eql(200); pm.expect(body[0].action.kind).to.eql(\"FREE_UNITS\"); });",
+                  "pm.collectionVariables.set(\"bxgyPromoId\", body[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/promotions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "promotions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Mugs 2+1\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"{{productId}}\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Buy 2 get 1 free on the mug: FREE_UNITS with buyQty 2 and freeQty 1, targeting the product (stage 200, so it runs after percent discounts). The free units are valued at the line's already discounted unit price. Saves bxgyPromoId."
+          },
+          "response": [
+            {
+              "name": "201 - Create buy X get Y promotion",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Mugs 2+1\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"{{productId}}\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "416d9b39-c754-4ffb-a33e-b8bf238665f4"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n    \"type\": \"RULE\",\n    \"name\": \"Mugs 2+1\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:13.956030Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 200,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 2,\n      \"freeQty\": 1\n    }\n  }\n]"
+            },
+            {
+              "name": "400 - invalid quantities",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Bad\",\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 0,\n      \"freeQty\": 2000\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "5c10a6d7-dc86-4d37-a0d6-761da4bb8ab3"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"5c10a6d7-dc86-4d37-a0d6-761da4bb8ab3\",\n  \"errors\": [\n    {\n      \"field\": \"[0].action.buyQty\",\n      \"message\": \"must be between 1 and 1000\"\n    },\n    {\n      \"field\": \"[0].action.freeQty\",\n      \"message\": \"must be between 1 and 1000\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "422 - the target references an unknown product",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/promotions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "promotions"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"type\": \"RULE\",\n    \"kind\": \"PRICING\",\n    \"name\": \"Ghost\",\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"00000000-0000-0000-0000-000000000001\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_UNITS\",\n      \"buyQty\": 1,\n      \"freeQty\": 1\n    }\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                },
+                {
+                  "key": "X-Request-Id",
+                  "value": "0d475a00-489f-4da5-a133-9e83a619d9cc"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"type\": \"urn:promoquoter:error:unknown-product\",\n  \"title\": \"Unknown product\",\n  \"status\": 422,\n  \"detail\": \"Promotion references products that do not exist\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"UNKNOWN_PRODUCT\",\n  \"requestId\": \"0d475a00-489f-4da5-a133-9e83a619d9cc\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.value\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 does not exist\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -912,11 +1054,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "a76db161-d808-400c-9b2d-f3575e8dec9f"
+                  "value": "0301f153-a564-4f03-a02e-4db50864cef8"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n    \"type\": \"RULE\",\n    \"name\": \"5% off 10+\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [\n      \"VIP\"\n    ],\n    \"createdAt\": \"2026-10-29T16:23:08.204634Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 300,\n    \"stopAfter\": false,\n    \"target\": {\n      \"all\": [\n        {\n          \"field\": \"product.id\",\n          \"op\": \"eq\",\n          \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n        },\n        {\n          \"field\": \"line.qty\",\n          \"op\": \"gte\",\n          \"value\": 10\n        }\n      ]\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 5\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"92a5099c-705d-46f1-bb30-ccf072b1a835\",\n    \"type\": \"RULE\",\n    \"name\": \"5% off 10+\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [\n      \"VIP\"\n    ],\n    \"createdAt\": \"2026-10-29T16:27:13.982350Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 300,\n    \"stopAfter\": false,\n    \"target\": {\n      \"all\": [\n        {\n          \"field\": \"product.id\",\n          \"op\": \"eq\",\n          \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n        },\n        {\n          \"field\": \"line.qty\",\n          \"op\": \"gte\",\n          \"value\": 10\n        }\n      ]\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 5\n    }\n  }\n]"
             },
             {
               "name": "400 - a quantity that is not a number",
@@ -959,11 +1101,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "1e9b2e7f-ccd5-441f-91f3-608854e49918"
+                  "value": "a3c979dd-f85a-4cb6-9d8e-389d5c87ac09"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"1e9b2e7f-ccd5-441f-91f3-608854e49918\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.all[1].value\",\n      \"message\": \"must be a number\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"a3c979dd-f85a-4cb6-9d8e-389d5c87ac09\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.all[1].value\",\n      \"message\": \"must be a number\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -1055,11 +1197,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "2c88b742-6d33-4f09-80c4-b8bba082939b"
+                  "value": "0e802c7e-6966-4245-b0f0-da78b036ee39"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n    \"type\": \"RULE\",\n    \"name\": \"Lamp deal for big carts\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.241666Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 100,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 20.0\n    },\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 20\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n    \"type\": \"RULE\",\n    \"name\": \"Lamp deal for big carts\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:13.999268Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 100,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 20.0\n    },\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 20\n    }\n  }\n]"
             },
             {
               "name": "400 - a cart field used as a line target",
@@ -1102,11 +1244,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "f9a56fca-d252-4176-9014-5366bc0c69a8"
+                  "value": "04764e1c-cf4c-4d42-bfab-dec6226b59b0"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"f9a56fca-d252-4176-9014-5366bc0c69a8\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.field\",\n      \"message\": \"Field 'cart.subtotal' is a cart field and cannot be used here\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"04764e1c-cf4c-4d42-bfab-dec6226b59b0\",\n  \"errors\": [\n    {\n      \"field\": \"[0].target.field\",\n      \"message\": \"Field 'cart.subtotal' is a cart field and cannot be used here\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -1198,11 +1340,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "9d12b348-21e7-4572-b0f9-0adc7eaff387"
+                  "value": "30d7853a-7ce5-478f-8935-81ea9414082f"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n    \"type\": \"RULE\",\n    \"name\": \"Mug limit\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.268973Z\",\n    \"kind\": \"VALIDATION\",\n    \"stage\": 900,\n    \"stopAfter\": false,\n    \"target\": {\n      \"all\": [\n        {\n          \"field\": \"product.id\",\n          \"op\": \"eq\",\n          \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n        },\n        {\n          \"field\": \"line.qty\",\n          \"op\": \"gt\",\n          \"value\": 5\n        }\n      ]\n    },\n    \"action\": {\n      \"kind\": \"REJECT\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n    \"type\": \"RULE\",\n    \"name\": \"Mug limit\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.016998Z\",\n    \"kind\": \"VALIDATION\",\n    \"stage\": 900,\n    \"stopAfter\": false,\n    \"target\": {\n      \"all\": [\n        {\n          \"field\": \"product.id\",\n          \"op\": \"eq\",\n          \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n        },\n        {\n          \"field\": \"line.qty\",\n          \"op\": \"gt\",\n          \"value\": 5\n        }\n      ]\n    },\n    \"action\": {\n      \"kind\": \"REJECT\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  }\n]"
             },
             {
               "name": "400 - a pricing action in a validation rule",
@@ -1245,11 +1387,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "7f8ab93b-a4f9-45a3-abe5-099030e489bc"
+                  "value": "a6899bdf-8009-4202-bb49-07586ba999fd"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"7f8ab93b-a4f9-45a3-abe5-099030e489bc\",\n  \"errors\": [\n    {\n      \"field\": \"[0].action.kind\",\n      \"message\": \"Action PERCENT_OFF cannot be used in a VALIDATION rule\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"a6899bdf-8009-4202-bb49-07586ba999fd\",\n  \"errors\": [\n    {\n      \"field\": \"[0].action.kind\",\n      \"message\": \"Action PERCENT_OFF cannot be used in a VALIDATION rule\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -1340,11 +1482,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "2b6d35bf-ef3f-458b-8fec-ac36e7907f09"
+                  "value": "336c789f-5e3b-4a0a-9f47-c787bc27a306"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n    \"type\": \"RULE\",\n    \"name\": \"Free mug with a lamp\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.299015Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 500,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_GIFT\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"qty\": 1\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n    \"type\": \"RULE\",\n    \"name\": \"Free mug with a lamp\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.032479Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 500,\n    \"stopAfter\": false,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n    },\n    \"action\": {\n      \"kind\": \"FREE_GIFT\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"qty\": 1\n    }\n  }\n]"
             }
           ]
         },
@@ -1436,11 +1578,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "449c2d72-5c36-43cc-841e-83a413093393"
+                  "value": "0b0de147-0610-4038-813f-ece6ec0889a2"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n    \"type\": \"RULE\",\n    \"name\": \"Voucher\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 400,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 40.0\n    },\n    \"action\": {\n      \"kind\": \"AMOUNT_OFF_CART\",\n      \"amount\": 3\n    }\n  },\n  {\n    \"id\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n    \"type\": \"RULE\",\n    \"name\": \"Handling fee\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 700,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 40.0\n    },\n    \"action\": {\n      \"kind\": \"SURCHARGE\",\n      \"amount\": 2.5\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n    \"type\": \"RULE\",\n    \"name\": \"Voucher\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 400,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 40.0\n    },\n    \"action\": {\n      \"kind\": \"AMOUNT_OFF_CART\",\n      \"amount\": 3\n    }\n  },\n  {\n    \"id\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n    \"type\": \"RULE\",\n    \"name\": \"Handling fee\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 700,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gte\",\n      \"value\": 40.0\n    },\n    \"action\": {\n      \"kind\": \"SURCHARGE\",\n      \"amount\": 2.5\n    }\n  }\n]"
             }
           ]
         },
@@ -1532,11 +1674,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "f7de2960-ea5b-4dea-a864-b1bf3e6e7906"
+                  "value": "38709f91-0a2d-498d-9e94-5f16edb465a6"
                 }
               ],
               "cookie": [],
-              "body": "[\n  {\n    \"id\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n    \"type\": \"RULE\",\n    \"name\": \"Exclusive pan deal\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.333506Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 50,\n    \"stopAfter\": true,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 50\n    }\n  }\n]"
+              "body": "[\n  {\n    \"id\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n    \"type\": \"RULE\",\n    \"name\": \"Exclusive pan deal\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.050986Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 50,\n    \"stopAfter\": true,\n    \"target\": {\n      \"field\": \"product.id\",\n      \"op\": \"eq\",\n      \"value\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\"\n    },\n    \"action\": {\n      \"kind\": \"PERCENT_OFF\",\n      \"percent\": 50\n    }\n  }\n]"
             }
           ]
         },
@@ -1629,11 +1771,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "849a266e-33c0-44fd-9f58-75ff67341aed"
+                  "value": "b76e8eb5-8b20-4cbc-8cbb-65243000bba5"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"rule\": {\n    \"id\": \"4d8af1de-d1e2-4b86-9099-167dbcb51997\",\n    \"type\": \"RULE\",\n    \"name\": \"Preview: 2 off the cart\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.373026Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 400,\n    \"stopAfter\": false,\n    \"action\": {\n      \"kind\": \"AMOUNT_OFF_CART\",\n      \"amount\": 2\n    }\n  },\n  \"quote\": {\n    \"customerSegment\": \"REGULAR\",\n    \"lines\": [\n      {\n        \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n        \"name\": \"Lamp\",\n        \"category\": \"HOME\",\n        \"unitPrice\": \"30.00\",\n        \"qty\": 1,\n        \"subtotal\": \"30.00\",\n        \"discount\": \"6.00\",\n        \"total\": \"24.00\"\n      }\n    ],\n    \"appliedPromotions\": [\n      {\n        \"sequence\": 1,\n        \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n        \"name\": \"Lamp deal for big carts\",\n        \"type\": \"RULE\",\n        \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n        \"amount\": \"6.00\"\n      }\n    ],\n    \"subtotal\": \"30.00\",\n    \"totalDiscount\": \"8.00\",\n    \"total\": \"22.00\",\n    \"shipping\": \"0.00\",\n    \"adjustments\": [\n      {\n        \"sequence\": 2,\n        \"promotionId\": \"4d8af1de-d1e2-4b86-9099-167dbcb51997\",\n        \"name\": \"Preview: 2 off the cart\",\n        \"action\": \"AMOUNT_OFF_CART\",\n        \"direction\": \"DISCOUNT\",\n        \"amount\": \"2.00\"\n      }\n    ],\n    \"gifts\": [\n      {\n        \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n        \"name\": \"Mug\",\n        \"category\": \"KITCHEN\",\n        \"qty\": 1,\n        \"unitPrice\": \"0.00\",\n        \"total\": \"0.00\",\n        \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n        \"promotionName\": \"Free mug with a lamp\"\n      }\n    ],\n    \"skipped\": []\n  },\n  \"violations\": []\n}"
+              "body": "{\n  \"rule\": {\n    \"id\": \"430c2dd3-4611-4d43-a386-f27103f602a6\",\n    \"type\": \"RULE\",\n    \"name\": \"Preview: 2 off the cart\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.073018Z\",\n    \"kind\": \"PRICING\",\n    \"stage\": 400,\n    \"stopAfter\": false,\n    \"action\": {\n      \"kind\": \"AMOUNT_OFF_CART\",\n      \"amount\": 2\n    }\n  },\n  \"quote\": {\n    \"customerSegment\": \"REGULAR\",\n    \"lines\": [\n      {\n        \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n        \"name\": \"Lamp\",\n        \"category\": \"HOME\",\n        \"unitPrice\": \"30.00\",\n        \"qty\": 1,\n        \"subtotal\": \"30.00\",\n        \"discount\": \"6.00\",\n        \"total\": \"24.00\"\n      }\n    ],\n    \"appliedPromotions\": [\n      {\n        \"sequence\": 1,\n        \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n        \"name\": \"Lamp deal for big carts\",\n        \"type\": \"RULE\",\n        \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n        \"amount\": \"6.00\"\n      }\n    ],\n    \"subtotal\": \"30.00\",\n    \"totalDiscount\": \"8.00\",\n    \"total\": \"22.00\",\n    \"shipping\": \"0.00\",\n    \"adjustments\": [\n      {\n        \"sequence\": 2,\n        \"promotionId\": \"430c2dd3-4611-4d43-a386-f27103f602a6\",\n        \"name\": \"Preview: 2 off the cart\",\n        \"action\": \"AMOUNT_OFF_CART\",\n        \"direction\": \"DISCOUNT\",\n        \"amount\": \"2.00\"\n      }\n    ],\n    \"gifts\": [\n      {\n        \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n        \"name\": \"Mug\",\n        \"category\": \"KITCHEN\",\n        \"qty\": 1,\n        \"unitPrice\": \"0.00\",\n        \"total\": \"0.00\",\n        \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n        \"promotionName\": \"Free mug with a lamp\"\n      }\n    ],\n    \"skipped\": []\n  },\n  \"violations\": []\n}"
             },
             {
               "name": "200 - a validation rule that would reject the cart",
@@ -1677,11 +1819,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "e09130df-ab2c-4520-9c2c-33f9e5beda81"
+                  "value": "e18edb88-a3ec-499d-a52e-d254859e1476"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"rule\": {\n    \"id\": \"0d798d99-210d-4972-a307-de8cfc281ac7\",\n    \"type\": \"RULE\",\n    \"name\": \"Maximum order\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:23:08.474460Z\",\n    \"kind\": \"VALIDATION\",\n    \"stage\": 900,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gt\",\n      \"value\": 10\n    },\n    \"action\": {\n      \"kind\": \"REJECT\",\n      \"message\": \"Orders above 10.00 are not allowed\"\n    }\n  },\n  \"quote\": {\n    \"customerSegment\": \"REGULAR\",\n    \"lines\": [\n      {\n        \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n        \"name\": \"Lamp\",\n        \"category\": \"HOME\",\n        \"unitPrice\": \"30.00\",\n        \"qty\": 1,\n        \"subtotal\": \"30.00\",\n        \"discount\": \"6.00\",\n        \"total\": \"24.00\"\n      }\n    ],\n    \"appliedPromotions\": [\n      {\n        \"sequence\": 1,\n        \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n        \"name\": \"Lamp deal for big carts\",\n        \"type\": \"RULE\",\n        \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n        \"amount\": \"6.00\"\n      }\n    ],\n    \"subtotal\": \"30.00\",\n    \"totalDiscount\": \"6.00\",\n    \"total\": \"24.00\",\n    \"shipping\": \"0.00\",\n    \"adjustments\": [],\n    \"gifts\": [\n      {\n        \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n        \"name\": \"Mug\",\n        \"category\": \"KITCHEN\",\n        \"qty\": 1,\n        \"unitPrice\": \"0.00\",\n        \"total\": \"0.00\",\n        \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n        \"promotionName\": \"Free mug with a lamp\"\n      }\n    ],\n    \"skipped\": []\n  },\n  \"violations\": [\n    {\n      \"promotionId\": \"0d798d99-210d-4972-a307-de8cfc281ac7\",\n      \"name\": \"Maximum order\",\n      \"message\": \"Orders above 10.00 are not allowed\"\n    }\n  ]\n}"
+              "body": "{\n  \"rule\": {\n    \"id\": \"e3b10947-621e-444c-85ad-a248d39c5ca0\",\n    \"type\": \"RULE\",\n    \"name\": \"Maximum order\",\n    \"active\": true,\n    \"priority\": 0,\n    \"eligibleSegments\": [],\n    \"createdAt\": \"2026-10-29T16:27:14.122509Z\",\n    \"kind\": \"VALIDATION\",\n    \"stage\": 900,\n    \"stopAfter\": false,\n    \"when\": {\n      \"field\": \"cart.subtotal\",\n      \"op\": \"gt\",\n      \"value\": 10\n    },\n    \"action\": {\n      \"kind\": \"REJECT\",\n      \"message\": \"Orders above 10.00 are not allowed\"\n    }\n  },\n  \"quote\": {\n    \"customerSegment\": \"REGULAR\",\n    \"lines\": [\n      {\n        \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n        \"name\": \"Lamp\",\n        \"category\": \"HOME\",\n        \"unitPrice\": \"30.00\",\n        \"qty\": 1,\n        \"subtotal\": \"30.00\",\n        \"discount\": \"6.00\",\n        \"total\": \"24.00\"\n      }\n    ],\n    \"appliedPromotions\": [\n      {\n        \"sequence\": 1,\n        \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n        \"name\": \"Lamp deal for big carts\",\n        \"type\": \"RULE\",\n        \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n        \"amount\": \"6.00\"\n      }\n    ],\n    \"subtotal\": \"30.00\",\n    \"totalDiscount\": \"6.00\",\n    \"total\": \"24.00\",\n    \"shipping\": \"0.00\",\n    \"adjustments\": [],\n    \"gifts\": [\n      {\n        \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n        \"name\": \"Mug\",\n        \"category\": \"KITCHEN\",\n        \"qty\": 1,\n        \"unitPrice\": \"0.00\",\n        \"total\": \"0.00\",\n        \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n        \"promotionName\": \"Free mug with a lamp\"\n      }\n    ],\n    \"skipped\": []\n  },\n  \"violations\": [\n    {\n      \"promotionId\": \"e3b10947-621e-444c-85ad-a248d39c5ca0\",\n      \"name\": \"Maximum order\",\n      \"message\": \"Orders above 10.00 are not allowed\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - rule problems are reported under rule.",
@@ -1725,11 +1867,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "fe367dbc-db9b-4d27-8e26-80f9e0303344"
+                  "value": "b8feeca0-308e-43e2-97b0-1409886e8250"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions/preview\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"fe367dbc-db9b-4d27-8e26-80f9e0303344\",\n  \"errors\": [\n    {\n      \"field\": \"rule.target.field\",\n      \"message\": \"Unknown field 'product.brand'. Allowed: [product.id, product.name, product.category, product.price, product.stock, line.qty]\"\n    },\n    {\n      \"field\": \"rule.action.percent\",\n      \"message\": \"must be greater than 0 and at most 100 with at most 2 decimals\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions/preview\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"b8feeca0-308e-43e2-97b0-1409886e8250\",\n  \"errors\": [\n    {\n      \"field\": \"rule.target.field\",\n      \"message\": \"Unknown field 'product.brand'. Allowed: [product.id, product.name, product.category, product.price, product.stock, line.qty]\"\n    },\n    {\n      \"field\": \"rule.action.percent\",\n      \"message\": \"must be greater than 0 and at most 100 with at most 2 decimals\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -1803,11 +1945,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "7b1cbdb7-b2ec-492a-a029-0feb4530eb0e"
+                  "value": "f5ef9c1f-2fd4-4f2d-8a75-9cbfd001a183"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"id\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n      \"type\": \"RULE\",\n      \"name\": \"10% off kitchen\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.064205Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.category\",\n        \"op\": \"eq\",\n        \"value\": \"kitchen\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 10\n      }\n    },\n    {\n      \"id\": \"2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n      \"type\": \"RULE\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"createdAt\": \"2026-10-29T16:23:08.204634Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 300,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gte\",\n            \"value\": 10\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 5\n      }\n    },\n    {\n      \"id\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"type\": \"RULE\",\n      \"name\": \"Exclusive pan deal\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.333506Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 50,\n      \"stopAfter\": true,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 50\n      }\n    },\n    {\n      \"id\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"type\": \"RULE\",\n      \"name\": \"Free mug with a lamp\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.299015Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 500,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_GIFT\",\n        \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n        \"qty\": 1\n      }\n    },\n    {\n      \"id\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n      \"type\": \"RULE\",\n      \"name\": \"Handling fee\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 700,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"SURCHARGE\",\n        \"amount\": 2.5\n      }\n    },\n    {\n      \"id\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"type\": \"RULE\",\n      \"name\": \"Lamp deal for big carts\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.241666Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 20.0\n      },\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 20\n      }\n    },\n    {\n      \"id\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.268973Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    },\n    {\n      \"id\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n      \"type\": \"RULE\",\n      \"name\": \"Mugs 2+1\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.065207Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 200,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_UNITS\",\n        \"buyQty\": 2,\n        \"freeQty\": 1\n      }\n    },\n    {\n      \"id\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n      \"type\": \"RULE\",\n      \"name\": \"Voucher\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 400,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"AMOUNT_OFF_CART\",\n        \"amount\": 3\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 9,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n      \"type\": \"RULE\",\n      \"name\": \"10% off kitchen\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.909205Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.category\",\n        \"op\": \"eq\",\n        \"value\": \"kitchen\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 10\n      }\n    },\n    {\n      \"id\": \"92a5099c-705d-46f1-bb30-ccf072b1a835\",\n      \"type\": \"RULE\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"createdAt\": \"2026-10-29T16:27:13.982350Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 300,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gte\",\n            \"value\": 10\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 5\n      }\n    },\n    {\n      \"id\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"type\": \"RULE\",\n      \"name\": \"Exclusive pan deal\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.050986Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 50,\n      \"stopAfter\": true,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 50\n      }\n    },\n    {\n      \"id\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"type\": \"RULE\",\n      \"name\": \"Free mug with a lamp\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.032479Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 500,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_GIFT\",\n        \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n        \"qty\": 1\n      }\n    },\n    {\n      \"id\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n      \"type\": \"RULE\",\n      \"name\": \"Handling fee\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 700,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"SURCHARGE\",\n        \"amount\": 2.5\n      }\n    },\n    {\n      \"id\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"type\": \"RULE\",\n      \"name\": \"Lamp deal for big carts\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.999268Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 20.0\n      },\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 20\n      }\n    },\n    {\n      \"id\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.016998Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    },\n    {\n      \"id\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n      \"type\": \"RULE\",\n      \"name\": \"Mugs 2+1\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.956030Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 200,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_UNITS\",\n        \"buyQty\": 2,\n        \"freeQty\": 1\n      }\n    },\n    {\n      \"id\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n      \"type\": \"RULE\",\n      \"name\": \"Voucher\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 400,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"AMOUNT_OFF_CART\",\n        \"amount\": 3\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 9,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "200 - filtered by type and active",
@@ -1846,11 +1988,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "fe572b36-a437-45be-868d-213483817c3b"
+                  "value": "01eb0d34-abe2-42bd-9a62-306f78d9af3c"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"id\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"type\": \"RULE\",\n      \"name\": \"Exclusive pan deal\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.333506Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 50,\n      \"stopAfter\": true,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 50\n      }\n    },\n    {\n      \"id\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n      \"type\": \"RULE\",\n      \"name\": \"Voucher\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 400,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"AMOUNT_OFF_CART\",\n        \"amount\": 3\n      }\n    },\n    {\n      \"id\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n      \"type\": \"RULE\",\n      \"name\": \"Handling fee\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.314031Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 700,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"SURCHARGE\",\n        \"amount\": 2.5\n      }\n    },\n    {\n      \"id\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"type\": \"RULE\",\n      \"name\": \"Free mug with a lamp\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.299015Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 500,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_GIFT\",\n        \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n        \"qty\": 1\n      }\n    },\n    {\n      \"id\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.268973Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    },\n    {\n      \"id\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"type\": \"RULE\",\n      \"name\": \"Lamp deal for big carts\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.241666Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 20.0\n      },\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 20\n      }\n    },\n    {\n      \"id\": \"2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n      \"type\": \"RULE\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"createdAt\": \"2026-10-29T16:23:08.204634Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 300,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gte\",\n            \"value\": 10\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 5\n      }\n    },\n    {\n      \"id\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n      \"type\": \"RULE\",\n      \"name\": \"Mugs 2+1\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.065207Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 200,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_UNITS\",\n        \"buyQty\": 2,\n        \"freeQty\": 1\n      }\n    },\n    {\n      \"id\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n      \"type\": \"RULE\",\n      \"name\": \"10% off kitchen\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.064205Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.category\",\n        \"op\": \"eq\",\n        \"value\": \"kitchen\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 10\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 9,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"type\": \"RULE\",\n      \"name\": \"Exclusive pan deal\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.050986Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 50,\n      \"stopAfter\": true,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 50\n      }\n    },\n    {\n      \"id\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n      \"type\": \"RULE\",\n      \"name\": \"Handling fee\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 700,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"SURCHARGE\",\n        \"amount\": 2.5\n      }\n    },\n    {\n      \"id\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n      \"type\": \"RULE\",\n      \"name\": \"Voucher\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.041936Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 400,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 40.0\n      },\n      \"action\": {\n        \"kind\": \"AMOUNT_OFF_CART\",\n        \"amount\": 3\n      }\n    },\n    {\n      \"id\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"type\": \"RULE\",\n      \"name\": \"Free mug with a lamp\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.032479Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 500,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_GIFT\",\n        \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n        \"qty\": 1\n      }\n    },\n    {\n      \"id\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.016998Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    },\n    {\n      \"id\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"type\": \"RULE\",\n      \"name\": \"Lamp deal for big carts\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.999268Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"when\": {\n        \"field\": \"cart.subtotal\",\n        \"op\": \"gte\",\n        \"value\": 20.0\n      },\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 20\n      }\n    },\n    {\n      \"id\": \"92a5099c-705d-46f1-bb30-ccf072b1a835\",\n      \"type\": \"RULE\",\n      \"name\": \"5% off 10+\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [\n        \"VIP\"\n      ],\n      \"createdAt\": \"2026-10-29T16:27:13.982350Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 300,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gte\",\n            \"value\": 10\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 5\n      }\n    },\n    {\n      \"id\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n      \"type\": \"RULE\",\n      \"name\": \"Mugs 2+1\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.956030Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 200,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n      },\n      \"action\": {\n        \"kind\": \"FREE_UNITS\",\n        \"buyQty\": 2,\n        \"freeQty\": 1\n      }\n    },\n    {\n      \"id\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n      \"type\": \"RULE\",\n      \"name\": \"10% off kitchen\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:13.909205Z\",\n      \"kind\": \"PRICING\",\n      \"stage\": 100,\n      \"stopAfter\": false,\n      \"target\": {\n        \"field\": \"product.category\",\n        \"op\": \"eq\",\n        \"value\": \"kitchen\"\n      },\n      \"action\": {\n        \"kind\": \"PERCENT_OFF\",\n        \"percent\": 10\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 9,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "400 - unknown type",
@@ -1885,11 +2027,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "e542d6a8-5671-4d27-9924-cd47226de38b"
+                  "value": "1efc16f6-3c7d-4e6e-84b6-4e1bef4ded16"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'type'\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"e542d6a8-5671-4d27-9924-cd47226de38b\",\n  \"errors\": [\n    {\n      \"field\": \"type\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'type'\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"1efc16f6-3c7d-4e6e-84b6-4e1bef4ded16\",\n  \"errors\": [\n    {\n      \"field\": \"type\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -1963,11 +2105,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "76b02523-d417-46d3-a77e-38ad4232ae5f"
+                  "value": "9c7bc4c7-67d4-4d19-909c-87127d6b5065"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"id\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:23:08.268973Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"id\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n      \"type\": \"RULE\",\n      \"name\": \"Mug limit\",\n      \"active\": true,\n      \"priority\": 0,\n      \"eligibleSegments\": [],\n      \"createdAt\": \"2026-10-29T16:27:14.016998Z\",\n      \"kind\": \"VALIDATION\",\n      \"stage\": 900,\n      \"stopAfter\": false,\n      \"target\": {\n        \"all\": [\n          {\n            \"field\": \"product.id\",\n            \"op\": \"eq\",\n            \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n          },\n          {\n            \"field\": \"line.qty\",\n            \"op\": \"gt\",\n            \"value\": 5\n          }\n        ]\n      },\n      \"action\": {\n        \"kind\": \"REJECT\",\n        \"message\": \"At most 5 mugs per order\"\n      }\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "400 - unknown kind",
@@ -2002,11 +2144,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "7a2154e9-c8a9-4945-98d0-56ff6d838199"
+                  "value": "c9687eee-76a1-4d55-8912-15ff64f37bb3"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'kind'\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"7a2154e9-c8a9-4945-98d0-56ff6d838199\",\n  \"errors\": [\n    {\n      \"field\": \"kind\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Invalid value for 'kind'\",\n  \"instance\": \"/api/v1/promotions\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"c9687eee-76a1-4d55-8912-15ff64f37bb3\",\n  \"errors\": [\n    {\n      \"field\": \"kind\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -2070,11 +2212,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "a36790b4-876b-46eb-ac35-912784354aef"
+                  "value": "fc5a853e-94f5-4a2c-979a-d44f5afc8a7c"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n  \"type\": \"RULE\",\n  \"name\": \"10% off kitchen\",\n  \"active\": true,\n  \"priority\": 0,\n  \"eligibleSegments\": [],\n  \"createdAt\": \"2026-10-29T16:23:08.064205Z\",\n  \"kind\": \"PRICING\",\n  \"stage\": 100,\n  \"stopAfter\": false,\n  \"target\": {\n    \"field\": \"product.category\",\n    \"op\": \"eq\",\n    \"value\": \"kitchen\"\n  },\n  \"action\": {\n    \"kind\": \"PERCENT_OFF\",\n    \"percent\": 10\n  }\n}"
+              "body": "{\n  \"id\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n  \"type\": \"RULE\",\n  \"name\": \"10% off kitchen\",\n  \"active\": true,\n  \"priority\": 0,\n  \"eligibleSegments\": [],\n  \"createdAt\": \"2026-10-29T16:27:13.909205Z\",\n  \"kind\": \"PRICING\",\n  \"stage\": 100,\n  \"stopAfter\": false,\n  \"target\": {\n    \"field\": \"product.category\",\n    \"op\": \"eq\",\n    \"value\": \"kitchen\"\n  },\n  \"action\": {\n    \"kind\": \"PERCENT_OFF\",\n    \"percent\": 10\n  }\n}"
             },
             {
               "name": "404 - unknown promotion",
@@ -2104,11 +2246,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "67a43d45-46ec-4ada-9136-d794c0bfc3af"
+                  "value": "7bdcb3fe-80c0-414a-8496-7ab872c5a3be"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"67a43d45-46ec-4ada-9136-d794c0bfc3af\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"7bdcb3fe-80c0-414a-8496-7ab872c5a3be\"\n}"
             }
           ]
         },
@@ -2200,11 +2342,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "4b83df75-4351-407f-a0e5-28295891ced4"
+                  "value": "0a946744-a1af-469c-adfa-f905b8cfee10"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n  \"type\": \"RULE\",\n  \"name\": \"5% off 10+\",\n  \"active\": false,\n  \"priority\": 2,\n  \"eligibleSegments\": [\n    \"VIP\"\n  ],\n  \"createdAt\": \"2026-10-29T16:23:08.204634Z\",\n  \"kind\": \"PRICING\",\n  \"stage\": 300,\n  \"stopAfter\": false,\n  \"target\": {\n    \"all\": [\n      {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\"\n      },\n      {\n        \"field\": \"line.qty\",\n        \"op\": \"gte\",\n        \"value\": 10\n      }\n    ]\n  },\n  \"action\": {\n    \"kind\": \"PERCENT_OFF\",\n    \"percent\": 5\n  }\n}"
+              "body": "{\n  \"id\": \"92a5099c-705d-46f1-bb30-ccf072b1a835\",\n  \"type\": \"RULE\",\n  \"name\": \"5% off 10+\",\n  \"active\": false,\n  \"priority\": 2,\n  \"eligibleSegments\": [\n    \"VIP\"\n  ],\n  \"createdAt\": \"2026-10-29T16:27:13.982350Z\",\n  \"kind\": \"PRICING\",\n  \"stage\": 300,\n  \"stopAfter\": false,\n  \"target\": {\n    \"all\": [\n      {\n        \"field\": \"product.id\",\n        \"op\": \"eq\",\n        \"value\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\"\n      },\n      {\n        \"field\": \"line.qty\",\n        \"op\": \"gte\",\n        \"value\": 10\n      }\n    ]\n  },\n  \"action\": {\n    \"kind\": \"PERCENT_OFF\",\n    \"percent\": 5\n  }\n}"
             },
             {
               "name": "400 - empty body",
@@ -2248,11 +2390,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "00a45baa-ce0c-49f1-bcc6-6a2fd13ef226"
+                  "value": "de2d5bfa-2564-4173-a8cc-b58361e9585d"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions/2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"00a45baa-ce0c-49f1-bcc6-6a2fd13ef226\",\n  \"errors\": [\n    {\n      \"field\": \"body\",\n      \"message\": \"At least one field must be provided\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/promotions/92a5099c-705d-46f1-bb30-ccf072b1a835\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"de2d5bfa-2564-4173-a8cc-b58361e9585d\",\n  \"errors\": [\n    {\n      \"field\": \"body\",\n      \"message\": \"At least one field must be provided\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - actions cannot be changed",
@@ -2296,11 +2438,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "f6c207f2-1fcb-450a-99be-43cda255423b"
+                  "value": "ededa6fc-156b-448e-bebc-d5b44ebac341"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions/534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"f6c207f2-1fcb-450a-99be-43cda255423b\",\n  \"errors\": [\n    {\n      \"field\": \"action\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/promotions/c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"ededa6fc-156b-448e-bebc-d5b44ebac341\",\n  \"errors\": [\n    {\n      \"field\": \"action\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             },
             {
               "name": "404 - unknown promotion",
@@ -2344,11 +2486,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "9ded241c-710c-428d-8ccf-bae6431ae0bb"
+                  "value": "9edaabed-a240-4284-a1a0-e374aa32d0ac"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"9ded241c-710c-428d-8ccf-bae6431ae0bb\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/promotions/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"9edaabed-a240-4284-a1a0-e374aa32d0ac\"\n}"
             }
           ]
         },
@@ -2407,7 +2549,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "bcb53260-03cc-44aa-9ccb-8be8b2569643"
+                  "value": "95ac01b4-a993-4521-be66-82967bb63afe"
                 }
               ],
               "cookie": [],
@@ -2441,11 +2583,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "fc2485b1-a044-4b01-a952-062ca6944ddd"
+                  "value": "74f2cb99-c725-458c-b0e5-aa5b473a069b"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 2dc9466b-a253-44cf-bbe5-5949d20375a1 was not found\",\n  \"instance\": \"/api/v1/promotions/2dc9466b-a253-44cf-bbe5-5949d20375a1\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"fc2485b1-a044-4b01-a952-062ca6944ddd\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:promotion-not-found\",\n  \"title\": \"Promotion not found\",\n  \"status\": 404,\n  \"detail\": \"Promotion 92a5099c-705d-46f1-bb30-ccf072b1a835 was not found\",\n  \"instance\": \"/api/v1/promotions/92a5099c-705d-46f1-bb30-ccf072b1a835\",\n  \"code\": \"PROMOTION_NOT_FOUND\",\n  \"requestId\": \"74f2cb99-c725-458c-b0e5-aa5b473a069b\"\n}"
             }
           ]
         }
@@ -2544,11 +2686,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "b41712c1-bb77-4137-8f3a-e211402842bd"
+                  "value": "af6e32ac-19da-47e5-a469-3d9e7a8985f8"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"skipped\": []\n}"
+              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"skipped\": []\n}"
             },
             {
               "name": "404 - unknown product",
@@ -2592,11 +2734,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "bc529f76-9dbb-432b-88a0-fef0c3cda0b6"
+                  "value": "acea4c21-b4f2-4206-b328-f346b743b064"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Some products in the cart were not found\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"bc529f76-9dbb-432b-88a0-fef0c3cda0b6\",\n  \"errors\": [\n    {\n      \"field\": \"productId\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 was not found\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:product-not-found\",\n  \"title\": \"Product not found\",\n  \"status\": 404,\n  \"detail\": \"Some products in the cart were not found\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"PRODUCT_NOT_FOUND\",\n  \"requestId\": \"acea4c21-b4f2-4206-b328-f346b743b064\",\n  \"errors\": [\n    {\n      \"field\": \"productId\",\n      \"message\": \"Product 00000000-0000-0000-0000-000000000001 was not found\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - empty cart",
@@ -2640,11 +2782,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "c8356c96-948f-4884-834f-89ba78f591a3"
+                  "value": "7070b006-f88d-47d2-989a-6202fd970533"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"c8356c96-948f-4884-834f-89ba78f591a3\",\n  \"errors\": [\n    {\n      \"field\": \"items\",\n      \"message\": \"must not be empty\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:validation-failed\",\n  \"title\": \"Validation failed\",\n  \"status\": 400,\n  \"detail\": \"Request validation failed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"VALIDATION_FAILED\",\n  \"requestId\": \"7070b006-f88d-47d2-989a-6202fd970533\",\n  \"errors\": [\n    {\n      \"field\": \"items\",\n      \"message\": \"must not be empty\"\n    }\n  ]\n}"
             },
             {
               "name": "400 - unknown field",
@@ -2688,11 +2830,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "b4099d92-b81c-4dcb-8816-2c79a2a2fee9"
+                  "value": "114e38aa-f283-4f67-a4e5-06af01a8b9d5"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"b4099d92-b81c-4dcb-8816-2c79a2a2fee9\",\n  \"errors\": [\n    {\n      \"field\": \"customersegment\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:malformed-request\",\n  \"title\": \"Malformed request\",\n  \"status\": 400,\n  \"detail\": \"Request body is missing or malformed\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"MALFORMED_REQUEST\",\n  \"requestId\": \"114e38aa-f283-4f67-a4e5-06af01a8b9d5\",\n  \"errors\": [\n    {\n      \"field\": \"customersegment\",\n      \"message\": \"Invalid value\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -2803,11 +2945,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "67046ea5-0a6d-410b-95d2-eb85e9488a55"
+                  "value": "9b7ef0e4-b2dd-4915-9f0b-f0af7c8be7a9"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"orderId\": \"2ead1b10-aa21-45b8-9537-dcdfc0025f77\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:23:08.847006Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"notes\": []\n}"
+              "body": "{\n  \"orderId\": \"8218b835-4065-471a-9eb9-c07b43648415\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:27:14.333108Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"notes\": []\n}"
             },
             {
               "name": "201 - replay with the same key (Idempotent-Replayed: true)",
@@ -2855,7 +2997,7 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "b3359611-ef54-44ea-8212-181143822f65"
+                  "value": "4710cc96-2b63-4525-840d-8655a4c336ba"
                 },
                 {
                   "key": "Idempotent-Replayed",
@@ -2863,7 +3005,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"orderId\": \"2ead1b10-aa21-45b8-9537-dcdfc0025f77\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:23:08.847006Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"notes\": []\n}"
+              "body": "{\n  \"orderId\": \"8218b835-4065-471a-9eb9-c07b43648415\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:27:14.333108Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"12.00\",\n      \"qty\": 3,\n      \"subtotal\": \"36.00\",\n      \"discount\": \"14.40\",\n      \"total\": \"21.60\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n      \"name\": \"10% off kitchen\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"3.60\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n      \"name\": \"Mugs 2+1\",\n      \"type\": \"RULE\",\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"amount\": \"10.80\"\n    }\n  ],\n  \"subtotal\": \"36.00\",\n  \"totalDiscount\": \"14.40\",\n  \"total\": \"21.60\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"notes\": []\n}"
             },
             {
               "name": "422 - same key, different cart",
@@ -2911,11 +3053,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "39606164-41de-491b-9b4e-b009d3acd33a"
+                  "value": "d78cd3b9-52ee-4803-b148-9ec2d0daf25b"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:idempotency-key-reused\",\n  \"title\": \"Idempotency key reused\",\n  \"status\": 422,\n  \"detail\": \"Idempotency-Key was already used with a different request\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"IDEMPOTENCY_KEY_REUSED\",\n  \"requestId\": \"39606164-41de-491b-9b4e-b009d3acd33a\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:idempotency-key-reused\",\n  \"title\": \"Idempotency key reused\",\n  \"status\": 422,\n  \"detail\": \"Idempotency-Key was already used with a different request\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"IDEMPOTENCY_KEY_REUSED\",\n  \"requestId\": \"d78cd3b9-52ee-4803-b148-9ec2d0daf25b\"\n}"
             },
             {
               "name": "409 - insufficient stock",
@@ -2959,11 +3101,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "36eaae52-d7e7-4352-a802-e7242bd37442"
+                  "value": "8f186944-0a33-414b-80eb-4fb31af7deb0"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:insufficient-stock\",\n  \"title\": \"Insufficient stock\",\n  \"status\": 409,\n  \"detail\": \"Not enough stock for 1 product(s)\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INSUFFICIENT_STOCK\",\n  \"requestId\": \"36eaae52-d7e7-4352-a802-e7242bd37442\",\n  \"errors\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"requested\": 50,\n      \"available\": 7\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:insufficient-stock\",\n  \"title\": \"Insufficient stock\",\n  \"status\": 409,\n  \"detail\": \"Not enough stock for 1 product(s)\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INSUFFICIENT_STOCK\",\n  \"requestId\": \"8f186944-0a33-414b-80eb-4fb31af7deb0\",\n  \"errors\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"requested\": 50,\n      \"available\": 7\n    }\n  ]\n}"
             },
             {
               "name": "400 - invalid idempotency key (101 characters)",
@@ -3011,11 +3153,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "81792d0a-6944-462d-8fdf-a9aa570e8afe"
+                  "value": "3dedb3c5-8d1a-433d-bb0a-695f75f76cca"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-idempotency-key\",\n  \"title\": \"Invalid idempotency key\",\n  \"status\": 400,\n  \"detail\": \"Idempotency-Key must be between 1 and 100 non-blank characters\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INVALID_IDEMPOTENCY_KEY\",\n  \"requestId\": \"81792d0a-6944-462d-8fdf-a9aa570e8afe\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-idempotency-key\",\n  \"title\": \"Invalid idempotency key\",\n  \"status\": 400,\n  \"detail\": \"Idempotency-Key must be between 1 and 100 non-blank characters\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"INVALID_IDEMPOTENCY_KEY\",\n  \"requestId\": \"3dedb3c5-8d1a-433d-bb0a-695f75f76cca\"\n}"
             }
           ]
         },
@@ -3079,11 +3221,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "e425ee86-bd3b-481e-990f-06e0404fa7fb"
+                  "value": "9f316718-3136-41ad-812c-428d3e1c92ea"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 7,\n  \"createdAt\": \"2026-10-29T16:23:07.089072Z\"\n}"
+              "body": "{\n  \"id\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n  \"name\": \"Mug\",\n  \"category\": \"KITCHEN\",\n  \"price\": \"12.00\",\n  \"stock\": 7,\n  \"createdAt\": \"2026-10-29T16:27:13.539211Z\"\n}"
             }
           ]
         },
@@ -3177,11 +3319,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "43586b45-3a2b-47a2-a539-b18e93088e59"
+                  "value": "1d2b7633-b3c5-4aec-a808-e6c1a7be5225"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"30.00\",\n  \"totalDiscount\": \"6.00\",\n  \"total\": \"24.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"skipped\": []\n}"
+              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"30.00\",\n  \"totalDiscount\": \"6.00\",\n  \"total\": \"24.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"skipped\": []\n}"
             },
             {
               "name": "422 - validation rule rejects the cart",
@@ -3225,11 +3367,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "cdb52cd0-a533-4747-9464-7b16e27644fe"
+                  "value": "0036c620-7c52-4cc1-9bf6-75bb2a368303"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:rule-violation\",\n  \"title\": \"Rule violation\",\n  \"status\": 422,\n  \"detail\": \"The cart violates 1 rule(s)\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"RULE_VIOLATION\",\n  \"requestId\": \"cdb52cd0-a533-4747-9464-7b16e27644fe\",\n  \"errors\": [\n    {\n      \"promotionId\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n      \"name\": \"Mug limit\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:rule-violation\",\n  \"title\": \"Rule violation\",\n  \"status\": 422,\n  \"detail\": \"The cart violates 1 rule(s)\",\n  \"instance\": \"/api/v1/cart/quote\",\n  \"code\": \"RULE_VIOLATION\",\n  \"requestId\": \"0036c620-7c52-4cc1-9bf6-75bb2a368303\",\n  \"errors\": [\n    {\n      \"promotionId\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n      \"name\": \"Mug limit\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -3322,11 +3464,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "6d670cd5-cf12-44b4-9a8c-d836967ec478"
+                  "value": "80465ef3-2e7f-48cb-afa5-8d974fb17aba"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"orderId\": \"fbdd0bc4-b148-41d8-91b1-5745ae2fc6fa\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:23:09.043836Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"30.00\",\n  \"totalDiscount\": \"6.00\",\n  \"total\": \"24.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
+              "body": "{\n  \"orderId\": \"0a53af40-8fa9-406c-9ee1-4bfd3b197691\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:27:14.437478Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"30.00\",\n  \"totalDiscount\": \"6.00\",\n  \"total\": \"24.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
             },
             {
               "name": "422 - validation rule rejects the cart and nothing is reserved",
@@ -3370,11 +3512,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "fb707027-afcc-4eac-b1a1-8aff92865880"
+                  "value": "ac43a21d-9cbd-4c61-9f06-a83cfe0f9104"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:rule-violation\",\n  \"title\": \"Rule violation\",\n  \"status\": 422,\n  \"detail\": \"The cart violates 1 rule(s)\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"RULE_VIOLATION\",\n  \"requestId\": \"fb707027-afcc-4eac-b1a1-8aff92865880\",\n  \"errors\": [\n    {\n      \"promotionId\": \"3a06cb50-1c40-4035-ba3c-94b8bad0ab59\",\n      \"name\": \"Mug limit\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  ]\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:rule-violation\",\n  \"title\": \"Rule violation\",\n  \"status\": 422,\n  \"detail\": \"The cart violates 1 rule(s)\",\n  \"instance\": \"/api/v1/cart/confirm\",\n  \"code\": \"RULE_VIOLATION\",\n  \"requestId\": \"ac43a21d-9cbd-4c61-9f06-a83cfe0f9104\",\n  \"errors\": [\n    {\n      \"promotionId\": \"355170bf-6c84-4f07-9a41-318f7b55d130\",\n      \"name\": \"Mug limit\",\n      \"message\": \"At most 5 mugs per order\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -3468,11 +3610,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "dd595812-0923-497e-ab94-0967a6b66d1d"
+                  "value": "f39f1ef5-4c2c-403c-a927-8c61f30fcc7e"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"skipped\": []\n}"
+              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"skipped\": []\n}"
             },
             {
               "name": "200 - a smaller cart: the cart-level rules do not fire",
@@ -3516,11 +3658,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "3891891d-0feb-49fd-b289-c11809eb5fd3"
+                  "value": "86c1d2b3-3c1d-4989-a55e-ddaf633cb93c"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"amount\": \"10.00\"\n    }\n  ],\n  \"subtotal\": \"20.00\",\n  \"totalDiscount\": \"10.00\",\n  \"total\": \"10.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"skipped\": []\n}"
+              "body": "{\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"amount\": \"10.00\"\n    }\n  ],\n  \"subtotal\": \"20.00\",\n  \"totalDiscount\": \"10.00\",\n  \"total\": \"10.00\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [],\n  \"gifts\": [],\n  \"skipped\": []\n}"
             }
           ]
         },
@@ -3614,11 +3756,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "e765be8a-512c-497c-8613-b4eb459a8ca8"
+                  "value": "400a5f4d-b9be-4b38-b4ae-42dbc21df174"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"orderId\": \"873b0971-9c2a-41e8-aef5-8afaf2bcc6aa\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:23:09.156444Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
+              "body": "{\n  \"orderId\": \"8eb2b44a-98d9-40a4-a1d3-fb12723b7998\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:27:14.502782Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
             }
           ]
         }
@@ -3696,11 +3838,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "430fdb38-b2aa-4ff5-81ed-cc5f3967cadf"
+                  "value": "ee7fd084-ea80-4425-a547-0b0d5d385694"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"content\": [\n    {\n      \"orderId\": \"873b0971-9c2a-41e8-aef5-8afaf2bcc6aa\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:23:09.156444Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n          \"name\": \"Lamp\",\n          \"category\": \"HOME\",\n          \"unitPrice\": \"30.00\",\n          \"qty\": 1,\n          \"subtotal\": \"30.00\",\n          \"discount\": \"6.00\",\n          \"total\": \"24.00\"\n        },\n        {\n          \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n          \"name\": \"Pan\",\n          \"category\": \"KITCHEN\",\n          \"unitPrice\": \"20.00\",\n          \"qty\": 1,\n          \"subtotal\": \"20.00\",\n          \"discount\": \"10.00\",\n          \"total\": \"10.00\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n          \"name\": \"Exclusive pan deal\",\n          \"type\": \"RULE\",\n          \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n          \"amount\": \"10.00\"\n        },\n        {\n          \"sequence\": 2,\n          \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n          \"name\": \"Lamp deal for big carts\",\n          \"type\": \"RULE\",\n          \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n          \"amount\": \"6.00\"\n        }\n      ],\n      \"subtotal\": \"50.00\",\n      \"totalDiscount\": \"19.00\",\n      \"total\": \"33.50\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [\n        {\n          \"sequence\": 3,\n          \"promotionId\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n          \"name\": \"Voucher\",\n          \"action\": \"AMOUNT_OFF_CART\",\n          \"direction\": \"DISCOUNT\",\n          \"amount\": \"3.00\"\n        },\n        {\n          \"sequence\": 4,\n          \"promotionId\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n          \"name\": \"Handling fee\",\n          \"action\": \"SURCHARGE\",\n          \"direction\": \"CHARGE\",\n          \"amount\": \"2.50\"\n        }\n      ],\n      \"gifts\": [\n        {\n          \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"qty\": 1,\n          \"unitPrice\": \"0.00\",\n          \"total\": \"0.00\",\n          \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n          \"promotionName\": \"Free mug with a lamp\"\n        }\n      ],\n      \"notes\": []\n    },\n    {\n      \"orderId\": \"fbdd0bc4-b148-41d8-91b1-5745ae2fc6fa\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:23:09.043836Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n          \"name\": \"Lamp\",\n          \"category\": \"HOME\",\n          \"unitPrice\": \"30.00\",\n          \"qty\": 1,\n          \"subtotal\": \"30.00\",\n          \"discount\": \"6.00\",\n          \"total\": \"24.00\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n          \"name\": \"Lamp deal for big carts\",\n          \"type\": \"RULE\",\n          \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n          \"amount\": \"6.00\"\n        }\n      ],\n      \"subtotal\": \"30.00\",\n      \"totalDiscount\": \"6.00\",\n      \"total\": \"24.00\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [],\n      \"gifts\": [\n        {\n          \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"qty\": 1,\n          \"unitPrice\": \"0.00\",\n          \"total\": \"0.00\",\n          \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n          \"promotionName\": \"Free mug with a lamp\"\n        }\n      ],\n      \"notes\": []\n    },\n    {\n      \"orderId\": \"2ead1b10-aa21-45b8-9537-dcdfc0025f77\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:23:08.847006Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"unitPrice\": \"12.00\",\n          \"qty\": 3,\n          \"subtotal\": \"36.00\",\n          \"discount\": \"14.40\",\n          \"total\": \"21.60\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"534f3277-7dfc-4045-b055-e5f7d1ee1fa8\",\n          \"name\": \"10% off kitchen\",\n          \"type\": \"RULE\",\n          \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n          \"amount\": \"3.60\"\n        },\n        {\n          \"sequence\": 2,\n          \"promotionId\": \"ef8bc7b8-336a-46ed-bc18-563ab567f932\",\n          \"name\": \"Mugs 2+1\",\n          \"type\": \"RULE\",\n          \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n          \"amount\": \"10.80\"\n        }\n      ],\n      \"subtotal\": \"36.00\",\n      \"totalDiscount\": \"14.40\",\n      \"total\": \"21.60\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [],\n      \"gifts\": [],\n      \"notes\": []\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 3,\n  \"totalPages\": 1\n}"
+              "body": "{\n  \"content\": [\n    {\n      \"orderId\": \"8eb2b44a-98d9-40a4-a1d3-fb12723b7998\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:27:14.502782Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n          \"name\": \"Lamp\",\n          \"category\": \"HOME\",\n          \"unitPrice\": \"30.00\",\n          \"qty\": 1,\n          \"subtotal\": \"30.00\",\n          \"discount\": \"6.00\",\n          \"total\": \"24.00\"\n        },\n        {\n          \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n          \"name\": \"Pan\",\n          \"category\": \"KITCHEN\",\n          \"unitPrice\": \"20.00\",\n          \"qty\": 1,\n          \"subtotal\": \"20.00\",\n          \"discount\": \"10.00\",\n          \"total\": \"10.00\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n          \"name\": \"Exclusive pan deal\",\n          \"type\": \"RULE\",\n          \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n          \"amount\": \"10.00\"\n        },\n        {\n          \"sequence\": 2,\n          \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n          \"name\": \"Lamp deal for big carts\",\n          \"type\": \"RULE\",\n          \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n          \"amount\": \"6.00\"\n        }\n      ],\n      \"subtotal\": \"50.00\",\n      \"totalDiscount\": \"19.00\",\n      \"total\": \"33.50\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [\n        {\n          \"sequence\": 3,\n          \"promotionId\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n          \"name\": \"Voucher\",\n          \"action\": \"AMOUNT_OFF_CART\",\n          \"direction\": \"DISCOUNT\",\n          \"amount\": \"3.00\"\n        },\n        {\n          \"sequence\": 4,\n          \"promotionId\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n          \"name\": \"Handling fee\",\n          \"action\": \"SURCHARGE\",\n          \"direction\": \"CHARGE\",\n          \"amount\": \"2.50\"\n        }\n      ],\n      \"gifts\": [\n        {\n          \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"qty\": 1,\n          \"unitPrice\": \"0.00\",\n          \"total\": \"0.00\",\n          \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n          \"promotionName\": \"Free mug with a lamp\"\n        }\n      ],\n      \"notes\": []\n    },\n    {\n      \"orderId\": \"0a53af40-8fa9-406c-9ee1-4bfd3b197691\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:27:14.437478Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n          \"name\": \"Lamp\",\n          \"category\": \"HOME\",\n          \"unitPrice\": \"30.00\",\n          \"qty\": 1,\n          \"subtotal\": \"30.00\",\n          \"discount\": \"6.00\",\n          \"total\": \"24.00\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n          \"name\": \"Lamp deal for big carts\",\n          \"type\": \"RULE\",\n          \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n          \"amount\": \"6.00\"\n        }\n      ],\n      \"subtotal\": \"30.00\",\n      \"totalDiscount\": \"6.00\",\n      \"total\": \"24.00\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [],\n      \"gifts\": [\n        {\n          \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"qty\": 1,\n          \"unitPrice\": \"0.00\",\n          \"total\": \"0.00\",\n          \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n          \"promotionName\": \"Free mug with a lamp\"\n        }\n      ],\n      \"notes\": []\n    },\n    {\n      \"orderId\": \"8218b835-4065-471a-9eb9-c07b43648415\",\n      \"status\": \"CONFIRMED\",\n      \"createdAt\": \"2026-10-29T16:27:14.333108Z\",\n      \"customerSegment\": \"REGULAR\",\n      \"lines\": [\n        {\n          \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n          \"name\": \"Mug\",\n          \"category\": \"KITCHEN\",\n          \"unitPrice\": \"12.00\",\n          \"qty\": 3,\n          \"subtotal\": \"36.00\",\n          \"discount\": \"14.40\",\n          \"total\": \"21.60\"\n        }\n      ],\n      \"appliedPromotions\": [\n        {\n          \"sequence\": 1,\n          \"promotionId\": \"c9d91f2d-59d4-469c-85df-dce8489d3e79\",\n          \"name\": \"10% off kitchen\",\n          \"type\": \"RULE\",\n          \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n          \"amount\": \"3.60\"\n        },\n        {\n          \"sequence\": 2,\n          \"promotionId\": \"a1f9d42d-4448-4092-b8ea-50664317e62a\",\n          \"name\": \"Mugs 2+1\",\n          \"type\": \"RULE\",\n          \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n          \"amount\": \"10.80\"\n        }\n      ],\n      \"subtotal\": \"36.00\",\n      \"totalDiscount\": \"14.40\",\n      \"total\": \"21.60\",\n      \"shipping\": \"0.00\",\n      \"adjustments\": [],\n      \"gifts\": [],\n      \"notes\": []\n    }\n  ],\n  \"page\": 0,\n  \"size\": 20,\n  \"totalElements\": 3,\n  \"totalPages\": 1\n}"
             },
             {
               "name": "400 - sort field not allowed",
@@ -3735,11 +3877,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "095b49a1-07a6-4f48-bb4b-e3816d1b9595"
+                  "value": "5a761d10-9dd6-4059-9418-8bec2a2fcab8"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'status'; allowed fields: [createdAt, total]\",\n  \"instance\": \"/api/v1/orders\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"095b49a1-07a6-4f48-bb4b-e3816d1b9595\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:invalid-sort\",\n  \"title\": \"Invalid sort\",\n  \"status\": 400,\n  \"detail\": \"Unsupported sort 'status'; allowed fields: [createdAt, total]\",\n  \"instance\": \"/api/v1/orders\",\n  \"code\": \"INVALID_SORT\",\n  \"requestId\": \"5a761d10-9dd6-4059-9418-8bec2a2fcab8\"\n}"
             }
           ]
         },
@@ -3803,11 +3945,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "556f86d2-2051-4601-a472-ae34323de67e"
+                  "value": "af623ab8-4e97-4bf9-8230-73dcf7ac6e36"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"orderId\": \"873b0971-9c2a-41e8-aef5-8afaf2bcc6aa\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:23:09.156444Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"01f3bb39-95ff-4f24-98d7-443f4caf57ab\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"6e6081bd-80c4-4881-9e0b-c2761454dabb\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"b9637936-4c97-4677-acd6-cd8a9961c480\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"38dc4843-cb86-47f7-8e34-4cf652eb1b4f\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"3b5fa857-1f88-4a39-9150-fc9e82922a6f\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"9deb5596-f74e-4c0f-b362-a9beb8cf4bff\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"6a56ad45-82f1-479f-a66b-4ea37671ec91\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"12149697-f275-4145-a0ad-65a6e4c1098a\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
+              "body": "{\n  \"orderId\": \"8eb2b44a-98d9-40a4-a1d3-fb12723b7998\",\n  \"status\": \"CONFIRMED\",\n  \"createdAt\": \"2026-10-29T16:27:14.502782Z\",\n  \"customerSegment\": \"REGULAR\",\n  \"lines\": [\n    {\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"name\": \"Lamp\",\n      \"category\": \"HOME\",\n      \"unitPrice\": \"30.00\",\n      \"qty\": 1,\n      \"subtotal\": \"30.00\",\n      \"discount\": \"6.00\",\n      \"total\": \"24.00\"\n    },\n    {\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"name\": \"Pan\",\n      \"category\": \"KITCHEN\",\n      \"unitPrice\": \"20.00\",\n      \"qty\": 1,\n      \"subtotal\": \"20.00\",\n      \"discount\": \"10.00\",\n      \"total\": \"10.00\"\n    }\n  ],\n  \"appliedPromotions\": [\n    {\n      \"sequence\": 1,\n      \"promotionId\": \"7a7c9ee5-b897-4328-896c-39fd1670478d\",\n      \"name\": \"Exclusive pan deal\",\n      \"type\": \"RULE\",\n      \"productId\": \"0bbab5f8-2d32-4a95-8f0e-1e26286de6c4\",\n      \"amount\": \"10.00\"\n    },\n    {\n      \"sequence\": 2,\n      \"promotionId\": \"4201ef60-b55c-4145-b3cc-17b8db13d550\",\n      \"name\": \"Lamp deal for big carts\",\n      \"type\": \"RULE\",\n      \"productId\": \"ebacf509-211a-41c6-b4f2-bedd32233c8a\",\n      \"amount\": \"6.00\"\n    }\n  ],\n  \"subtotal\": \"50.00\",\n  \"totalDiscount\": \"19.00\",\n  \"total\": \"33.50\",\n  \"shipping\": \"0.00\",\n  \"adjustments\": [\n    {\n      \"sequence\": 3,\n      \"promotionId\": \"5c2e1c87-3e16-45fb-ac20-ddbd8d8a8afd\",\n      \"name\": \"Voucher\",\n      \"action\": \"AMOUNT_OFF_CART\",\n      \"direction\": \"DISCOUNT\",\n      \"amount\": \"3.00\"\n    },\n    {\n      \"sequence\": 4,\n      \"promotionId\": \"1727769d-df5c-48c8-bb90-154ab231a591\",\n      \"name\": \"Handling fee\",\n      \"action\": \"SURCHARGE\",\n      \"direction\": \"CHARGE\",\n      \"amount\": \"2.50\"\n    }\n  ],\n  \"gifts\": [\n    {\n      \"productId\": \"44f41189-5039-47e2-aa74-c7fb5dbd672f\",\n      \"name\": \"Mug\",\n      \"category\": \"KITCHEN\",\n      \"qty\": 1,\n      \"unitPrice\": \"0.00\",\n      \"total\": \"0.00\",\n      \"promotionId\": \"bdf19c3e-6115-4bc7-acaa-0ba407d1c9db\",\n      \"promotionName\": \"Free mug with a lamp\"\n    }\n  ],\n  \"notes\": []\n}"
             },
             {
               "name": "404 - unknown order",
@@ -3837,11 +3979,11 @@
                 },
                 {
                   "key": "X-Request-Id",
-                  "value": "3fba91c1-f903-435c-884d-236588a147ff"
+                  "value": "8afe89ae-aa30-4094-bd17-3814991c021d"
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"type\": \"urn:promoquoter:error:order-not-found\",\n  \"title\": \"Order not found\",\n  \"status\": 404,\n  \"detail\": \"Order 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/orders/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"requestId\": \"3fba91c1-f903-435c-884d-236588a147ff\"\n}"
+              "body": "{\n  \"type\": \"urn:promoquoter:error:order-not-found\",\n  \"title\": \"Order not found\",\n  \"status\": 404,\n  \"detail\": \"Order 00000000-0000-0000-0000-000000000001 was not found\",\n  \"instance\": \"/api/v1/orders/00000000-0000-0000-0000-000000000001\",\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"requestId\": \"8afe89ae-aa30-4094-bd17-3814991c021d\"\n}"
             }
           ]
         }
@@ -3905,7 +4047,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "5422df8e-94d9-4905-a94c-18c8fe9b4c91"
+                  "value": "52679231-6a38-4074-b099-2d36dc955477"
                 }
               ],
               "cookie": [],
@@ -3968,7 +4110,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "6dc3014e-4b42-4246-8018-d8d4e5a7437c"
+                  "value": "65e035ad-5538-459c-a648-bdd43a008bad"
                 }
               ],
               "cookie": [],
@@ -4031,7 +4173,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "430d78e9-33a6-42f5-a582-eaa8c145330d"
+                  "value": "7f67b0ab-80a3-46a1-a998-695c6224679c"
                 }
               ],
               "cookie": [],
@@ -4094,7 +4236,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "6b2e5ecb-8e4d-4fb8-a886-cf5a76cf2875"
+                  "value": "d702589b-10eb-407c-a35f-f9d4276cb6b4"
                 }
               ],
               "cookie": [],
@@ -4157,7 +4299,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "440261fc-f99b-48bc-aadd-6387bb3efce1"
+                  "value": "bd1a4904-a9d0-4173-9cc8-9fcc3867352d"
                 }
               ],
               "cookie": [],
@@ -4220,7 +4362,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "d020cb90-4a37-4644-a8e7-35fc83b2b56f"
+                  "value": "b7b24710-6bd6-4eab-9284-bec6ee4fe79f"
                 }
               ],
               "cookie": [],
@@ -4283,7 +4425,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "def2c727-e8d4-4a31-8deb-e68466653462"
+                  "value": "44e56825-94f0-46a7-b60c-1dda676739d3"
                 }
               ],
               "cookie": [],
@@ -4346,7 +4488,7 @@
               "header": [
                 {
                   "key": "X-Request-Id",
-                  "value": "f10cf527-5136-4355-889f-664228bb1efe"
+                  "value": "09923f91-d1b1-45f1-a4b5-b7d508d4c300"
                 }
               ],
               "cookie": [],

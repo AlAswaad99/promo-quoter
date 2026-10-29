@@ -1,8 +1,10 @@
 package com.promoquoter.product;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,12 +30,31 @@ public class InventoryService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void reserve(Map<UUID, Integer> quantities) {
+        reserve(quantities, List.of());
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void reserve(Map<UUID, Integer> quantities, Collection<UUID> alsoLock) {
         List<UUID> ids = quantities.keySet().stream().sorted().toList();
-        Map<UUID, Product> locked = productRepository.lockAllByIdOrderById(ids).stream()
+        TreeSet<UUID> lockIds = new TreeSet<>(ids);
+        lockIds.addAll(alsoLock);
+        Map<UUID, Product> locked = productRepository.lockAllByIdOrderById(lockIds).stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
         rejectMissing(ids, locked);
         rejectShortages(ids, quantities, locked);
         ids.forEach(id -> locked.get(id).decrementStock(quantities.get(id)));
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void reserveGifts(Map<UUID, Integer> quantities) {
+        if (quantities.isEmpty()) {
+            return;
+        }
+        Map<UUID, Product> products = productRepository.findAllById(quantities.keySet()).stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+        quantities.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> products.get(entry.getKey()).decrementStock(entry.getValue()));
     }
 
     private static void rejectMissing(List<UUID> ids, Map<UUID, Product> locked) {

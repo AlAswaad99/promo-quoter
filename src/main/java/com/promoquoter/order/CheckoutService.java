@@ -13,9 +13,9 @@ import com.promoquoter.cart.CartNormalizer;
 import com.promoquoter.cart.CartRequest;
 import com.promoquoter.cart.NormalizedCart;
 import com.promoquoter.cart.QuoteService;
+import com.promoquoter.cart.QuotedCart;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
-import com.promoquoter.pricing.PriceBreakdown;
 import com.promoquoter.product.InventoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -62,9 +62,10 @@ public class CheckoutService {
             if (idempotencyKey != null) {
                 idempotencyRepository.saveAndFlush(new IdempotencyRecord(idempotencyKey, fingerprint, orderId));
             }
-            inventoryService.reserve(quantitiesOf(cart));
-            PriceBreakdown breakdown = quoteService.priceChecked(cart, true).breakdown();
-            Order order = orderRepository.saveAndFlush(Order.confirmed(orderId, breakdown, idempotencyKey));
+            inventoryService.reserve(quantitiesOf(cart), quoteService.giftProductIds());
+            QuotedCart quoted = quoteService.priceChecked(cart, true);
+            inventoryService.reserveGifts(giftQuantities(quoted));
+            Order order = orderRepository.saveAndFlush(Order.confirmed(orderId, quoted, idempotencyKey));
             return OrderResponse.from(order);
         });
     }
@@ -87,6 +88,12 @@ public class CheckoutService {
     private ConfirmResult created(OrderResponse order) {
         log.info("Order {} confirmed, total {}", order.orderId(), order.total());
         return new ConfirmResult(order, false);
+    }
+
+    private static Map<UUID, Integer> giftQuantities(QuotedCart quoted) {
+        Map<UUID, Integer> quantities = new LinkedHashMap<>();
+        quoted.gifts().forEach(gift -> quantities.merge(gift.productId(), gift.qty(), Integer::sum));
+        return quantities;
     }
 
     private static Map<UUID, Integer> quantitiesOf(NormalizedCart cart) {

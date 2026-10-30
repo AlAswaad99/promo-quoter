@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.common.web.PageResponse;
 import com.promoquoter.pricing.engine.RuleDefinition;
 import com.promoquoter.pricing.model.PromotionType;
@@ -25,7 +27,9 @@ import com.promoquoter.promotion.dto.RuleRequest;
 import com.promoquoter.promotion.dto.UpdatePromotionRequest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PromotionService {
@@ -41,7 +45,14 @@ public class PromotionService {
         rejectUnknownProducts(requests, ruleReferences, index -> "[" + index + "]");
         requireRoomForActive(requests.stream().filter(CreatePromotionRequest::active).count());
         List<Promotion> promotions = requests.stream().map(PromotionMapper::toEntity).toList();
-        return promotionRepository.saveAll(promotions).stream().map(PromotionMapper::toResponse).toList();
+        List<PromotionResponse> created = promotionRepository.saveAll(promotions).stream()
+                .map(PromotionMapper::toResponse).toList();
+        LogEvent.PROMOTION_CREATED.at(log)
+                .with("count", created.size())
+                .with("types", promotions.stream().map(promotion -> promotion.getType().name()).distinct().sorted()
+                        .collect(Collectors.joining(",")))
+                .message("Promotions created");
+        return created;
     }
 
     @Transactional(readOnly = true)
@@ -70,12 +81,40 @@ public class PromotionService {
             requireRoomForActive(1);
         }
         promotion.update(request.name(), request.active(), request.priority(), request.eligibleSegments());
-        return PromotionMapper.toResponse(promotionRepository.saveAndFlush(promotion));
+        PromotionResponse updated = PromotionMapper.toResponse(promotionRepository.saveAndFlush(promotion));
+        LogEvent.PROMOTION_UPDATED.at(log)
+                .with("promotionId", id)
+                .with("changedFields", changedFields(request))
+                .message("Promotion updated");
+        return updated;
     }
 
     @Transactional
     public void delete(UUID id) {
         promotionRepository.delete(find(id));
+        LogEvent.PROMOTION_DELETED.at(log).with("promotionId", id).message("Promotion deleted");
+    }
+
+    @Transactional(readOnly = true)
+    public long countActive() {
+        return promotionRepository.countByActiveTrue();
+    }
+
+    private static String changedFields(UpdatePromotionRequest request) {
+        List<String> fields = new ArrayList<>();
+        if (request.name() != null) {
+            fields.add("name");
+        }
+        if (request.active() != null) {
+            fields.add("active");
+        }
+        if (request.priority() != null) {
+            fields.add("priority");
+        }
+        if (request.eligibleSegments() != null) {
+            fields.add("eligibleSegments");
+        }
+        return String.join(",", fields);
     }
 
     private Promotion find(UUID id) {

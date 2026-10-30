@@ -17,8 +17,11 @@ import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
 
+import com.promoquoter.common.observability.LogEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
@@ -77,6 +80,7 @@ public class InventoryService {
             }
         }
         if (!shortages.isEmpty()) {
+            LogEvent.STOCK_SHORTAGE.at(log).with("shortProductCount", shortages.size()).message("Stock shortage");
             throw new ApiException(ErrorCode.INSUFFICIENT_STOCK,
                     "Not enough stock for " + shortages.size() + " product(s)", shortages);
         }

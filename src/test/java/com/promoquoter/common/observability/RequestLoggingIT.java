@@ -71,8 +71,11 @@ class RequestLoggingIT {
         mockMvc.perform(get("/does-not-exist").header(RequestContext.HEADER, "log-check"));
 
         assertThat(output.getAll()).contains("[log-check]")
-                .contains("request started method=GET path=/does-not-exist")
-                .contains("request completed method=GET path=/does-not-exist status=404")
+                .contains("event=\"http.request.started\"")
+                .contains("event=\"http.request.completed\"")
+                .contains("method=\"GET\"")
+                .contains("path=\"/does-not-exist\"")
+                .contains("status=\"404\"")
                 .contains("startedAt=")
                 .contains("endedAt=")
                 .contains("durationMs=");

@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.slf4j.event.Level;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,23 +32,25 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         response.setHeader(RequestContext.HEADER, requestId);
         Instant startedAt = Instant.now();
         long startedNanos = System.nanoTime();
-        log.info("request started method={} path={} startedAt={}", request.getMethod(), request.getRequestURI(),
-                startedAt);
+        LogEvent.HTTP_REQUEST_STARTED.at(log)
+                .with("method", request.getMethod())
+                .with("path", request.getRequestURI())
+                .with("startedAt", startedAt)
+                .message("request started");
         try {
             chain.doFilter(request, response);
         } finally {
             long durationMs = (System.nanoTime() - startedNanos) / 1_000_000;
             int status = response.getStatus();
-            String summary = "request completed method={} path={} status={} startedAt={} endedAt={} durationMs={}";
-            Object[] fields = {request.getMethod(), request.getRequestURI(), status, startedAt, Instant.now(),
-                    durationMs};
-            if (status >= 500) {
-                log.error(summary, fields);
-            } else if (status >= 400) {
-                log.warn(summary, fields);
-            } else {
-                log.info(summary, fields);
-            }
+            Level level = status >= 500 ? Level.ERROR : status >= 400 ? Level.WARN : Level.INFO;
+            LogEvent.HTTP_REQUEST_COMPLETED.at(log, level)
+                    .with("method", request.getMethod())
+                    .with("path", request.getRequestURI())
+                    .with("status", status)
+                    .with("startedAt", startedAt)
+                    .with("endedAt", Instant.now())
+                    .with("durationMs", durationMs)
+                    .message("request completed");
             RequestContext.clear();
         }
     }

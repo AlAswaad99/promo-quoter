@@ -20,6 +20,10 @@ final class RequestFingerprint {
         return sha256(canonical);
     }
 
+    static String keyHash(String idempotencyKey) {
+        return sha256(idempotencyKey).substring(0, 8);
+    }
+
     private static String sha256(String value) {
         try {
             byte[] digest = MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));

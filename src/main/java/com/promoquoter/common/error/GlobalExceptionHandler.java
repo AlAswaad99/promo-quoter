@@ -22,6 +22,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.common.observability.RequestContext;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,23 +33,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     ResponseEntity<Object> handleApiException(ApiException ex) {
-        HttpStatus status = ex.getCode().getStatus();
-        if (status == HttpStatus.CONFLICT || status == HttpStatus.UNPROCESSABLE_ENTITY) {
-            log.warn("{}: {}", ex.getCode(), ex.getMessage());
-        }
         return respond(ex.getCode(), ex.getMessage(), ex.getErrors());
     }
 
     @ExceptionHandler(ConcurrencyFailureException.class)
     ResponseEntity<Object> handleConcurrencyFailure(ConcurrencyFailureException ex) {
-        log.warn("{}: {}", ErrorCode.CONCURRENT_MODIFICATION, ex.getMessage());
         return respond(ErrorCode.CONCURRENT_MODIFICATION, "The resource was modified concurrently, please retry",
                 List.of());
     }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<Object> handleUnexpected(Exception ex) {
-        log.error("Unexpected error", ex);
+        LogEvent.ERROR_UNEXPECTED.at(log).with("exception", ex.getClass().getName()).cause(ex)
+                .message("Unexpected error");
         return respond(ErrorCode.INTERNAL_ERROR, "An unexpected error occurred", List.of());
     }
 
@@ -108,6 +105,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (response != null && response.getBody() instanceof ProblemDetail problem) {
             HttpStatus resolved = HttpStatus.resolve(statusCode.value());
             problem.setProperty("code", resolved == null ? "ERROR" : resolved.name());
+            if (statusCode.is4xxClientError()) {
+                LogEvent.REQUEST_REJECTED.at(log)
+                        .with("code", resolved == null ? "ERROR" : resolved.name())
+                        .with("status", statusCode.value())
+                        .message("Request rejected");
+            }
             RequestContext.currentRequestId().ifPresent(requestId -> problem.setProperty("requestId", requestId));
         }
         return response;
@@ -120,6 +123,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> respond(ErrorCode code, String detail, List<?> errors) {
+        if (code.getStatus().is4xxClientError()) {
+            LogEvent.REQUEST_REJECTED.at(log)
+                    .with("code", code.name())
+                    .with("status", code.getStatus().value())
+                    .with("detail", detail)
+                    .with("errorCount", errors.size())
+                    .message("Request rejected");
+        }
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(code.getStatus(), detail);
         problem.setType(code.type());
         problem.setTitle(code.getTitle());

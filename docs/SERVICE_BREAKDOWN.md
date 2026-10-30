@@ -1008,21 +1008,66 @@ Framework-generated errors (unknown route `404`, wrong method `405`) go through 
 
 ## 13. Logging and request ids
 
-`RequestLoggingFilter` runs first in the filter chain.
+Logging is structured: every line has the base fields (UTC timestamp, level, process id, thread, logger, `requestId`, message) and business or request lines add an `event` name plus key-value fields. All event names live in the `LogEvent` enum in `common.observability`; code logs through it:
 
-- **Request id.** An incoming `X-Request-Id` is reused if it is 1 to 64 characters of letters, digits, `.`, `_` or `-`. Otherwise a UUID is generated. Restricting the characters stops log injection through the header. The id is stored in the logging context under `requestId`, echoed in the `X-Request-Id` response header and added to every error body.
-- **Per request.** A `request started` line, then a `request completed` line with method, path, status, `startedAt`, `endedAt` and `durationMs`. Completion is INFO for 1xx to 3xx, WARN for 4xx and ERROR for 5xx. The context is cleared afterwards so ids never leak between requests on a reused thread.
-- **Business events.** INFO when an order is confirmed or replayed; WARN for `409` and `422` outcomes; ERROR with a stack trace for unexpected failures. Request bodies are never logged.
-
-Plain-text pattern: `%5p [%X{requestId:-}]` follows the level, so a line looks like:
-
-```
-INFO [0b2c8c1e-6a3e-4f3c-9d0e-2d4a1f7c9b11] … : request started method=POST path=/api/v1/cart/confirm startedAt=2026-10-28T08:15:02.113Z
-INFO [0b2c8c1e-…] … : Order 4f1c… confirmed, total 21.60
-INFO [0b2c8c1e-…] … : request completed method=POST path=/api/v1/cart/confirm status=201 startedAt=… endedAt=… durationMs=18
+```java
+LogEvent.ORDER_CONFIRMED.at(log).with("orderId", id).with("total", total).message("Order confirmed");
 ```
 
-The `json` Spring profile switches the console to ECS structured JSON, where `requestId` appears as a field.
+`LogEvent.at(logger)` uses the event's default level, `at(logger, level)` overrides it (the request completion line is INFO, WARN or ERROR by status). Under the hood it calls the SLF4J fluent API (`addKeyValue`), so no extra dependency is needed. Null values are left out.
+
+- **Request id.** `RequestLoggingFilter` runs first in the filter chain. An incoming `X-Request-Id` is reused if it is 1 to 64 characters of letters, digits, `.`, `_` or `-`. Otherwise a UUID is generated. Restricting the characters stops log injection through the header. The id is stored in the logging context under `requestId`, echoed in the `X-Request-Id` response header and added to every error body. The context is cleared afterwards so ids never leak between requests on a reused thread.
+- **Business ids are explicit fields**, not logging context: `orderId`, `promotionId` and so on are passed on the event that needs them, so they cannot leak into unrelated lines.
+- **Levels.** INFO for business events, WARN for expected rejections (stock shortage, rule violation, idempotency conflict, any 4xx), ERROR only for unexpected failures (with the stack trace), DEBUG for the pricing engine's per-rule trace.
+- **Never logged.** Request and response bodies, product names, free text, raw idempotency keys (only `idempotencyKeyHash`, the first 8 hex characters of the SHA-256).
+
+### 13.1 Event catalogue
+
+| Event | Level | Fields besides the common ones |
+|---|---|---|
+| `http.request.started` | INFO | `method`, `path`, `startedAt` |
+| `http.request.completed` | INFO, WARN for 4xx, ERROR for 5xx | `method`, `path`, `status`, `startedAt`, `endedAt`, `durationMs` |
+| `request.rejected` | WARN | `code`, `status`, `detail`, `errorCount` |
+| `error.unexpected` | ERROR | `exception`, with the stack trace |
+| `app.started` | INFO | `version`, `profiles`, `shippingFee`, `activePromotions` |
+| `product.created` | INFO | `count` |
+| `promotion.created` | INFO | `count`, `types` |
+| `promotion.updated` | INFO | `promotionId`, `changedFields` (names only) |
+| `promotion.deleted` | INFO | `promotionId` |
+| `rule.previewed` | INFO | `ruleKind`, `actionKind`, `violationCount` |
+| `quote.priced` | INFO | `itemCount`, `segment`, `appliedCount`, `adjustmentCount`, `giftCount`, `skippedCount`, `total`, `durationMs` |
+| `quote.rejected` | WARN | `violationCount` |
+| `pricing.rule.evaluated` | DEBUG | `ruleId`, `ruleName`, `stage`, `fired`, `lineAmount` |
+| `gift.skipped` | INFO | `productId`, `qty`, `reason` |
+| `stock.reserved` | INFO | `orderId`, `productCount`, `giftUnits` |
+| `stock.shortage` | WARN | `shortProductCount` |
+| `order.confirmed` | INFO | `orderId`, `total`, `shipping`, `giftCount`, `idempotencyKeyHash` |
+| `order.replayed` | INFO | `orderId`, `idempotencyKeyHash` |
+| `idempotency.conflict` | WARN | `idempotencyKeyHash` |
+
+### 13.2 Formats
+
+The console pattern (`logging.pattern.console` in `application.yml`) adds the request id and the key-value pairs (`%kvp`) to Spring's usual layout:
+
+```
+2026-10-30T11:20:08.690+03:00  INFO 85556 --- promo-quoter[io-8080-exec-4] [demo-3] c.p.order.domain.CheckoutService : Order confirmed event="order.confirmed" orderId="d08c3363-6bd3-4297-a71b-6aa2e9034e5e" total="12.00" shipping="0.00" giftCount="0" idempotencyKeyHash="eaa2ba0c"
+```
+
+The `json` profile (`application-json.yml`) switches the console to ECS JSON. Key-value pairs and the request id appear as top-level fields:
+
+```json
+{ "@timestamp": "2026-10-30T08:20:21.490536Z", "log": { "level": "INFO", "logger": "com.promoquoter.order.domain.CheckoutService" },
+  "process": { "pid": 85556, "thread": { "name": "http-nio-8080-exec-3" } },
+  "service": { "name": "promo-quoter", "version": "0.0.1-SNAPSHOT" },
+  "message": "Order confirmed", "requestId": "demo-3", "event": "order.confirmed",
+  "orderId": "1fcc3c18-c90e-4674-9928-6af8e7198427", "total": 12.0, "shipping": 0.0, "giftCount": 0, "idempotencyKeyHash": "eaa2ba0c" }
+```
+
+Logs go to the console only. `StartupSummary` logs `app.started` once the application is ready.
+
+### 13.3 Tests
+
+`LogEventTest` checks the catalogue (unique lowercase dotted names, levels, key-value order, null handling, disabled levels). `StructuredLoggingIT` attaches a Logback list appender and checks each event's fields, the request id on every request line, that DEBUG detail only appears at DEBUG, and that no secret key, product name or body appears in any log line.
 
 ## 14. Configuration
 
@@ -1035,14 +1080,14 @@ The `json` Spring profile switches the console to ECS structured JSON, where `re
 | `spring.jpa.hibernate.ddl-auto` | `create` | Hibernate builds the schema at startup |
 | `spring.jackson.deserialization.fail-on-unknown-properties` | `true` | Reject typos and unsupported fields |
 | `management.endpoints.web.exposure.include` | `health` | Only the health endpoint is exposed |
-| `logging.pattern.level` | `%5p [%X{requestId:-}]` | Request id in every log line |
+| `logging.pattern.console` | Spring layout plus `[%X{requestId:-}]` and `%kvp` | Request id and structured fields in every log line |
 | `promoquoter.shipping.flat-fee` | `0.00` (default) | Flat shipping fee added to every quote and order; a `SHIPPING_WAIVER` rule removes it |
 
 `application-json.yml` (profile `json`) enables ECS structured logging.
 
 ## 15. Testing
 
-450 tests; line coverage 96.8 %, branch coverage 92.1 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
+474 tests; line coverage 97.0 %, branch coverage 91.4 %. `./mvnw verify` fails if line coverage drops below 85 %. The HTML report is at `target/site/jacoco/index.html`.
 
 | Level | Classes | Covers |
 |---|---|---|

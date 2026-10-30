@@ -18,6 +18,7 @@ import com.promoquoter.cart.dto.QuoteResponse;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
 import com.promoquoter.common.error.FieldViolation;
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.pricing.engine.PricingEngine;
 import com.promoquoter.pricing.engine.RuleDefinition;
 import com.promoquoter.pricing.model.ActionSpec;
@@ -30,7 +31,9 @@ import com.promoquoter.product.domain.ProductSnapshot;
 import com.promoquoter.promotion.domain.PromotionService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuoteService {
@@ -42,7 +45,26 @@ public class QuoteService {
 
     @Transactional(readOnly = true)
     public QuoteResponse quote(CartRequest request) {
-        return QuoteMapper.toResponse(priceChecked(cartNormalizer.normalize(request), false));
+        long startedNanos = System.nanoTime();
+        NormalizedCart cart = cartNormalizer.normalize(request);
+        QuotedCart quoted = price(cart, List.of(), false);
+        PriceBreakdown breakdown = quoted.breakdown();
+        if (!breakdown.violations().isEmpty()) {
+            LogEvent.QUOTE_REJECTED.at(log).with("violationCount", breakdown.violations().size())
+                    .message("Quote rejected by validation rules");
+        }
+        requireNoViolations(breakdown);
+        LogEvent.QUOTE_PRICED.at(log)
+                .with("itemCount", cart.items().size())
+                .with("segment", cart.customerSegment())
+                .with("appliedCount", breakdown.appliedPromotions().size())
+                .with("adjustmentCount", breakdown.adjustments().size())
+                .with("giftCount", quoted.gifts().size())
+                .with("skippedCount", quoted.skipped().size())
+                .with("total", breakdown.total())
+                .with("durationMs", (System.nanoTime() - startedNanos) / 1_000_000)
+                .message("Quote priced");
+        return QuoteMapper.toResponse(quoted);
     }
 
     @Transactional(readOnly = true)
@@ -96,9 +118,13 @@ public class QuoteService {
             if (product == null) {
                 skipped.add(new SkippedRule(request.promotionId(), request.name(),
                         "gift product " + request.productId() + " does not exist"));
+                LogEvent.GIFT_SKIPPED.at(log).with("productId", request.productId()).with("qty", request.qty())
+                        .with("reason", "product does not exist").message("Gift skipped");
             } else if (product.stock() - taken.getOrDefault(product.id(), 0) < request.qty()) {
                 skipped.add(new SkippedRule(request.promotionId(), request.name(),
                         "gift " + product.name() + " x" + request.qty() + " skipped: not enough stock"));
+                LogEvent.GIFT_SKIPPED.at(log).with("productId", request.productId()).with("qty", request.qty())
+                        .with("reason", "not enough stock").message("Gift skipped");
             } else {
                 taken.merge(product.id(), request.qty(), Integer::sum);
                 gifts.add(new GiftLine(product.id(), product.name(), product.category(), request.qty(),

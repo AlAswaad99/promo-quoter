@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.pricing.model.RuleInfo;
 import com.promoquoter.pricing.model.RuleKind;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class AuditingRule implements PricingRule {
 
     private final PricingRule delegate;
@@ -47,12 +50,23 @@ public final class AuditingRule implements PricingRule {
         int cartEffectsBefore = cartEffects(context);
         delegate.apply(context);
         List<PricedLine> discounted = new ArrayList<>();
+        BigDecimal lineAmount = BigDecimal.ZERO;
         for (int index = 0; index < lines.size(); index++) {
             BigDecimal amount = totalsBefore.get(index).subtract(lines.get(index).total());
             if (amount.signum() > 0) {
                 context.recordApplied(delegate.definition(), lines.get(index), amount);
                 discounted.add(lines.get(index));
+                lineAmount = lineAmount.add(amount);
             }
+        }
+        if (log.isDebugEnabled()) {
+            LogEvent.PRICING_RULE_EVALUATED.at(log)
+                    .with("ruleId", delegate.definition().id())
+                    .with("ruleName", delegate.definition().name())
+                    .with("stage", delegate.stage())
+                    .with("fired", !discounted.isEmpty() || cartEffects(context) > cartEffectsBefore)
+                    .with("lineAmount", lineAmount)
+                    .message("Rule evaluated");
         }
         if (delegate.stopAfter()) {
             stopFurtherRules(context, discounted, cartEffects(context) > cartEffectsBefore);

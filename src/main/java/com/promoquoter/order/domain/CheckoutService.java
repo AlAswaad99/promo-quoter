@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.promoquoter.cart.domain.CartNormalizer;
+import com.promoquoter.cart.domain.GiftLine;
 import com.promoquoter.cart.domain.NormalizedCart;
 import com.promoquoter.cart.domain.QuoteService;
 import com.promoquoter.cart.domain.QuotedCart;
 import com.promoquoter.cart.dto.CartRequest;
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.order.dto.OrderResponse;
 import com.promoquoter.product.domain.InventoryService;
 
@@ -43,7 +45,7 @@ public class CheckoutService {
         validateKey(idempotencyKey);
         NormalizedCart cart = cartNormalizer.normalize(request);
         if (idempotencyKey == null) {
-            return created(placeOrder(cart, null, null));
+            return created(placeOrder(cart, null, null), null);
         }
         String fingerprint = RequestFingerprint.of(cart);
         Optional<ConfirmResult> replay = replayIfRecorded(idempotencyKey, fingerprint);
@@ -51,7 +53,7 @@ public class CheckoutService {
             return replay.get();
         }
         try {
-            return created(placeOrder(cart, idempotencyKey, fingerprint));
+            return created(placeOrder(cart, idempotencyKey, fingerprint), idempotencyKey);
         } catch (DataIntegrityViolationException raceLost) {
             return replayIfRecorded(idempotencyKey, fingerprint).orElseThrow(() -> raceLost);
         }
@@ -67,6 +69,11 @@ public class CheckoutService {
             QuotedCart quoted = quoteService.priceChecked(cart, true);
             inventoryService.reserveGifts(giftQuantities(quoted));
             Order order = orderRepository.saveAndFlush(Order.confirmed(orderId, quoted, idempotencyKey));
+            LogEvent.STOCK_RESERVED.at(log)
+                    .with("orderId", orderId)
+                    .with("productCount", cart.items().size())
+                    .with("giftUnits", quoted.gifts().stream().mapToInt(GiftLine::qty).sum())
+                    .message("Stock reserved");
             return OrderMapper.toResponse(order);
         });
     }
@@ -74,6 +81,8 @@ public class CheckoutService {
     private Optional<ConfirmResult> replayIfRecorded(String idempotencyKey, String fingerprint) {
         return idempotencyRepository.findById(idempotencyKey).map(record -> {
             if (!record.getRequestHash().equals(fingerprint)) {
+                LogEvent.IDEMPOTENCY_CONFLICT.at(log).with("idempotencyKeyHash", RequestFingerprint.keyHash(idempotencyKey))
+                        .message("Idempotency key reused with a different request");
                 throw new ApiException(ErrorCode.IDEMPOTENCY_KEY_REUSED,
                         "Idempotency-Key was already used with a different request");
             }
@@ -81,13 +90,22 @@ public class CheckoutService {
                     .map(OrderMapper::toResponse)
                     .orElseThrow(() -> new IllegalStateException(
                             "Order " + record.getOrderId() + " is missing for a recorded idempotency key")));
-            log.info("Replayed order {} for idempotency key", order.orderId());
+            LogEvent.ORDER_REPLAYED.at(log)
+                    .with("orderId", order.orderId())
+                    .with("idempotencyKeyHash", RequestFingerprint.keyHash(idempotencyKey))
+                    .message("Order replayed");
             return new ConfirmResult(order, true);
         });
     }
 
-    private ConfirmResult created(OrderResponse order) {
-        log.info("Order {} confirmed, total {}", order.orderId(), order.total());
+    private ConfirmResult created(OrderResponse order, String idempotencyKey) {
+        LogEvent.ORDER_CONFIRMED.at(log)
+                .with("orderId", order.orderId())
+                .with("total", order.total())
+                .with("shipping", order.shipping())
+                .with("giftCount", order.gifts().size())
+                .with("idempotencyKeyHash", idempotencyKey == null ? null : RequestFingerprint.keyHash(idempotencyKey))
+                .message("Order confirmed");
         return new ConfirmResult(order, false);
     }
 

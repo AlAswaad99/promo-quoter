@@ -44,7 +44,7 @@ A multi-stage build: JDK to compile, JRE to run, non-root user.
 ./mvnw verify    # tests + coverage report + coverage gate (fails below 85% line coverage)
 ```
 
-The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **96.8 % line, 92.1 % branch coverage** across 450 tests.
+The HTML coverage report is written to `target/site/jacoco/index.html`. At the time of writing: **97.0 % line, 91.4 % branch coverage** across 474 tests.
 
 | Kind | What it covers |
 |---|---|
@@ -296,11 +296,55 @@ All errors are RFC 7807 `application/problem+json` with extra fields `code`, `re
 | `IDEMPOTENCY_KEY_REUSED` | 422 | The key was already used with a different request |
 | `INTERNAL_ERROR` | 500 | Anything unexpected; details are logged, never returned |
 
-### Logging and request ids
+### Logging
 
-A servlet filter (`RequestLoggingFilter`) gives every request an id. An incoming `X-Request-Id` is reused when it is 1–64 characters of letters, digits, `.`, `_` or `-`; otherwise a UUID is generated. The id is put in the logging context, so it appears in every log line (`[requestId]`), in the `X-Request-Id` response header and in every error body, and a client can quote it when reporting a problem.
+Every log line carries the same base fields: UTC timestamp, level, process id, thread, logger, the request id and the message. Business and request lines also carry an `event` name and their own key-value fields, so one event can be searched or alerted on without parsing sentences. The events are listed in the `LogEvent` enum, so names cannot drift.
 
-Per request the filter logs a `request started` line and a `request completed` line with method, path, status, `startedAt`, `endedAt` and `durationMs`. The completion line is INFO, WARN for 4xx and ERROR for 5xx. The service also logs INFO when an order is confirmed or replayed, WARN on 409/422 and ERROR with a stack trace on 500. Request bodies are never logged. The `json` profile switches the console output to structured ECS JSON, with the request id as a field.
+**Request ids.** A servlet filter (`RequestLoggingFilter`) gives every request an id. An incoming `X-Request-Id` is reused when it is 1 to 64 characters of letters, digits, `.`, `_` or `-`; otherwise a UUID is generated. The id is in the logging context, so it appears in every log line (`[requestId]`), in the `X-Request-Id` response header and in every error body.
+
+**Formats.** By default the console shows readable text with the fields appended as `key="value"`:
+
+```
+2026-10-30T11:20:08.690+03:00  INFO 85556 --- promo-quoter[io-8080-exec-4] [demo-3] c.p.order.domain.CheckoutService : Order confirmed event="order.confirmed" orderId="d08c3363-6bd3-4297-a71b-6aa2e9034e5e" total="12.00" shipping="0.00" giftCount="0" idempotencyKeyHash="eaa2ba0c"
+```
+
+With `--spring.profiles.active=json` the same events are written as structured ECS JSON, one object per line, with the fields at the top level:
+
+```json
+{ "@timestamp": "2026-10-30T08:20:21.490536Z", "log": { "level": "INFO", "logger": "com.promoquoter.order.domain.CheckoutService" },
+  "process": { "pid": 85556, "thread": { "name": "http-nio-8080-exec-3" } },
+  "service": { "name": "promo-quoter", "version": "0.0.1-SNAPSHOT" },
+  "message": "Order confirmed", "requestId": "demo-3", "event": "order.confirmed",
+  "orderId": "1fcc3c18-c90e-4674-9928-6af8e7198427", "total": 12.0, "shipping": 0.0, "giftCount": 0, "idempotencyKeyHash": "eaa2ba0c" }
+```
+
+**Events and levels.** INFO for business events, WARN for expected rejections (stock shortage, rule violation, idempotency key reuse, any 4xx), ERROR only for unexpected failures (with the stack trace) and DEBUG for per-rule detail in the pricing engine. Set `logging.level.com.promoquoter=DEBUG` (or just `com.promoquoter.pricing`) to see every rule's evaluation.
+
+| Event | Level | Fields besides the common ones |
+|---|---|---|
+| `http.request.started` | INFO | `method`, `path`, `startedAt` |
+| `http.request.completed` | INFO, WARN for 4xx, ERROR for 5xx | `method`, `path`, `status`, `startedAt`, `endedAt`, `durationMs` |
+| `request.rejected` | WARN | `code`, `status`, `detail`, `errorCount` |
+| `error.unexpected` | ERROR | `exception`, with the stack trace |
+| `app.started` | INFO | `version`, `profiles`, `shippingFee`, `activePromotions` |
+| `product.created` | INFO | `count` |
+| `promotion.created` | INFO | `count`, `types` |
+| `promotion.updated` | INFO | `promotionId`, `changedFields` (names only) |
+| `promotion.deleted` | INFO | `promotionId` |
+| `rule.previewed` | INFO | `ruleKind`, `actionKind`, `violationCount` |
+| `quote.priced` | INFO | `itemCount`, `segment`, `appliedCount`, `adjustmentCount`, `giftCount`, `skippedCount`, `total`, `durationMs` |
+| `quote.rejected` | WARN | `violationCount` |
+| `pricing.rule.evaluated` | DEBUG | `ruleId`, `ruleName`, `stage`, `fired`, `lineAmount` |
+| `gift.skipped` | INFO | `productId`, `qty`, `reason` |
+| `stock.reserved` | INFO | `orderId`, `productCount`, `giftUnits` |
+| `stock.shortage` | WARN | `shortProductCount` |
+| `order.confirmed` | INFO | `orderId`, `total`, `shipping`, `giftCount`, `idempotencyKeyHash` |
+| `order.replayed` | INFO | `orderId`, `idempotencyKeyHash` |
+| `idempotency.conflict` | WARN | `idempotencyKeyHash` |
+
+**What is never logged.** Request and response bodies, product names and other free text, and raw idempotency keys: a key is logged only as the first 8 hex characters of its SHA-256 (`idempotencyKeyHash`). A test (`StructuredLoggingIT`) sends a secret-looking key and checks that it appears in no log line.
+
+Logs go to the console only, so Docker and process managers can collect them as they like.
 
 ## Assumptions and trade-offs
 

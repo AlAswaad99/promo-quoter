@@ -13,13 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.promoquoter.common.error.ApiException;
 import com.promoquoter.common.error.ErrorCode;
+import com.promoquoter.common.observability.LogEvent;
 import com.promoquoter.common.text.Categories;
 import com.promoquoter.common.web.PageResponse;
 import com.promoquoter.product.dto.CreateProductRequest;
 import com.promoquoter.product.dto.ProductResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -31,7 +34,10 @@ public class ProductService {
         List<Product> products = requests.stream()
                 .map(request -> new Product(request.name(), request.category(), request.price(), request.stock()))
                 .toList();
-        return productRepository.saveAll(products).stream().map(ProductMapper::toResponse).toList();
+        List<ProductResponse> created = productRepository.saveAll(products).stream().map(ProductMapper::toResponse)
+                .toList();
+        LogEvent.PRODUCT_CREATED.at(log).with("count", created.size()).message("Products created");
+        return created;
     }
 
     @Transactional(readOnly = true)
